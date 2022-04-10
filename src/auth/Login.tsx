@@ -10,7 +10,7 @@ import {
   Grid,
   MenuItem,
   TextField,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { useLocalStorageState, useRequest } from 'ahooks';
@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouteLink, Route, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { version } from '../../package.json';
 import { useAccessFlags } from '../data/AccessFlags';
@@ -26,7 +27,8 @@ import { APP_LANGUAGES, useAppLanguage } from '../i18n/hooks';
 import { useLoginAPI } from './data/LoginAPI';
 import { LoginDTO, loginSchema } from './data/LoginDTO';
 import { ForgotPassword } from './ForgotPassword';
-
+import BackgroundImage from '../assets/images/login-background.png'
+import Logo from '../assets/images/dior-logo.png'
 export function Login() {
   const history = useHistory();
   const { t } = useTranslation();
@@ -94,6 +96,7 @@ export function Login() {
       display="flex"
       justifyContent="center"
       alignItems="center"
+      style={{backgroundImage: `url(${BackgroundImage})`}}
     >
       <Route path="/forgot-password">
         {({ match }) => (
@@ -109,94 +112,98 @@ export function Login() {
       <Box>
         <Card variant="outlined">
           <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Box width="360px" marginTop={2} padding={2}>
-                <Grid container spacing={2} direction="column">
-                  <Grid item>
-                    <Typography variant="h5" align="center" gutterBottom>
-                      PARTNERS DATABASE
-                    </Typography>
+            <CardContentDiv>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Box marginTop={2} style={{padding: 40+'px'}}>
+                  <Grid container spacing={2} direction="column">
+                    <Grid item>
+                      {/* <Typography variant="h5" align="center" gutterBottom>
+                        PARTNERS DATABASE
+                      </Typography> */}
+                      <img src={Logo} style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
+                    </Grid>
+                    {isError && (
+                      <Box paddingBottom={2}>
+                        <Alert severity="error">
+                          Please check your ID and password.
+                        </Alert>
+                      </Box>
+                    )}
+                    <Grid item>
+                      <TextField
+                        inputRef={register}
+                        name="email"
+                        label={t('login.username')}
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <TextField
+                        inputRef={register}
+                        name="password"
+                        label={t('login.password')}
+                        variant="outlined"
+                        size="small"
+                        type="password"
+                        fullWidth
+                        error={!!errors.password}
+                        helperText={errors.password?.message}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <FormControlLabel
+                        onChange={(_, checked) => {
+                          setShouldRememberCredentials(checked);
+                        }}
+                        checked={shouldRememberCredentials}
+                        control={<Checkbox name="remember_me" color="primary" />}
+                        label={t('login.remember_me')}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        startIcon={
+                          formState.isSubmitting && <CircularProgress size={18} />
+                        }
+                        disabled={formState.isSubmitting}
+                        disableElevation
+                        variant="contained"
+                        // color="primary"
+                        style={{background: '#5A5A5A', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: '15px', color: 'white'}}
+                        fullWidth
+                        type="submit"
+                      >
+                        {t('login.login')}
+                      </Button>
+                    </Grid>
                   </Grid>
-                  {isError && (
-                    <Box paddingBottom={2}>
-                      <Alert severity="error">
-                        Please check your ID and password.
-                      </Alert>
-                    </Box>
-                  )}
+                </Box>
+              </form>
+              <Box marginTop={1}>
+                <Grid
+                  container
+                  spacing={2}
+                  direction="column"
+                  alignItems="center"
+                >
                   <Grid item>
-                    <TextField
-                      inputRef={register}
-                      name="email"
-                      label={t('login.username')}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      error={!!errors.email}
-                      helperText={errors.email?.message}
-                    />
+                    <RouteLink to="/forgot-password">
+                      {t('login.forgot_password')}
+                    </RouteLink>
                   </Grid>
                   <Grid item>
-                    <TextField
-                      inputRef={register}
-                      name="password"
-                      label={t('login.password')}
-                      variant="outlined"
-                      size="small"
-                      type="password"
-                      fullWidth
-                      error={!!errors.password}
-                      helperText={errors.password?.message}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <FormControlLabel
-                      onChange={(_, checked) => {
-                        setShouldRememberCredentials(checked);
-                      }}
-                      checked={shouldRememberCredentials}
-                      control={<Checkbox name="remember_me" color="primary" />}
-                      label={t('login.remember_me')}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      startIcon={
-                        formState.isSubmitting && <CircularProgress size={18} />
-                      }
-                      disabled={formState.isSubmitting}
-                      disableElevation
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      type="submit"
-                    >
-                      {t('login.login')}
-                    </Button>
+                    {/* <RouteLink to="/register">Register Account</RouteLink> */}
                   </Grid>
                 </Grid>
               </Box>
-            </form>
-            <Box marginTop={1}>
-              <Grid
-                container
-                spacing={2}
-                direction="column"
-                alignItems="center"
-              >
-                <Grid item>
-                  <RouteLink to="/forgot-password">
-                    {t('login.forgot_password')}
-                  </RouteLink>
-                </Grid>
-                <Grid item>
-                  {/* <RouteLink to="/register">Register Account</RouteLink> */}
-                </Grid>
-              </Grid>
-            </Box>
+            </CardContentDiv>
           </CardContent>
         </Card>
-        <Box
+        {/* <Box
           paddingY={2}
           display="flex"
           justifyContent="space-between"
@@ -226,8 +233,24 @@ export function Login() {
               </MenuItem>
             ))}
           </TextField>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );
 }
+
+
+const CardContentDiv = styled.div`
+  position: absolute;
+  width: 500px;
+  height: 480px;
+  left: 710px;
+  top: 272px;
+
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 18px;
+`;
