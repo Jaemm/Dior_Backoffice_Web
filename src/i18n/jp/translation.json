@@ -1,0 +1,141 @@
+{
+  "language": "言語",
+  "sidebar": {
+    "brand_details": "ブランドの詳細",
+    "company_profile": "会社プロフィール",
+    "analysis_record": "分析記録",
+    "registered_devices": "登録されたデバイス",
+    "logout": "ログアウト"
+  },
+  "login": {
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "remember_me": "パスワード。パスワードを記憶する",
+    "login": "ログイン",
+    "forgot_password": "パスワードを忘れた？",
+    "contact_us_link": "お問い合わせ"
+  },
+  "forgot_password": {
+    "title": "パスワードを忘れた？",
+    "email": "メール",
+    "helper_text": "一時パスワードをメールで送信",
+    "recover": "回復する"
+  },
+  "header": {
+    "location": "位置",
+    "login_date": "ログイン",
+    "welcome": "ようこそ！"
+  },
+  "company_profile": {
+    "title": "会社プロフィール",
+    "brand_manager_details": {
+      "title": "ブランドマネージャーの詳細",
+      "country": "国",
+      "city": "都市",
+      "store_name": "店舗名/番号",
+      "store_manager": "店長"
+    },
+    "store_statistics": {
+      "title": "店頭統計",
+      "started_since": "サービス開始時点",
+      "total_customers": "総顧客",
+      "total_analysis": "総診断回数",
+      "registered_devices": "登録されたデバイス"
+    },
+    "total_statistics": {
+      "title": "総統計",
+      "note": "注：この統計は、すべてのポイントの情報をもとに算出されました",
+      "started_since": "サービス開始時点",
+      "total_customers": "総顧客",
+      "total_analysis": "総診断回数",
+      "registered_devices": "登録されたデバイス"
+    }
+  },
+  "registered_devices": {
+    "title": "登録されたデバイス",
+    "search": "検索",
+    "filter_by": "検索条件",
+    "reset": "初期化",
+    "export": "データの抽出",
+    "device_id": "診断機のID",
+    "optic_number": "鏡筒番号",
+    "product_code": "製品コード",
+    "email": "メールアドレス",
+    "country_code": "国コード",
+    "store": "保存",
+    "all": "すべて"
+  },
+  "analysis_record": {
+    "title": "分析記録",
+    "from": "〜から",
+    "to": "〜まで",
+    "search": "検索",
+    "filter_by": "検索条件",
+    "reset": "初期化",
+    "export_selected": "選択データの抽出",
+    "export_all": "すべてのデータの抽出",
+    "details": "詳細",
+    "name": "名前",
+    "batch_id": "ID",
+    "hydration": "水分",
+    "sebum": "油分",
+    "pores": "毛穴",
+    "spots": "くすみ",
+    "wrinkles": "しわ",
+    "dark_circle": "ダークサークル",
+    "sensitivity": "感度",
+    "keratin": "角質",
+    "impurities": "皮脂",
+    "all": "すべて"
+  },
+  "customer_record": {
+    "batch_id": "ID",
+    "customer": "お客様",
+    "gender": "性別",
+    "email": "メール",
+    "age": "年齢",
+    "skin_color": "肌の色",
+    "ethnicity": "人種",
+    "country_code": "国コード",
+    "device_id": "診断機のID",
+    "product_code": "製品コード",
+    "device_model": "デバイスのモデル",
+    "os_system_code": "OSシステムコード",
+    "id": "ユーザ名",
+    "measurement": "測定",
+    "date": "日付",
+    "time": "時間",
+    "temperature": "気温",
+    "uv_index": "紫外線指数",
+    "analysis_result": "分析の結果、",
+    "image_url": "画像のURL",
+    "go_back_to_records": "記録に戻る"
+  },
+  "brand_details": {
+    "company": "会社",
+    "address": "住所",
+    "contact_information": "連絡先情報",
+    "started_since": "開始日",
+    "brand_manager": "ブランドマネージャー",
+    "view_customers": "顧客の表示",
+    "assigned_customers": "割り当てられた顧客",
+    "store": "お店",
+    "branch": "ブランチ",
+    "country": "国",
+    "name": "名前",
+    "email": "Eメール",
+    "status": "状態",
+    "all": "すべて"
+  },
+  "export_dialog": {
+    "title": "輸出記録",
+    "file_name": "ファイル名",
+    "select_file_format": "ファイル形式の選択",
+    "save": "保存"
+  },
+  "pagination": {
+    "rows_per_page": "ページあたりの行"
+  },
+  "loading": "読み込んでいます...",
+  "no_data": "データなし"
+}

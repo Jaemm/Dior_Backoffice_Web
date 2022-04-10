@@ -1,0 +1,6 @@
+*{
+  box-sizing: border-box;
+}
+table .MuiTableCell-stickyHeader {
+  z-index: unset;
+}

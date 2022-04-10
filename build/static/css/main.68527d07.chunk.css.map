@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/GlobalStyles.css"],"names":[],"mappings":"AAAA,EACE,qBACF,CACA,iCACE,aACF","file":"main.68527d07.chunk.css","sourcesContent":["*{\n  box-sizing: border-box;\n}\ntable .MuiTableCell-stickyHeader {\n  z-index: unset;\n}\n"]}

@@ -1,0 +1,210 @@
+{
+  "language": "Language",
+  "version": "APP VERSION",
+  "male": "Male",
+  "female": "Female",
+  "sidebar": {
+    "brand_details": "Brand Details",
+    "customer_record": "Customer Record",
+    "statistics_and_reports": "Statistics & Reports",
+    "registered_devices": "Registered Devices",
+    "analysis_history": "Analysis History",
+    "analysis_details": "Analysis Details",
+    "logout": "Logout"
+  },
+  "login": {
+    "username": "Username",
+    "password": "Password",
+    "remember_me": "Remember me",
+    "login": "Login",
+    "forgot_password": "Forgot Password?",
+    "contact_us_link": "Form more details Contact Us",
+    "logout_confirmation_msg": "Are you sure you want to logout?",
+    "no": "No",
+    "yes": "Yes"
+  },
+  "forgot_password": {
+    "title": "Forgot Password?",
+    "email": "Email",
+    "helper_text": "You will receive recovery password in your email",
+    "recover": "Recover",
+    "recover_email_sent_msg": "Email successfully sent",
+    "email_required_msg": "'Enter your email'"
+  },
+  "reset_password": {
+    "title": "Reset Password"
+  },
+  "update_password": {
+    "title": "Update your password",
+    "required": "This field is required",
+    "old_password": "Enter old password",
+    "new_password": "New password",
+    "confirm_new_password": "Confirm new password",
+    "no_match": "Passwords did not match",
+    "change_password": "Change Password"
+  },
+  "date_picker": {
+    "start": "start",
+    "end": "end",
+    "to": "to"
+  },
+  "datatable": {
+    "refresh": "Refresh",
+    "export": "Export",
+    "search": "Search",
+    "filter_by": "Filter By",
+    "reset": "Reset"
+  },
+  "header": {
+    "location": "Location",
+    "login_date": "Login Date",
+    "welcome": "Welcome"
+  },
+  "registered_devices": {
+    "title": "Registered Devices",
+    "search": "Search",
+    "filter_by": "Filter By",
+    "reset": "Reset",
+    "export": "Export",
+    "device_id": "Device ID",
+    "optic_number": "Optic Number",
+    "product_code": "Product Code",
+    "email": "Email Address",
+    "country_code": "Country Code",
+    "store": "Store",
+    "all": "All",
+    "device_code": "Device Code",
+    "purchase_date": "Purchase Date",
+    "country": "Country"
+  },
+  "customer_record": {
+    "last_name": "Last Name",
+    "first_name": "First Name",
+    "service_name": "Service Name",
+    "email": "Email",
+    "phone_number": "Phone number",
+    "country": "Country",
+    "title": "Customer Record"
+  },
+  "analysis_details": {
+    "customer_id": "Customer ID",
+    "customer_name": "Customer name",
+    "customer_birthdate": "Customer birth date",
+    "country": "Country",
+    "email": "Email",
+    "phone_number": "Phone number",
+    "skin_group": "Skin Group",
+    "ethnicity": "Ethnicity",
+    "gender": "Gender",
+    "measurement_details": {
+      "title": "Measurement Details",
+      "device_id": "Device ID",
+      "product_code": "Product Code",
+      "phone_model": "Phone Model",
+      "phone_os": "Phone OS",
+      "batch_id": "Batch ID",
+      "app_name": "App Name",
+      "date_time": "Date/Time",
+      "temperature": "Temperature",
+      "humidity": "Humidity",
+      "uv_index": "UV-Index"
+    },
+    "analysis_information": {
+      "title": "Analysis Information",
+      "measurement": "Measurement",
+      "score": "Score",
+      "raw_value": "Raw Value",
+      "view_details": "View Details",
+      "no_img": "No Image",
+      "image": "Image"
+    }
+  },
+  "analysis_history": {
+    "title": "Analysis History",
+    "customer_id": "Customer ID",
+    "customer_name": "Customer name",
+    "customer_information": "Customer Information",
+    "birth_date": "Birth date",
+    "country": "Country",
+    "email": "Email",
+    "phone_number": "Phone number",
+    "skin_group": "Skin Group",
+    "ethnicity": "Ethnicity",
+    "gender": "Gender",
+    "analysis": "Analysis",
+    "batch_id": "Batch ID",
+    "device_id": "Device ID",
+    "service_name": "Service Name",
+    "analysis_date": "Analysis Date",
+    "analysis_details": "Analysis Details",
+    "view_details": "View Details"
+  },
+  "assigned_customers": {
+    "bm": "BM",
+    "name": "Name",
+    "store": "Store",
+    "contact_information": "Contact Information",
+    "address": "Address",
+    "started_since": "Started Since",
+    "country": "Country",
+    "assigned_customers": "Assigned Customers",
+    "last_name": "Last Name",
+    "first_name": "First Name",
+    "service_name": "Service Name",
+    "email": "Email",
+    "phone_number": "Phone number"
+  },
+  "brand_details": {
+    "company": "Company",
+    "address": "Address",
+    "contact_information": "Contact Information",
+    "started_since": "Started Since",
+    "brand_manager": "Brand Manager",
+    "view_customers": "View Customers",
+    "assigned_customers": "Assigned Customers",
+    "store": "Store",
+    "branch": "Branch",
+    "country": "Country",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "status": "Status",
+    "all": "All",
+    "bm": "BM",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "statistics": {
+    "title": "Statistics & Reports",
+    "store_id": "Store ID",
+    "total_bms_overall": "Total BM's Overall",
+    "store_name": "Store Name",
+    "total_devices_overall": "Total Devices Overall",
+    "contact_information": "Contact Information",
+    "month": "Month",
+    "week": "Week",
+    "total_customers": "Total Customers",
+    "overall": "Overall",
+    "total_analysis": "Total Analysis",
+    "new_customers": "New Customers",
+    "new_analysis": "New Analysis",
+    "this_week": "This Week",
+    "this_month": "This Month",
+    "store_details": "STORE DETAILS",
+    "select_date": "Select Date",
+    "customers": "Customers",
+    "store_statistics": "Store Statistics"
+  },
+  "export_dialog": {
+    "title": "Export Records",
+    "file_name": "File Name",
+    "select_file_format": "Select File Format",
+    "save": "Save",
+    "not_supported": "This feature is not supported yet"
+  },
+  "pagination": {
+    "rows_per_page": "Rows Per Page"
+  },
+  "loading": "Loading...",
+  "no_data": "No Data"
+}

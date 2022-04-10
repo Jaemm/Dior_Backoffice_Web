@@ -1,0 +1,210 @@
+{
+  "language": "語言",
+  "version": "軟體版本",
+  "male": "男性",
+  "female": "女性",
+  "sidebar": {
+    "brand_details": "品牌詳情",
+    "customer_record": "客戶記錄",
+    "statistics_and_reports": "統計與報告",
+    "registered_devices": "已注册設備",
+    "analysis_history": "分析記錄",
+    "analysis_details": "分析詳細資訊",
+    "logout": "退出"
+  },
+  "login": {
+    "username": "用戶名",
+    "password": "密碼",
+    "remember_me": "記住我",
+    "login": "登入",
+    "forgot_password": "忘記密碼？",
+    "contact_us_link": "詳情請聯繫我們",
+    "logout_confirmation_msg": "你確定要退出嗎？",
+    "no": "不",
+    "yes": "是的"
+  },
+  "forgot_password": {
+    "title": "忘記密碼？",
+    "email": "電子郵件",
+    "helper_text": "您將在電子郵件中收到恢復密碼",
+    "recover": "恢復",
+    "recover_email_sent_msg": "電子郵件已成功發送",
+    "email_required_msg": "'輸入您的電子郵件'"
+  },
+  "reset_password": {
+    "title": "重置密碼"
+  },
+  "update_password": {
+    "title": "更新您的密碼",
+    "required": "此欄位必填",
+    "old_password": "輸入舊密碼",
+    "new_password": "新密碼",
+    "confirm_new_password": "確認新密碼",
+    "no_match": "密碼不匹配",
+    "change_password": "修改密碼"
+  },
+  "date_picker": {
+    "start": "開始",
+    "end": "結束",
+    "to": "到"
+  },
+  "datatable": {
+    "refresh": "重繪",
+    "export": "傳送",
+    "search": "蒐索",
+    "filter_by": "篩選依據",
+    "reset": "重置"
+  },
+  "header": {
+    "location": "位置",
+    "login_date": "登錄日期",
+    "welcome": "歡迎"
+  },
+  "registered_devices": {
+    "title": "已注册設備",
+    "search": "蒐索",
+    "filter_by": "篩選依據",
+    "reset": "重置密碼",
+    "export": "傳送",
+    "device_id": "產品ID",
+    "optic_number": "鏡頭號碼",
+    "product_code": "產品程式碼",
+    "email": "郵寄地址",
+    "country_code": "國家代碼",
+    "store": "商店",
+    "all": "全部",
+    "device_code": "產品程式碼",
+    "purchase_date": "購買日期",
+    "country": "國家"
+  },
+  "customer_record": {
+    "last_name": "姓",
+    "first_name": "名字",
+    "service_name": "服務名稱",
+    "email": "郵件",
+    "phone_number": "電話號碼",
+    "country": "國家",
+    "title": "客戶記錄"
+  },
+  "analysis_details": {
+    "customer_id": "客戶ID",
+    "customer_name": "客戶名子",
+    "customer_birthdate": "客戶出生日期",
+    "country": "國家",
+    "email": "電子郵件",
+    "phone_number": "電話號碼",
+    "skin_group": "皮膚組",
+    "ethnicity": "種族",
+    "gender": "性別",
+    "measurement_details": {
+      "title": "診斷細節",
+      "device_id": "設備ID",
+      "product_code": "產品程式碼",
+      "phone_model": "電話號碼",
+      "phone_os": "手機OS",
+      "batch_id": "分店ID",
+      "app_name": "軟體名稱",
+      "date_time": "日期/時間",
+      "temperature": "氣溫",
+      "humidity": "濕度",
+      "uv_index": "紫外線指數"
+    },
+    "analysis_information": {
+      "title": "分析資訊",
+      "measurement": "量測",
+      "score": "分數",
+      "raw_value": "原始值",
+      "view_details": "查看詳細資訊",
+      "no_img": "沒有影像",
+      "image": "影像"
+    }
+  },
+  "analysis_history": {
+    "title": "分析歷史",
+    "customer_id": "客戶ID",
+    "customer_name": "客戶名稱",
+    "customer_information": "客戶資訊",
+    "birth_date": "出生日期",
+    "country": "國家",
+    "email": "電子郵件",
+    "phone_number": "手機號碼",
+    "skin_group": "皮膚組",
+    "ethnicity": "種族",
+    "gender": "性別",
+    "analysis": "分析",
+    "batch_id": "分店ID",
+    "device_id": "設備ID",
+    "service_name": "服務名稱",
+    "analysis_date": "分析日期",
+    "analysis_details": "詳細分析資訊",
+    "view_details": "查看詳細資訊"
+  },
+  "assigned_customers": {
+    "bm": "BM",
+    "name": "姓名",
+    "store": "商店",
+    "contact_information": "聯繫方式",
+    "address": "地址",
+    "started_since": "開始",
+    "country": "國家",
+    "assigned_customers": "指定客戶",
+    "last_name": "姓",
+    "first_name": "名字",
+    "service_name": "服務名稱",
+    "email": "電子郵件",
+    "phone_number": "手機號碼"
+  },
+  "brand_details": {
+    "company": "公司",
+    "address": "地址",
+    "contact_information": "聯繫方式",
+    "started_since": "開始於",
+    "brand_manager": "品牌經理",
+    "view_customers": "查看客戶",
+    "assigned_customers": "指定客戶",
+    "store": "商店",
+    "branch": "分店",
+    "country": "國家",
+    "name": "姓名",
+    "email": "電子郵件",
+    "phone": "電話號碼",
+    "status": "狀態",
+    "all": "全部",
+    "bm": "BM",
+    "active": "活躍",
+    "inactive": "非活躍"
+  },
+  "statistics": {
+    "title": "統計與報告",
+    "store_id": "商店ID",
+    "total_bms_overall": "總計全部BM",
+    "store_name": "商店名稱",
+    "total_devices_overall": "總設備數",
+    "contact_information": "聯繫方式",
+    "month": "月",
+    "week": "周",
+    "total_customers": "所有顧客",
+    "overall": "總計",
+    "total_analysis": "全面分析",
+    "new_customers": "新客戶",
+    "new_analysis": "重新分析",
+    "this_week": "本周",
+    "this_month": "本月",
+    "store_details": "商店詳細資訊",
+    "select_date": "選擇日期",
+    "customers": "客戶",
+    "store_statistics": "商店統計"
+  },
+  "export_dialog": {
+    "title": "匯出記錄",
+    "file_name": "檔名",
+    "select_file_format": "選擇檔案格式",
+    "save": "保存",
+    "not_supported": "此功能尚不受支持"
+  },
+  "pagination": {
+    "rows_per_page": "每頁行數"
+  },
+  "loading": "加載中。。。",
+  "no_data": "沒有數據"
+}
