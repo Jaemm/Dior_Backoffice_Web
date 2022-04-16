@@ -10,7 +10,8 @@
     "registered_devices": "Зарегистрированные аппараты",
     "analysis_history": "История Анализа",
     "analysis_details": "Детали Анализа\n",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "product_catalog": "Product Catalog"
   },
   "login": {
     "username": "Имя пользователя",

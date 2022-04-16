@@ -10,7 +10,8 @@
     "registered_devices": "已注册设备",
     "analysis_history": "历史记录",
     "analysis_details": "分析详细信息",
-    "logout": "注销"
+    "logout": "注销",
+    "product_catalog": "Product Catalog"
   },
   "login": {
     "username": "用户名",

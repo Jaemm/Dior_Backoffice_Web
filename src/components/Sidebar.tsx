@@ -29,6 +29,7 @@ import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { version } from '../../package.json';
 import { useAccessFlags } from '../data/AccessFlags';
 import { APP_LANGUAGES, useAppLanguage } from '../i18n/hooks';
+import Logo from '../assets/images/dior-logo-sidebar.png'
 
 export function Sidebar() {
   const match = useRouteMatch();
@@ -46,6 +47,9 @@ export function Sidebar() {
       width="240px"
       display="flex"
       flexDirection="column"
+      style={{
+        background: 'linear-gradient(90deg, #FFFFFF -29.43%, #CBCBCB 100%)'
+      }}
     >
       <Dialog
         open={showLogoutConfirmation}
@@ -86,9 +90,10 @@ export function Sidebar() {
       </Dialog>
 
       <Box width="200px" padding="16px">
-        <Typography variant="h5" align="center">
+        {/* <Typography variant="h5" align="center">
           Partners DB
-        </Typography>
+        </Typography> */}
+        <img src={Logo} style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
       </Box>
       <Divider />
       <List>
@@ -98,9 +103,13 @@ export function Sidebar() {
             component={Link}
             to="/brand-details"
             selected={match.path === '/brand-details'}
+            className="menu"
           >
             <ListItemIcon>
-              <Sort />
+              { match.path.includes('/brand-details') ? 
+                <Sort style={{color: 'white'}}/>
+                : <Sort />
+              }
             </ListItemIcon>
             <ListItemText primary={t('sidebar.brand_details')} />
           </ListItem>
@@ -111,9 +120,13 @@ export function Sidebar() {
           component={Link}
           to="/customer-record"
           selected={match.path.includes('/customer-record')}
+          className="menu"
         >
           <ListItemIcon>
-            <AccountCircle />
+            { match.path.includes('/customer-record') ? 
+                <AccountCircle style={{color: 'white'}}/>
+                : <AccountCircle />
+              }
           </ListItemIcon>
           <ListItemText primary={t('sidebar.customer_record')} />
         </ListItem>
@@ -124,14 +137,18 @@ export function Sidebar() {
             component={Link}
             to="/product-catalog"
             selected={match.path.includes('/product-catalog')}
+            className="menu"
           >
             <ListItemIcon>
-              <LocalMallOutlinedIcon />
+              { match.path.includes('/product-catalog') ? 
+                <LocalMallOutlinedIcon style={{color: 'white'}}/>
+                : <LocalMallOutlinedIcon />
+              }
             </ListItemIcon>
             <ListItemText primary="Product Catalog" />
           </ListItem>
         )}
-
+{/* 
         {accessFlags.has_access_to_registered_devices && (
           <ListItem
             button
@@ -161,7 +178,7 @@ export function Sidebar() {
             </ListItemIcon>
             <ListItemText primary={t('sidebar.statistics_and_reports')} />
           </ListItem>
-        )}
+        )} */}
       </List>
       <Divider />
       <List>

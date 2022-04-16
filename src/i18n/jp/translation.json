@@ -5,7 +5,8 @@
     "company_profile": "会社プロフィール",
     "analysis_record": "分析記録",
     "registered_devices": "登録されたデバイス",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "product_catalog": "Product Catalog"
   },
   "login": {
     "username": "ユーザー名",

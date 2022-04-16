@@ -90,53 +90,47 @@ const ProductCatalog = () => {
   }, []);
 
   return (
-    <Layout
-      title={
-        <Breadcrumbs aria-label="breadcrumb">
-          <Typography display="initial">Product Catalog</Typography>
-        </Breadcrumbs>
-      }
-    >
-      <Header>
+    <Layout title={t('sidebar.product_catalog')}>
         <ProductModal title="Add Product" icon="add" />
-
-        <Button
-          disabled={!selectedID}
-          variant="contained"
-          onClick={() => setConfirmDelete(true)}
-        >
-          Delete Product
-        </Button>
-        <Dialog open={confirmDelete}>
-          <DialogTitle>Are you sure to delete this item?</DialogTitle>
-          <DialogContent>
-            <Box marginBottom={2}>
-              <Grid container spacing={2}>
-                <Grid item xs>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={() => {
-                      setConfirmDelete(false);
-                    }}
-                  >
-                    No
-                  </Button>
+        <div>
+          <Button
+            disabled={!selectedID}
+            variant="contained"
+            onClick={() => setConfirmDelete(true)}
+          >
+            Delete Product
+          </Button>
+          <Dialog open={confirmDelete}>
+            <DialogTitle>Are you sure to delete this item?</DialogTitle>
+            <DialogContent>
+              <Box marginBottom={2}>
+                <Grid container spacing={2}>
+                  <Grid item xs>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      onClick={() => {
+                        setConfirmDelete(false);
+                      }}
+                    >
+                      No
+                    </Button>
+                  </Grid>
+                  <Grid item xs>
+                    <Button
+                      fullWidth
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() => onDeleteProduct()}
+                    >
+                      Yes
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs>
-                  <Button
-                    fullWidth
-                    color="secondary"
-                    variant="outlined"
-                    onClick={() => onDeleteProduct()}
-                  >
-                    Yes
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-          </DialogContent>
-        </Dialog>
+              </Box>
+            </DialogContent>
+          </Dialog>
+        </div>
         {/* <FormControl
           style={{ marginLeft: 20, width: 200 }}
           variant="outlined"
@@ -159,7 +153,6 @@ const ProductCatalog = () => {
             <MenuItem value={30}>Thirty</MenuItem>
           </Select>
         </FormControl> */}
-      </Header>
 
       <Box marginTop={3} />
 

@@ -10,14 +10,18 @@ import {
 } from '@material-ui/core';
 import { Person } from '@material-ui/icons';
 import { useRequest } from 'ahooks';
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserState, setUser } from '../data/UserState';
 import { useSwitchAppAPI } from '../auth/data/LoginAPI';
 import { useAccessFlags } from '../data/AccessFlags';
 import { ChangePassword } from './ChangePassword';
 
-export function Header(props: BoxProps) {
+interface SectionHeaderProps {
+  title: ReactNode
+}
+
+export function Header({ title }: SectionHeaderProps, props: BoxProps) {
   const user = useUserState();
   const { t } = useTranslation();
   const [showUpdatePasswordDialog, setShowUpdatePasswordDialog] = useState(
@@ -65,7 +69,8 @@ export function Header(props: BoxProps) {
   };
 
   return (
-    <Box margin={2} {...props} textAlign="right">
+    <Box {...props} style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: 'white', padding: '20px' }}>
+      <div className="title">{title}</div>
       {showUpdatePasswordDialog && (
         <ChangePassword
           open
@@ -74,7 +79,7 @@ export function Header(props: BoxProps) {
           }}
         />
       )}
-      <FormControl
+      {/* <FormControl
         variant="outlined"
         style={{ marginRight: 10, minWidth: 350 }}
         size="small"
@@ -97,7 +102,7 @@ export function Header(props: BoxProps) {
             <MenuItem>No service name is available</MenuItem>
           )}
         </Select>
-      </FormControl>
+      </FormControl> */}
       <Button
         variant="outlined"
         size="large"

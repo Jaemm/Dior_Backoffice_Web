@@ -15,7 +15,7 @@ import {
 } from '../helpers/SchemaHelpers';
 
 import { DataTable } from '../components/DataTable';
-
+import NewDataTable from '../components/NewDataTable';
 export type CompanyInfo = InferType<typeof companyInfoSchema>;
 const companyInfoSchema = objectSchema({
   address: stringSchema().nullable(),
@@ -56,6 +56,7 @@ export default function BrandDetailsPage() {
     <Layout title={t('sidebar.brand_details')}>
       <Grid container direction="column" spacing={2} wrap="nowrap">
         <Grid item xs>
+          {/* <NewDataTable /> */}
           <DataTable<BrandAndStore>
             dataIndex="id"
             resource_url="/api/partnerdb/consultants"
@@ -108,7 +109,7 @@ export default function BrandDetailsPage() {
                 label: t('brand_details.status'),
                 key: 'status',
               },
-            ]}
+            ]} 
           />
         </Grid>
       </Grid>

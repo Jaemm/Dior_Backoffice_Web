@@ -10,7 +10,8 @@
     "registered_devices": "Registered Devices",
     "analysis_history": "Analysis History",
     "analysis_details": "Analysis Details",
-    "logout": "Logout"
+    "logout": "Logout",
+    "product_catalog": "Product Catalog"
   },
   "login": {
     "username": "Username",

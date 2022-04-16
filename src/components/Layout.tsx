@@ -12,18 +12,19 @@ export interface LayoutProps extends Omit<BoxProps, 'title'> {
 
 export function Layout({ title, children, loading, ...rest }: LayoutProps) {
   return (
-    <Box display="flex" height="100%" {...rest}>
+    <Box display="flex" height="100%" {...rest} style={{backgroundColor: '#F2F2F2'}}>
       <Box>
         <Sidebar />
       </Box>
-      <Box flexGrow="1" bgcolor="white" overflow="auto" display="flex" flexDirection="column">
-        <Header />
+      <Box flexGrow="1" overflow="auto" display="flex" flexDirection="column">
+        <Header title={title}/>
         <Box padding={2} flexGrow={1} display="flex" flexDirection="column">
-          <SectionHeader title={title} />
           {!loading ? (
-            children
+            <div style={{padding: '20px', backgroundColor: 'white', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)', borderRadius:'20px'}}>
+              {children}
+            </div>
           ) : (
-            <Box flexGrow={1} display="flex" alignItems="center" justifyContent="center">
+            <Box flexGrow={1} display="flex" alignItems="center" justifyContent="center" style={{backgroundColor: 'white'}}>
               <CircularProgress />
             </Box>
           )}

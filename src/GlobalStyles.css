@@ -4,3 +4,74 @@
 table .MuiTableCell-stickyHeader {
   z-index: unset;
 }
+
+.menu.MuiListItem-root.Mui-selected, .menu.MuiListItem-root.Mui-selected:hover {
+  background-color: #5A5A5A !important;
+  border-radius: 30px 0px 0px 30px;
+  color: white;
+}
+
+.title{
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  color: #5A5A5A;
+  margin-top: 20px;
+}
+
+.MuiButton-containedPrimary{
+  background: radial-gradient(67.52% 352.01% at 50% 50%, #747474 0%, #1F1F1F 100%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+}
+
+.table-new{
+  width: 100%;
+  display: flex;
+}
+
+.header{
+
+  /* justify-content: space-between; */
+  background: #D9D9D9;
+  padding: 20px;
+  box-shadow: 0px 6px 10px rgb(0 0 0 / 10%);
+  border-radius: 15px;
+}
+.table-body{
+
+  /* justify-content: space-between; */
+  flex: 1;
+  background: #FFFFFF;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+
+new-header, .new-row {
+  display: flex;  /* aligns all child elements (flex items) in a row */
+}
+new-header {
+  background: #D9D9D9;
+  padding: 20px;
+  box-shadow: 0px 6px 10px rgb(0 0 0 / 10%);
+  border-radius: 15px;
+}
+
+
+
+.new-col {
+  flex: 1;        /* distributes space on the line equally among items */
+}
+
+.new-row {
+  background: #FFFFFF;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  margin-top: 20px;
+}
