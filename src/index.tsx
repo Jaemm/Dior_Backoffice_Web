@@ -21,6 +21,7 @@ import AnalysisDetailsPage from './pages/AnalysisDetails';
 import AnalysisHistoryPage from './pages/AnalysisHistoryPage';
 import { CustomerDetailsPage } from './pages/AssignedCustomers';
 import BrandDetailsPage from './pages/BrandDetails';
+import BeautyConsultantsPage from './pages/BeautyConsultants'
 import CustomerRecord from './pages/CustomerRecord';
 import RegisteredDevicesPage from './pages/RegisteredDevicesPage';
 import { StatisticsAndReports } from './pages/StatisticsAndReports';
@@ -52,6 +53,10 @@ ReactDOM.render(
 
                   <Route path="/brand-details">
                     <BrandDetailsPage />
+                  </Route>
+
+                  <Route path="/beauty-consultants">
+                    <BeautyConsultantsPage />
                   </Route>
 
                   <Route path="/customer-record/:customer_id/:analysis_id/:batch_id">

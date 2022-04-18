@@ -99,3 +99,13 @@ new-header {
   
   color: #707070;
 }
+
+.is-active-radio-div{
+  border: 0.5px solid rgb(0 0 0 / 23%);
+  box-sizing: border-box;
+  border-radius: 4px;
+  width: 440px;
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+}

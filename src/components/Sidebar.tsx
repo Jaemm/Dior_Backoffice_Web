@@ -114,7 +114,21 @@ export function Sidebar() {
             <ListItemText primary={t('sidebar.brand_details')} />
           </ListItem>
         )}
-
+        <ListItem
+          button
+          component={Link}
+          to="/beauty-consultants"
+          selected={match.path.includes('/beauty-consultants')}
+          className="menu"
+        >
+          <ListItemIcon>
+            { match.path.includes('/beauty-consultants') ? 
+                <AccountCircle style={{color: 'white'}}/>
+                : <AccountCircle />
+              }
+          </ListItemIcon>
+          <ListItemText primary={t('sidebar.beauty_consultant')} />
+        </ListItem>
         <ListItem
           button
           component={Link}
