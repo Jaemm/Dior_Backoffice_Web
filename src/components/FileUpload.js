@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppContext } from '../data/AppContext';
 
-const FileUpload = ({ productData, setProductData, setLoading }) => {
+const FileUpload = ({ productData, setProductData, setLoading, setImageUrl }) => {
   const [show, setShow] = useState(false);
   const { token } = useAppContext();
   const [selectedFile, setSelectedFile] = useState();
@@ -14,7 +14,7 @@ const FileUpload = ({ productData, setProductData, setLoading }) => {
   };
 
   const handleSubmission = () => {
-    setLoading(true);
+    setLoading && setLoading(true);
     axios
       .get(
         'https://v2-app.chowis.com/api/pmx/product_recommendations/presign_upload',
@@ -36,7 +36,7 @@ const FileUpload = ({ productData, setProductData, setLoading }) => {
       })
       .catch((err) => {
         console.log('Presign Upload Error => ', err);
-        setLoading(false);
+        setLoading && setLoading(false);
       });
   };
 
@@ -44,15 +44,16 @@ const FileUpload = ({ productData, setProductData, setLoading }) => {
     axios
       .put(presigned_url, selectedFile, {})
       .then((res) => {
-        setLoading(false);
+        setLoading && setLoading(false);
         console.log('S3 Testing Success!', res.status);
         setShow(!show);
         //if status 200 set public_url to image_url
-        setProductData({ ...productData, image_url: public_url });
+        setImageUrl(public_url)
+        // setProductData({ ...productData, image_url: public_url });
       })
       .catch((err) => {
         console.log('S3 Testing Error =>', err);
-        setLoading(false);
+        setLoading && setLoading(false);
       });
   };
 
@@ -70,7 +71,7 @@ const FileUpload = ({ productData, setProductData, setLoading }) => {
           onChange={changeHandler}
           style={{
             width: '275px',
-            height: '372px',
+            height: '200px',
             borderRadius: 5,
             opacity: 0,
             cursor: 'pointer',
@@ -98,7 +99,7 @@ const Container = styled.div`
 
   .image {
     width: 100%;
-    height: 376px;
+    height: 200px;
     object-fit: cover;
   }
 `;

@@ -1,185 +1,380 @@
-import {
-  Box,
-  Breadcrumbs,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import React, { useEffect } from 'react';
+import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Item } from '@material-ui/core';
+import { useRequest } from 'ahooks';
+import React, {useState} from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { InferType } from 'yup';
+
+import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
-import { ProductCatalogDataTable } from '../components/PorductCatalogDataTable';
-import axios from 'axios';
+// import { parseDateString } from '../helpers/dateHelpers';
+import {
+  numberSchema,
+  objectSchema,
+  stringSchema,
+} from '../helpers/SchemaHelpers';
 import { useAppContext } from '../data/AppContext';
-import ProductModal from '../components/ProductModal';
-import { useSnackbar } from 'notistack';
+import axios from 'axios';
+import ImageIcon from '@material-ui/icons/Image';
+import FileUpload from '../components/FileUpload';
 
-const useStyles = makeStyles(() => ({
-  formControl: {
-    minWidth: 120,
-  },
-  select: {},
-  label: {},
-}));
+import { DataTable } from '../components/DataTable';
+import NewDataTable from '../components/NewDataTable';
+// export type CompanyInfo = InferType<typeof companyInfoSchema>;
+// const companyInfoSchema = objectSchema({
+//   address: stringSchema().nullable(),
+//   email: stringSchema().nullable(),
+//   name: stringSchema().nullable(),
+//   phone: stringSchema().nullable(),
+//   registration_date: stringSchema().nullable(),
+// });
 
-const ProductCatalog = () => {
-  const { token } = useAppContext();
+// type BrandAndStore = InferType<typeof brandAndStoreSchema>;
+// const brandAndStoreSchema = objectSchema({
+//   id: numberSchema(),
+//   name: stringSchema(),
+//   code: stringSchema(),
+//   email: stringSchema(),
+//   country: stringSchema(),
+//   password: stringSchema(),
+//   total_devices: numberSchema(),
+//   last_consultation_date: stringSchema(),
+//   created_at: stringSchema(),
+// });
+
+export default function BrandDetailsPage() {
+  const api = useAPI();
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const branchesInfo = useRequest(() =>
+    api.requestResource('/api/dior/company_branches')
+  );
+  const { token } = useAppContext();
 
-  const [productList, setProductList] = React.useState();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedID, setSelectedID] = React.useState();
-  const [confirmDelete, setConfirmDelete] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false)
+  const [country, setCountry] = useState('')
+  const [code, setCode] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [reloadNow, setReloadNow] = useState(false)
+  const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [bcCode, setBcCode] = useState('')
+  const [link, setLink] = useState('')
+  const [category, setCategory] = useState('')
+  const [collection, setCollection] = useState('')
+  const [axis, setAxis] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
 
-  const onDeleteProduct = () => {
-    axios
-      .delete(
-        `https://v2-app.chowis.com/api/pmx/product_recommendations/${selectedID}`,
-        {
-          headers: {
-            'X-CHOWIS-CONSULTANT-TOKEN': token,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setConfirmDelete(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-        enqueueSnackbar('Product Successfully Deleted', {
-          variant: 'success',
-        });
-      })
-      .catch((err) => {
-        console.log('delete err', err);
-        setConfirmDelete(false);
-        enqueueSnackbar(err.message, {
-          variant: 'error',
-        });
-      });
-  };
+  const headers = [
+    { label: 'Name', key: 'name' },
+    { label: 'ID', key: 'id' },
+    { label: 'Address', key: 'adderess' },
+    { label: 'Email', key: 'email' },
+    { label: 'Phone Number', key: 'phone' },
+  ];
 
-  const fetchListOfProductRecommendations = () => {
-    setIsLoading(true);
-    axios
-      .get('https://v2-app.chowis.com/api/pmx/product_recommendations', {
+  const onClickAddButton = () => {
+    // alert('onClickAddButton')
+    setOpenModal(true)
+  }
+
+  const deleteMultiplePos = () => {
+    console.log(selectedRowIds)
+    const productData = {
+      ids: selectedRowIds
+    }
+    if (window.confirm("Delete the item?")) {
+      axios({
+        method: 'DELETE',
+        url: 'https://v2-app.chowis.com/api/pmx/product_recommendations/delete_multiple',
+        data: productData,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
         },
       })
       .then((res) => {
-        console.log('LIst', res.data.data);
-        setProductList(res.data?.data);
-        setIsLoading(false);
+        console.log(res)
+        if(res.status === 200){
+          // reload
+          setReloadNow(true)
+          setOpenModal(false)
+        }
       })
-      .catch((err) => {
-        console.log('Product catalog List Err', err);
-        setIsLoading(false);
-      });
-  };
+    }
+  }
 
-  useEffect(() => {
-    fetchListOfProductRecommendations();
-  }, []);
-
-  return (
-    <Layout title={t('sidebar.product_catalog')}>
-        <ProductModal title="Add Product" icon="add" />
-        <div>
+  const toolbarButtons =
+    <Grid item>
+      <Grid container spacing={2}>
           <Button
-            disabled={!selectedID}
             variant="contained"
-            onClick={() => setConfirmDelete(true)}
+            color="primary"
+            style={{marginRight: '10px'}}
+            onClick={() => {onClickAddButton()}}
           >
-            Delete Product
+            Add
           </Button>
-          <Dialog open={confirmDelete}>
-            <DialogTitle>Are you sure to delete this item?</DialogTitle>
-            <DialogContent>
-              <Box marginBottom={2}>
-                <Grid container spacing={2}>
-                  <Grid item xs>
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      onClick={() => {
-                        setConfirmDelete(false);
-                      }}
-                    >
-                      No
-                    </Button>
-                  </Grid>
-                  <Grid item xs>
-                    <Button
-                      fullWidth
-                      color="secondary"
-                      variant="outlined"
-                      onClick={() => onDeleteProduct()}
-                    >
-                      Yes
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Box>
-            </DialogContent>
-          </Dialog>
-        </div>
-        {/* <FormControl
-          style={{ marginLeft: 20, width: 200 }}
-          variant="outlined"
-          className={classes.formControl}
-          size="small"
-        >
-          <InputLabel id="demo-simple-select-label" className={classes.label}>
-            Filter By Brand
-          </InputLabel>
-          <Select
-            className={classes.select}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={filter}
-            onChange={handleChange}
-            label="Age"
-          >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl> */}
+          <Button
+            variant="contained"
+            onClick={()=> {deleteMultiplePos()}}
+            color="primary">
+            Delete
+            
+          </Button>
+      </Grid>
+    </Grid>
 
-      <Box marginTop={3} />
+  const saveProduct = () => {
+    const productData = {
+      code: code,
+      name: name,
+      link: link,
+      category: category,
+      collection: collection,
+      axis: axis,
+      image_url: imageUrl
+    }
 
+    axios({
+      method: 'POST',
+      url: 'https://v2-app.chowis.com/api/pmx/product_recommendations',
+      data: productData,
+      headers: {
+        'X-CHOWIS-CONSULTANT-TOKEN': token,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+      if(res.status === 200){
+        // reload
+        setReloadNow(true)
+        setOpenModal(false)
+      }
+    })
+  }
+console.log('branchesInfo', branchesInfo)
+  // const branchesSelect = branchesInfo.map((e) => return({id: e.id, name: e.name, code: e.code}))
+  return (
+    <Layout title={t('sidebar.beauty_consultant')}>
+      <Modal
+        open={openModal}
+        onClose={()=>{setOpenModal(false)}}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Box className="modal-box" style={{height: '620px', width: '600px'}}>
+          <div className="modal-header">ADD NEW POS</div>
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+                <TextField
+                  label={'Product Code'}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  value={code}
+                  style={{marginTop: '20px'}}
+                  onChange={(e) => {
+                    setCode(e.target.value)
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                />
+            </Grid>
+            <Grid item xs={8}>
+                <TextField
+                  label={'Product Name'}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  value={name}
+                  style={{marginTop: '20px'}}
+                  onChange={(e) => {
+                    setName(e.target.value)
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label={'Product Link'}
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={link}
+                style={{marginTop: '20px'}}
+                onChange={(e) => {
+                  setLink(e.target.value)
+                }}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label={'Category'}
+                variant="outlined"
+                size="small"
+                select
+                fullWidth
+                value={category}
+                style={{marginTop: '20px'}}
+                onChange={(e) => {
+                  setCategory(e.target.value)
+                }}
+                InputLabelProps={{ shrink: true }}
+              >
+                <MenuItem key={1} value={'Serums'}>
+                  Serums
+                </MenuItem>
+                <MenuItem key={1} value={'Pre-serums'}>
+                  Pre-serums
+                </MenuItem>
+                <MenuItem key={1} value={'Eye Care'}>
+                  Eye Care
+                </MenuItem>
+                <MenuItem key={1} value={'Lotions'}>
+                  Lotions
+                </MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label={'Collection'}
+                variant="outlined"
+                size="small"
+                select
+                fullWidth
+                value={collection}
+                style={{marginTop: '20px'}}
+                onChange={(e) => {
+                  setCollection(e.target.value)
+                }}
+                InputLabelProps={{ shrink: true }}
+              >
+                <MenuItem key={1} value={'Dior Prestige	'}>
+                  Dior Prestige	
+                </MenuItem>
+                <MenuItem key={1} value={'Capture Totale'}>
+                  Capture Totale
+                </MenuItem>
+                <MenuItem key={1} value={'Dior Prestige Light-in-White'}>
+                  Dior Prestige Light-in-White
+                </MenuItem>
+              </TextField>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                label={'Axis'}
+                variant="outlined"
+                size="small"
+                select
+                fullWidth
+                value={axis}
+                style={{marginTop: '20px'}}
+                onChange={(e) => {
+                  setAxis(e.target.value)
+                }}
+                InputLabelProps={{ shrink: true }}
+              >
+                <MenuItem key={1} value={'Makeup'}>
+                  Makeup
+                </MenuItem>
+                <MenuItem key={1} value={'Skincare'}>
+                  Skincare
+                </MenuItem>
+              </TextField>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{marginTop: '20px', width: '100%'}}
+                onClick={() => {saveProduct()}}
+              >
+                Save
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <div className="image-container">
+                  {imageUrl && (
+                    <img
+                      src={imageUrl}
+                      alt="product"
+                      className="image"
+                    />
+                  )}
+                  <ImageIcon htmlColor="blue" />
+                  <FileUpload
+                  setImageUrl={setImageUrl}
+                    // setProductData={setProductData}
+                    // productData={productData}
+                    // setLoading={setImageLoading}
+                  />
+                </div>
+            </Grid>
+          </Grid>
+        </Box>
+      </Modal>
       <Grid container direction="column" spacing={2} wrap="nowrap">
         <Grid item xs>
-          <ProductCatalogDataTable
-            productList={productList}
-            isLoading={isLoading}
-            setSelectedID={setSelectedID}
-            selectedID={selectedID}
+          <DataTable
             dataIndex="id"
             resource_url="/api/pmx/product_recommendations"
+            headers={headers}
+            reloadNow={reloadNow}
+            setReloadNow={setReloadNow}
+            setSelectedRowIdsFromParent={setSelectedRowIds}
+            columns={[
+              {
+                label: 'Product Image',
+                key: 'image',
+                content: ({ image_url }) =>
+                <div className="image-box">
+                {image_url ? (
+                  <img
+                    className="image"
+                    src={image_url}
+                    alt="product"
+                  />
+                ) : (
+                  <p>No Image</p>
+                )}
+              </div>
+              },
+              { label: 'Product Name', key: 'name' },
+              { label: 'Category', key: 'category' },
+              { label: 'Collection', key: 'collection' },
+              { label: 'Axis', key: 'routine' },
+              { label: 'Link', key: 'link' }
+            ]}
             toolbar={{
+              search: true,
+              filter: true,
+              pagination: true,
               export: true,
             }}
+            toolbarButtons={toolbarButtons}
+            filters={[
+              { label: t('brand_details.all'), key: '-id' },
+              {
+                label: t('brand_details.country'),
+                key: 'country',
+              },
+              {
+                label: t('brand_details.name'),
+                key: 'name',
+              },
+              {
+                label: t('brand_details.email'),
+                key: 'email',
+              },
+              {
+                label: t('brand_details.status'),
+                key: 'status',
+              },
+            ]} 
           />
         </Grid>
       </Grid>
     </Layout>
   );
-};
-
-export default ProductCatalog;
-
-const Header = styled.div`
-  display: flex;
-  align-items: 'center';
-  margin-top: -146px;
-  margin-bottom: 100px;
-`;
+}

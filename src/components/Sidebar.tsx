@@ -218,7 +218,7 @@ export function Sidebar() {
       >
         <Grid container direction="column" alignItems="stretch" spacing={2}>
           <Grid item xs>
-            <TextField
+            {/* <TextField
               label={
                 currentLanguage !== 'en'
                   ? `${t('language')}/Language`
@@ -238,7 +238,7 @@ export function Sidebar() {
                   {value}
                 </MenuItem>
               ))}
-            </TextField>
+            </TextField> */}
           </Grid>
           <Grid item>
             <Typography color="textSecondary" align="center">

@@ -58,9 +58,12 @@ export function ProductCatalogDataTable(props) {
             <Checkbox color="primary" className="id" />
             {/* <p className="id">PID</p> */}
             <p className="image">Image</p>
+            <p className="product-code">Product Code</p>
             <p className="product-name">Product Name</p>
-            <p className="brand">Link</p>
-            <p className="status">Type</p>
+            <p className="category">Category</p>
+            <p className="collection">Collection</p>
+            <p className="axis">Axis</p>
+            <p className="link">Link</p>
             <p className="modification">Modification</p>
           </TableHeader>
           {isLoading && (
@@ -103,12 +106,19 @@ export function ProductCatalogDataTable(props) {
                       <p>No Image</p>
                     )}
                   </div>
+                  <p className="product-code">{item.code}</p>
                   <p className="product-name">{item.name}</p>
-                  <a href={item.link} target="blank" className="brand">
-                    {item.link}
+                  <a href={item.link} target="blank" className="category">
+                    {item.category}
                   </a>
-                  <p className="price" style={{ textAlign: 'center' }}>
-                    {item.product_type}
+                  <p className="colelction" style={{ textAlign: 'center' }}>
+                    {item.collection}
+                  </p>
+                  <p className="routine" style={{ textAlign: 'center' }}>
+                    {item.routine}
+                  </p>
+                  <p className="link" style={{ textAlign: 'center' }}>
+                    {item.link}
                   </p>
                   <div className="edit-btn">
                     <ProductModal title="Edit" item={item} />
