@@ -75,3 +75,27 @@ new-header {
   border-radius: 15px;
   margin-top: 20px;
 }
+
+.modal-box{
+  position: absolute;
+  width: 514px;
+  height: 470px;
+  left: 703px;
+  top: 163px;
+  padding: 40px;
+  background: #FFFFFF;
+  border-radius: 30px;
+}
+
+.modal-header{
+  font-family: 'Segoe UI';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  /* identical to box height */
+  
+  text-align: center;
+  
+  color: #707070;
+}

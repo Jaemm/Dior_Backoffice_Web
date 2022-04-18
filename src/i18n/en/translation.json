@@ -173,7 +173,11 @@
     "all": "All",
     "bm": "BM",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "code": "Code",
+    "total_devices": "Total Devices",
+    "password": "Password",
+    "last_consultation_date": "Last Consultation Date"
   },
   "statistics": {
     "title": "Statistics & Reports",

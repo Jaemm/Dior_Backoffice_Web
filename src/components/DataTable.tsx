@@ -55,6 +55,10 @@ interface DataTableProps<T> {
     filter_by_date?: boolean;
     export?: boolean;
   };
+  toolbarButtons?: any;
+  reloadNow?: any;
+  setReloadNow?: any;
+  setSelectedRowIdsFromParent?: any;
   pageSize?: number;
   filters?: Array<{ key: string; label: string }>;
   shouldFetch?: boolean;
@@ -141,6 +145,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
   const exportData = results?.data?.data;
   const pageSize = query.limit || props.pageSize || 20;
 
+  if(props.reloadNow){
+    results.revalidate();
+    props.setReloadNow(false)
+  }
+  
   const onChangeHeaderFilter = (key: string) => {
     if (key === filterHeader.column) {
       const newOrder = filterHeader.order === 'asc' ? 'desc' : 'asc';
@@ -271,7 +280,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
             )}
           </Grid>
 
-          {props.toolbar?.export && (
+          {/* {props.toolbar?.export && (
             <Grid item>
               <Grid container spacing={2}>
                 <Grid item>
@@ -288,9 +297,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
                   </Button>
                 </Grid>
                 <ExportToCSV data={exportData} headers={props?.headers} />
+                
               </Grid>
             </Grid>
-          )}
+          )} */}
+          {props.toolbarButtons && (props.toolbarButtons)}
         </Grid>
 
         <Grid item xs>
@@ -321,13 +332,19 @@ export function DataTable<T>(props: DataTableProps<T>) {
                         }
                         onChange={(_, checked) => {
                           if (checked) {
-                            setSelectedRowIds(
-                              results.data?.data?.map(
-                                (r) => r[props.dataIndex as string] as string
-                              ) || []
-                            );
+                            const rowIds = results.data?.data?.map(
+                              (r) => r[props.dataIndex as string] as string
+                            ) || []
+                            console.log('rowIds', rowIds)
+                            setSelectedRowIds(rowIds);
+                            if(props.setSelectedRowIdsFromParent){
+                              props.setSelectedRowIdsFromParent(rowIds)
+                            }
                           } else {
                             setSelectedRowIds([]);
+                            if(props.setSelectedRowIdsFromParent){
+                              props.setSelectedRowIdsFromParent([])
+                            }
                           }
                         }}
                       />
@@ -414,17 +431,23 @@ export function DataTable<T>(props: DataTableProps<T>) {
                             )}
                             onChange={(_, checked) => {
                               if (checked) {
-                                setSelectedRowIds([
+                                const rowIds = [
                                   ...(selectedRowIds || []),
                                   record[props.dataIndex as string] as string,
-                                ]);
+                                ]
+                                setSelectedRowIds(rowIds);
+                                if(props.setSelectedRowIdsFromParent){
+                                  props.setSelectedRowIdsFromParent(rowIds)
+                                }
                               } else {
-                                setSelectedRowIds(
-                                  selectedRowIds?.filter(
-                                    (r) =>
-                                      r !== record[props.dataIndex as string]
-                                  )
-                                );
+                                const rowIds = selectedRowIds?.filter(
+                                  (r) =>
+                                    r !== record[props.dataIndex as string]
+                                )
+                                setSelectedRowIds(rowIds);
+                                if(props.setSelectedRowIdsFromParent){
+                                  props.setSelectedRowIdsFromParent(rowIds)
+                                }
                               }
                             }}
                           />
