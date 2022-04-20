@@ -4,7 +4,7 @@ import { getCookie, setCookie } from '../helpers/CookieHelpers'
 import { LanguageCodes } from './config'
 
 const LANGUAGE_COOKIE_KEY = 'APP_LANGUAGE'
-const DEFAULT_FALLBACK_LANGUAGE = window.location.hostname === 'cn.chowispartner.com' ? 'zh' : 'kr'
+const DEFAULT_FALLBACK_LANGUAGE = window.location.hostname === 'cn.chowispartner.com' ? 'en' : 'en'
 export const APP_LANGUAGES = [
   { code: 'kr', value: '한국어' },
   { code: 'en', value: 'English' },

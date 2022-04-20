@@ -20,6 +20,7 @@ import FileUpload from '../components/FileUpload';
 
 import { DataTable } from '../components/DataTable';
 import NewDataTable from '../components/NewDataTable';
+import { setISODay } from 'date-fns';
 // export type CompanyInfo = InferType<typeof companyInfoSchema>;
 // const companyInfoSchema = objectSchema({
 //   address: stringSchema().nullable(),
@@ -64,7 +65,7 @@ export default function BrandDetailsPage() {
   const [collection, setCollection] = useState('')
   const [axis, setAxis] = useState('')
   const [imageUrl, setImageUrl] = useState('')
-
+  const [id, setId] = useState(null)
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -75,6 +76,27 @@ export default function BrandDetailsPage() {
 
   const onClickAddButton = () => {
     // alert('onClickAddButton')
+    setId(null)
+    setCode(null)
+    setName(null)
+    setLink(null)
+    setCategory(null)
+    setAxis(null)
+    setCollection(null)
+    setImageUrl(null)
+    setOpenModal(true)
+  }
+
+  const onClickEditButton = (product) => {
+    console.log(product)
+    setId(product.id)
+    setCode(product.code)
+    setName(product.name)
+    setLink(product.link)
+    setCategory(product.category)
+    setAxis(product.routine)
+    setCollection(product.collection)
+    setImageUrl(product.image_url)
     setOpenModal(true)
   }
 
@@ -134,10 +156,18 @@ export default function BrandDetailsPage() {
       axis: axis,
       image_url: imageUrl
     }
+    let method, url
+    if(id){
+      method = 'PUT'
+      url = `https://v2-app.chowis.com/api/pmx/product_recommendations/${id}`
+    }else{
+      method = 'POST'
+      url = 'https://v2-app.chowis.com/api/pmx/product_recommendations'
+    }
 
     axios({
-      method: 'POST',
-      url: 'https://v2-app.chowis.com/api/pmx/product_recommendations',
+      method: method,
+      url: url,
       data: productData,
       headers: {
         'X-CHOWIS-CONSULTANT-TOKEN': token,
@@ -163,7 +193,7 @@ console.log('branchesInfo', branchesInfo)
         aria-describedby="simple-modal-description"
       >
         <Box className="modal-box" style={{height: '620px', width: '600px'}}>
-          <div className="modal-header">ADD NEW POS</div>
+          <div className="modal-header">{id ? 'EDIT' : 'ADD'} NEW POS</div>
           <Grid container spacing={2}>
             <Grid item xs={4}>
                 <TextField
@@ -233,6 +263,9 @@ console.log('branchesInfo', branchesInfo)
                 <MenuItem key={1} value={'Lotions'}>
                   Lotions
                 </MenuItem>
+                <MenuItem key={1} value={'Powders'}>
+                  Powders
+                </MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={6}>
@@ -257,6 +290,9 @@ console.log('branchesInfo', branchesInfo)
                 </MenuItem>
                 <MenuItem key={1} value={'Dior Prestige Light-in-White'}>
                   Dior Prestige Light-in-White
+                </MenuItem>
+                <MenuItem key={1} value={'Forever'}>
+                  Forever
                 </MenuItem>
               </TextField>
             </Grid>
@@ -302,13 +338,8 @@ console.log('branchesInfo', branchesInfo)
                       className="image"
                     />
                   )}
-                  <ImageIcon htmlColor="blue" />
-                  <FileUpload
-                  setImageUrl={setImageUrl}
-                    // setProductData={setProductData}
-                    // productData={productData}
-                    // setLoading={setImageLoading}
-                  />
+                  <ImageIcon htmlColor="silver" />
+                  <FileUpload setImageUrl={setImageUrl}/>
                 </div>
             </Grid>
           </Grid>
@@ -344,7 +375,20 @@ console.log('branchesInfo', branchesInfo)
               { label: 'Category', key: 'category' },
               { label: 'Collection', key: 'collection' },
               { label: 'Axis', key: 'routine' },
-              { label: 'Link', key: 'link' }
+              { label: 'Link', key: 'link' },
+              { label: 'Action', key: '',
+              content: (props) =>
+                <div className="">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{marginRight: '10px'}}
+                    onClick={() => {onClickEditButton(props)}}
+                  >
+                    Edit
+                  </Button>
+                </div>
+              }
             ]}
             toolbar={{
               search: true,
