@@ -153,7 +153,7 @@ export default function BrandDetailsPage() {
       link: link,
       category: category,
       collection: collection,
-      axis: axis,
+      routine: axis,
       image_url: imageUrl
     }
     let method, url
@@ -266,6 +266,10 @@ console.log('branchesInfo', branchesInfo)
                 <MenuItem key={1} value={'Powders'}>
                   Powders
                 </MenuItem>
+                <MenuItem key={1} value={'UV Protection'}>
+                  UV Protection
+                </MenuItem>
+                	
               </TextField>
             </Grid>
             <Grid item xs={6}>
@@ -293,6 +297,9 @@ console.log('branchesInfo', branchesInfo)
                 </MenuItem>
                 <MenuItem key={1} value={'Forever'}>
                   Forever
+                </MenuItem>
+                <MenuItem key={1} value={'Dior Prestige'}>
+                  Dior Prestige
                 </MenuItem>
               </TextField>
             </Grid>
