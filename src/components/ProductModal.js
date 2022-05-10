@@ -120,6 +120,7 @@ export default function ProductModal({ title, icon, item }) {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
+        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
         className={classes.modal}
         open={open}
         // onClose={handleClose}

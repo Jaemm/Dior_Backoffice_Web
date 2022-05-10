@@ -201,37 +201,6 @@ export function Login() {
               </Box>
             </CardContentDiv>
 
-        {/* <Box
-          paddingY={2}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography color="textSecondary">
-            {t('version')}: {version}
-          </Typography>
-          <TextField
-            label={
-              currentLanguage !== 'en'
-                ? `${t('language')}/Language`
-                : t('language')
-            }
-            value={currentLanguage}
-            select
-            variant="outlined"
-            size="small"
-            onChange={(event) => {
-              setLanguage(event.target.value);
-            }}
-            style={{ width: 120 }}
-          >
-            {APP_LANGUAGES.map(({ code, value }) => (
-              <MenuItem key={code} value={code}>
-                {value}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Box> */}
       </Box>
     </Box>
   );

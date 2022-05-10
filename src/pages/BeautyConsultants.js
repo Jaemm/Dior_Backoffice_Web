@@ -153,6 +153,7 @@ console.log('branchesInfo', branchesInfo)
         onClose={()=>{setOpenModal(false)}}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
       >
         <Box className="modal-box" style={{height: '620px'}}>
           <div className="modal-header">ADD NEW POS</div>
