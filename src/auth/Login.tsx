@@ -110,8 +110,7 @@ export function Login() {
       </Route>
 
       <Box>
-        <Card variant="outlined">
-          <CardContent>
+
             <CardContentDiv>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Box marginTop={2} style={{padding: 40+'px'}}>
@@ -201,8 +200,7 @@ export function Login() {
                 </Grid>
               </Box>
             </CardContentDiv>
-          </CardContent>
-        </Card>
+
         {/* <Box
           paddingY={2}
           display="flex"
@@ -241,11 +239,11 @@ export function Login() {
 
 
 const CardContentDiv = styled.div`
-  position: absolute;
+
   width: 500px;
   height: 480px;
-  left: 710px;
-  top: 272px;
+
+
 
   background: rgba(255, 255, 255, 0.3);
   box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.1);
