@@ -48,6 +48,7 @@ export default function BrandDetailsPage() {
     api.requestResource('/api/partnerdb/companies/me')
   );
   const { token } = useAppContext();
+  const csvFile = useRef(null) 
 
   const [openModal, setOpenModal] = useState(false)
   const [modalType, setModalType] = useState('')
@@ -58,6 +59,8 @@ export default function BrandDetailsPage() {
   const [password, setPassword] = useState('')
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [dataInCSV, setDataInCSV] = useState('')
+  const [exportLoading, setExportLoading] = useState(false)
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -75,6 +78,29 @@ export default function BrandDetailsPage() {
   const onClickUploadButton = () => {
     setModalType('upload-form')
     setOpenModal(true)
+  }
+
+  const onClickExportButton = () => {
+    setExportLoading(true)
+    const url = 'https://v2-app.chowis.com/api/dior/company_branches/export'
+    axios({
+      method: 'GET',
+      url: url,
+      headers: {
+        'X-CHOWIS-CONSULTANT-TOKEN': token,
+      },
+    })
+    .then((res:any) => {
+      console.log(res)
+      if(res.status === 200){
+        setDataInCSV(res.data)
+        if(csvFile && csvFile.current){
+          // @ts-ignore: Object is possibly 'null'.
+          csvFile.current.click()
+        }
+      }
+      setExportLoading(false)
+    })
   }
 
   const deleteMultiplePos = () => {
@@ -125,9 +151,25 @@ export default function BrandDetailsPage() {
           <Button
             variant="contained"
             onClick={()=> {onClickUploadButton()}}
+            style={{marginRight: '10px'}}
             color="primary">
             Upload
           </Button>
+          <Button
+            variant="contained"
+            onClick={()=> {onClickExportButton()}}
+            disabled={exportLoading}
+            color="primary">
+            {exportLoading ? 'Loading ...' : 'Export'}
+          </Button>
+          <a
+            href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
+            download="pos_list.csv"
+            ref={csvFile}
+            style={{display: 'none'}}
+          >
+            download
+          </a>
       </Grid>
     </Grid>
 

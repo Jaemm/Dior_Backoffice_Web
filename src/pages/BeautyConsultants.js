@@ -1,6 +1,6 @@
 import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { useRequest } from 'ahooks';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
@@ -26,6 +26,7 @@ export default function BrandDetailsPage() {
     api.requestResource('/api/dior/company_branches')
   );
   const { token } = useAppContext();
+  const csvFile = useRef(null) 
 
   const [openModal, setOpenModal] = useState(false)
   const [country, setCountry] = useState('')
@@ -37,6 +38,8 @@ export default function BrandDetailsPage() {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [bcCode, setBcCode] = useState('')
   const [modalType, setModalType] = useState('')
+  const [dataInCSV, setDataInCSV] = useState('')
+  const [exportLoading, setExportLoading] = useState(false)
 
   const headers = [
     { label: 'Name', key: 'name' },
@@ -82,6 +85,30 @@ export default function BrandDetailsPage() {
     }
   }
 
+  const onClickExportButton = () => {
+    setExportLoading(true)
+    const url = 'https://v2-app.chowis.com/api/dior/company_consultants/export'
+    axios({
+      method: 'GET',
+      url: url,
+      headers: {
+        'X-CHOWIS-CONSULTANT-TOKEN': token,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+      if(res.status === 200){
+        setDataInCSV(res.data)
+        if(csvFile && csvFile.current){
+          // @ts-ignore: Object is possibly 'null'.
+          csvFile.current.click()
+        }
+      }
+      setExportLoading(false)
+    })
+  }
+
+
   const toolbarButtons =
     <Grid item>
       <Grid container spacing={2}>
@@ -104,9 +131,25 @@ export default function BrandDetailsPage() {
           <Button
             variant="contained"
             onClick={()=> {onClickUploadButton()}}
+            style={{marginRight: '10px'}}
             color="primary">
             Upload
           </Button>
+          <Button
+            variant="contained"
+            onClick={()=> {onClickExportButton()}}
+            disabled={exportLoading}
+            color="primary">
+            {exportLoading ? 'Loading ...' : 'Export'}
+          </Button>
+          <a
+            href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
+            download="bc_list.csv"
+            ref={csvFile}
+            style={{display: 'none'}}
+          >
+            download
+          </a>
       </Grid>
     </Grid>
 
