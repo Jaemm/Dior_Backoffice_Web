@@ -269,6 +269,7 @@ export default function BrandDetailsPage() {
               token={token} 
               onClose={() => setOpenModal(false)}
               saveUploadUrl='https://v2-app.chowis.com/api/dior/company_branches/import'
+              exampleFileUrl=''
               modelName='POS'
             />
           }

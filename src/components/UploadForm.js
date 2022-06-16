@@ -82,13 +82,12 @@ const UploadForm = (props) => {
   return(      
     <Box className="modal-box">
       <div className="modal-header">Upload a list of {modelName}</div>
-      <div className="modal-subheader">Please download sample file</div>
+      <div className="modal-subheader" style={{marginTop: '40px'}}>Please download sample file</div>
       <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
         <Button
             variant="contained"
             color="primary"
-            style={{marginRight: '10px'}}
-            // onClick={() => {onClickAddButton()}}
+            style={{marginRight: '10px', borderRadius: '15px'}}
         >
           Download
         </Button>
@@ -97,12 +96,15 @@ const UploadForm = (props) => {
       <div className="border"/>
 
       <input type="file" ref={inputFile} style={{display: 'none'}} onChange={(e)=>{onUploadFile(e.target.files)}}/>
+      <div style={{fontFamily: 'Pretendard', fontStyle: 'normal', fontWeight: '500', fontSize: '18px', lineHeight: '22px', color: '#5A5A5A'}}>
+        Please select Excel POS list to upload:
+      </div>
       <div style={{display: 'flex'}}>
-        <div className="upload-field">{filename ? filename : 'Link here'}</div>
+        <div className="upload-field"><span style={{marginLeft: '10px'}}>{filename ? filename : 'Link here'}</span></div>
         <Button
             variant="contained"
             color="primary"
-            style={{marginRight: '10px'}}
+            style={{marginRight: '10px', borderRadius: '15px'}}
             onClick={() => {onBrowseFileClick()}}
         >
           Browse
@@ -111,19 +113,19 @@ const UploadForm = (props) => {
 
       <div style={{display: 'flex', marginTop: '30px', justifyContent: 'center'}}>
         <Button
-              variant="contained"
-              color="primary"
-              style={{marginRight: '10px'}}
-              onClick={() => {onClose()}}
-          >
-            Cancel
+          variant="contained"
+          color="primary"
+          style={{ marginRight: '10px', borderRadius: '15px', color: 'black', background: 'white', border: '1px solid #000000', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}
+          onClick={() => {onClose()}}
+        >
+          Cancel
         </Button>
         <Button
-            variant="contained"
-            color="primary"
-            style={{marginRight: '10px'}}
-            onClick={() => {onSaveUpload()}}
-            disabled={loadingUpload}
+          variant="contained"
+          color="primary"
+          style={{ marginRight: '10px', borderRadius: '15px'}}
+          onClick={() => {onSaveUpload()}}
+          disabled={loadingUpload}
         >
           Upload
         </Button>

@@ -18,28 +18,7 @@ import axios from 'axios';
 
 import { DataTable } from '../components/DataTable';
 import NewDataTable from '../components/NewDataTable';
-// export type CompanyInfo = InferType<typeof companyInfoSchema>;
-// const companyInfoSchema = objectSchema({
-//   address: stringSchema().nullable(),
-//   email: stringSchema().nullable(),
-//   name: stringSchema().nullable(),
-//   phone: stringSchema().nullable(),
-//   registration_date: stringSchema().nullable(),
-// });
-
-// type BrandAndStore = InferType<typeof brandAndStoreSchema>;
-// const brandAndStoreSchema = objectSchema({
-//   id: numberSchema(),
-//   name: stringSchema(),
-//   code: stringSchema(),
-//   email: stringSchema(),
-//   country: stringSchema(),
-//   password: stringSchema(),
-//   total_devices: numberSchema(),
-//   last_consultation_date: stringSchema(),
-//   created_at: stringSchema(),
-// });
-
+import UploadForm from '../components/UploadForm';
 export default function BrandDetailsPage() {
   const api = useAPI();
   const { t } = useTranslation();
@@ -57,6 +36,7 @@ export default function BrandDetailsPage() {
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [bcCode, setBcCode] = useState('')
+  const [modalType, setModalType] = useState('')
 
   const headers = [
     { label: 'Name', key: 'name' },
@@ -68,6 +48,12 @@ export default function BrandDetailsPage() {
 
   const onClickAddButton = () => {
     // alert('onClickAddButton')
+    setModalType('add-form')
+    setOpenModal(true)
+  }
+
+  const onClickUploadButton = () => {
+    setModalType('upload-form')
     setOpenModal(true)
   }
 
@@ -110,9 +96,16 @@ export default function BrandDetailsPage() {
           <Button
             variant="contained"
             onClick={()=> {deleteMultiplePos()}}
+            style={{marginRight: '10px'}}
             color="primary">
             Delete
             
+          </Button>
+          <Button
+            variant="contained"
+            onClick={()=> {onClickUploadButton()}}
+            color="primary">
+            Upload
           </Button>
       </Grid>
     </Grid>
@@ -144,7 +137,136 @@ export default function BrandDetailsPage() {
       }
     })
   }
-console.log('branchesInfo', branchesInfo)
+
+  const renderAddForm = () => {
+    return(
+      <Box className="modal-box" style={{height: '620px'}}>
+        <div className="modal-header">ADD NEW POS</div>
+        <TextField
+          label={'Country'}
+          variant="outlined"
+          size="small"
+          select
+          fullWidth
+          value={country}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setCountry(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        >
+          <MenuItem key={1} value={'FRANCE'}>
+            FRANCE
+          </MenuItem>
+          <MenuItem key={1} value={'KOREA'}>
+            KOREA
+          </MenuItem>
+        </TextField>
+        <TextField
+          label={'POS Code'}
+          variant="outlined"
+          size="small"
+          select
+          fullWidth
+          value={code}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setCode(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        >
+          {branchesInfo && branchesInfo?.data?.data && branchesInfo?.data?.data.map(e => 
+            <MenuItem key={e.id} value={e.id}>
+              {e.code}
+            </MenuItem>
+          )}
+        </TextField>
+        <TextField
+          label={'BC Code'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={bcCode}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setBcCode(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label={'BC Name'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={name}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setName(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label={'BC Email'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={email}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setEmail(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label={'Password'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={password}
+          type="password"
+          style={{marginTop: '20px', marginBottom: '20px'}}
+          onChange={(e) => {
+            setPassword(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <FormControl>
+          <FormLabel id="demo-radio-buttons-group-label">Is Active</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="female"
+            name="radio-buttons-group"
+            class="is-active-radio-div"
+            row
+          >
+            <FormControlLabel value="0" control={<Radio />} label="Yes" />
+            <FormControlLabel value="1" control={<Radio />} label="No" />
+          </RadioGroup>
+        </FormControl>
+
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{marginRight: '10px', width: '192px'}}
+            onClick={() => {saveBc()}}
+          >
+            Save
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{width: '192px'}}
+            onClick={() => {}}
+          >
+            Save & New
+          </Button>
+        </div>
+      </Box>
+    )
+  }
+
+  console.log('branchesInfo', branchesInfo)
   // const branchesSelect = branchesInfo.map((e) => return({id: e.id, name: e.name, code: e.code}))
   return (
     <Layout title={t('sidebar.beauty_consultant')}>
@@ -155,129 +277,19 @@ console.log('branchesInfo', branchesInfo)
         aria-describedby="simple-modal-description"
         style={{display:'flex',alignItems:'center',justifyContent:'center'}}
       >
-        <Box className="modal-box" style={{height: '620px'}}>
-          <div className="modal-header">ADD NEW POS</div>
-          <TextField
-            label={'Country'}
-            variant="outlined"
-            size="small"
-            select
-            fullWidth
-            value={country}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setCountry(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          >
-            <MenuItem key={1} value={'FRANCE'}>
-              FRANCE
-            </MenuItem>
-            <MenuItem key={1} value={'KOREA'}>
-              KOREA
-            </MenuItem>
-          </TextField>
-          <TextField
-            label={'POS Code'}
-            variant="outlined"
-            size="small"
-            select
-            fullWidth
-            value={code}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setCode(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          >
-            {branchesInfo && branchesInfo?.data?.data && branchesInfo?.data?.data.map(e => 
-              <MenuItem key={e.id} value={e.id}>
-                {e.code}
-              </MenuItem>
-            )}
-          </TextField>
-          <TextField
-            label={'BC Code'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={bcCode}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setBcCode(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label={'BC Name'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={name}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setName(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label={'BC Email'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={email}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label={'Password'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={password}
-            type="password"
-            style={{marginTop: '20px', marginBottom: '20px'}}
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">Is Active</FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="female"
-              name="radio-buttons-group"
-              class="is-active-radio-div"
-              row
-            >
-              <FormControlLabel value="0" control={<Radio />} label="Yes" />
-              <FormControlLabel value="1" control={<Radio />} label="No" />
-            </RadioGroup>
-          </FormControl>
-
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{marginRight: '10px', width: '192px'}}
-              onClick={() => {saveBc()}}
-            >
-              Save
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{width: '192px'}}
-              onClick={() => {}}
-            >
-              Save & New
-            </Button>
-          </div>
-        </Box>
+        <>
+          {modalType === 'add-form' && renderAddForm()}
+          {modalType === 'upload-form' && 
+            <UploadForm 
+              token={token} 
+              onClose={() => setOpenModal(false)}
+              saveUploadUrl='https://v2-app.chowis.com/api/dior/company_consultants/import'
+              exampleFileUrl=''
+              modelName='BC'
+            />
+          }
+        </>
+        
       </Modal>
       <Grid container direction="column" spacing={2} wrap="nowrap">
         <Grid item xs>
@@ -290,8 +302,8 @@ console.log('branchesInfo', branchesInfo)
             setSelectedRowIdsFromParent={setSelectedRowIds}
             columns={[
               { label: t('brand_details.country'), key: 'country' },
-              { label: t('brand_details.pos_code'), key: 'pos_code' },
-              { label: t('brand_details.bc_code'), key: 'code' },
+              { label: 'Pos Code', key: 'pos_code' },
+              { label: 'BC Code', key: 'code' },
               { label: t('brand_details.name'), key: 'name' },
               { label: t('brand_details.email'), key: 'email' },
               { label: t('brand_details.status'), key: 'status' }
