@@ -1,6 +1,6 @@
 import { Grid, Button, Modal, Box, TextField, MenuItem } from '@material-ui/core';
 import { useRequest } from 'ahooks';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
@@ -18,6 +18,7 @@ import axios from 'axios';
 
 import { DataTable } from '../components/DataTable';
 import NewDataTable from '../components/NewDataTable';
+import UploadForm from '../components/UploadForm';
 export type CompanyInfo = InferType<typeof companyInfoSchema>;
 const companyInfoSchema = objectSchema({
   address: stringSchema().nullable(),
@@ -49,6 +50,7 @@ export default function BrandDetailsPage() {
   const { token } = useAppContext();
 
   const [openModal, setOpenModal] = useState(false)
+  const [modalType, setModalType] = useState('')
   const [country, setCountry] = useState('')
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
@@ -56,7 +58,6 @@ export default function BrandDetailsPage() {
   const [password, setPassword] = useState('')
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
-
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -67,6 +68,12 @@ export default function BrandDetailsPage() {
 
   const onClickAddButton = () => {
     // alert('onClickAddButton')
+    setModalType('add-form')
+    setOpenModal(true)
+  }
+
+  const onClickUploadButton = () => {
+    setModalType('upload-form')
     setOpenModal(true)
   }
 
@@ -109,9 +116,17 @@ export default function BrandDetailsPage() {
           <Button
             variant="contained"
             onClick={()=> {deleteMultiplePos()}}
-            color="primary">
+            color="primary"
+            style={{marginRight: '10px'}}
+          >
             Delete
             
+          </Button>
+          <Button
+            variant="contained"
+            onClick={()=> {onClickUploadButton()}}
+            color="primary">
+            Upload
           </Button>
       </Grid>
     </Grid>
@@ -143,6 +158,101 @@ export default function BrandDetailsPage() {
     })
   }
 
+  const renderAddForm = () => {
+    return(
+      <Box className="modal-box">
+        <div className="modal-header">ADD NEW POS</div>
+        <TextField
+          label={'Country'}
+          variant="outlined"
+          size="small"
+          select
+          fullWidth
+          value={country}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setCountry(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        >
+          <MenuItem key={1} value={'FRANCE'}>
+            FRANCE
+          </MenuItem>
+          <MenuItem key={1} value={'KOREA'}>
+            KOREA
+          </MenuItem>
+        </TextField>
+        <TextField
+          label={'POS Code'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={code}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setCode(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label={'POS Name'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={name}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setName(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label={'POS Email'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={email}
+          style={{marginTop: '20px'}}
+          onChange={(e) => {
+            setEmail(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label={'Password'}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={password}
+          type="password"
+          style={{marginTop: '20px', marginBottom: '20px'}}
+          onChange={(e) => {
+            setPassword(e.target.value)
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{marginRight: '10px', width: '192px'}}
+            onClick={() => {savePos()}}
+          >
+            Save
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{width: '192px'}}
+            onClick={() => {}}
+          >
+            Save & New
+          </Button>
+        </div>
+      </Box>
+    )
+  }
+
   return (
     <Layout title={t('sidebar.brand_details')}>
       <Modal
@@ -152,96 +262,17 @@ export default function BrandDetailsPage() {
         aria-describedby="simple-modal-description"
         style={{display:'flex',alignItems:'center',justifyContent:'center'}}
       >
-        <Box className="modal-box">
-          <div className="modal-header">ADD NEW POS</div>
-          <TextField
-            label={'Country'}
-            variant="outlined"
-            size="small"
-            select
-            fullWidth
-            value={country}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setCountry(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          >
-            <MenuItem key={1} value={'FRANCE'}>
-              FRANCE
-            </MenuItem>
-            <MenuItem key={1} value={'KOREA'}>
-              KOREA
-            </MenuItem>
-          </TextField>
-          <TextField
-            label={'POS Code'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={code}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setCode(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label={'POS Name'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={name}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setName(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label={'POS Email'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={email}
-            style={{marginTop: '20px'}}
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label={'Password'}
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={password}
-            type="password"
-            style={{marginTop: '20px', marginBottom: '20px'}}
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{marginRight: '10px', width: '192px'}}
-              onClick={() => {savePos()}}
-            >
-              Save
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{width: '192px'}}
-              onClick={() => {}}
-            >
-              Save & New
-            </Button>
-          </div>
-        </Box>
+        <>
+          {modalType === 'add-form' && renderAddForm()}
+          {modalType === 'upload-form' && 
+            <UploadForm 
+              token={token} 
+              onClose={() => setOpenModal(false)}
+              saveUploadUrl='https://v2-app.chowis.com/api/dior/company_branches/import'
+              modelName='POS'
+            />
+          }
+        </>
       </Modal>
       <Grid container direction="column" spacing={2} wrap="nowrap">
         <Grid item xs>
