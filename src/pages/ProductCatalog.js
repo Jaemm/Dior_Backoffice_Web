@@ -1,13 +1,21 @@
-import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Item, FormGroup, Checkbox } from '@material-ui/core';
+import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Item, FormGroup, Checkbox, List, ListItem, ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
 import { useRequest } from 'ahooks';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
 import countries from 'country-list'
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
-// import { parseDateString } from '../helpers/dateHelpers';
+import UploadFormProduct from '../components/UploadFormProduct'
+import ExportFormProduct from  '../components/ExportFormProduct'
+
 import {
   numberSchema,
   objectSchema,
@@ -30,6 +38,7 @@ export default function BrandDetailsPage() {
     api.requestResource('/api/dior/company_branches')
   );
   const { token } = useAppContext();
+  const csvFile = useRef(null) 
 
   const [openModal, setOpenModal] = useState(false)
   const [country, setCountry] = useState('')
@@ -37,6 +46,7 @@ export default function BrandDetailsPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [variants, setVariants] = useState([])
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [bcCode, setBcCode] = useState('')
@@ -53,6 +63,10 @@ export default function BrandDetailsPage() {
   const [germanProductName, setGermanProductName] = useState('')
   const [hindiProductName, setHindiProductName] = useState('')
   const [japaneseProductName, setJapaneseProductName] = useState('')
+  const [modalType, setModalType] = useState('')
+  const [dataInCSV, setDataInCSV] = useState('')
+  const [exportLoading, setExportLoading] = useState(false)
+
   const listCountries = countries.getNames()
   console.log(listCountries)
   const headers = [
@@ -64,7 +78,6 @@ export default function BrandDetailsPage() {
   ];
 
   const onClickAddButton = () => {
-    // alert('onClickAddButton')
     setId(null)
     setCode(null)
     setName(null)
@@ -73,6 +86,7 @@ export default function BrandDetailsPage() {
     setAxis(null)
     setCollection(null)
     setImageUrl(null)
+    setModalType('add-form')
     setOpenModal(true)
   }
 
@@ -86,6 +100,8 @@ export default function BrandDetailsPage() {
     setAxis(product.routine)
     setCollection(product.collection)
     setImageUrl(product.image_url)
+    setVariants(product.product_variants)
+    setModalType('edit-form')
     setOpenModal(true)
     if(product.countries){
       setSelectedCountries(product.countries)
@@ -143,10 +159,33 @@ export default function BrandDetailsPage() {
           <Button
             variant="contained"
             onClick={()=> {deleteMultiplePos()}}
+            style={{marginRight: '10px'}}
             color="primary">
             Delete
             
           </Button>
+          <Button
+            variant="contained"
+            onClick={()=> {onClickUploadButton()}}
+            style={{marginRight: '10px'}}
+            color="primary">
+            Upload
+          </Button>
+          <Button
+            variant="contained"
+            onClick={()=> {onClickExportButton()}}
+            disabled={exportLoading}
+            color="primary">
+            {exportLoading ? 'Loading ...' : 'Export'}
+          </Button>
+          <a
+            href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
+            download="product_list.csv"
+            ref={csvFile}
+            style={{display: 'none'}}
+          >
+            download
+          </a>
       </Grid>
     </Grid>
 
@@ -217,9 +256,394 @@ export default function BrandDetailsPage() {
     }
   }
 
+  const onClickExportButton = () => {
+    // setModalType('export-form')
+    // setOpenModal(true)
+    setExportLoading(true)
+    const url = 'http://localhost:3000/api/dior/product_recommendations/export'
+    axios({
+      method: 'GET',
+      url: url,
+      headers: {
+        'X-CHOWIS-CONSULTANT-TOKEN': token,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+      if(res.status === 200){
+        setDataInCSV(res.data)
+        if(csvFile && csvFile.current){
+          // @ts-ignore: Object is possibly 'null'.
+          csvFile.current.click()
+        }
+      }
+      setExportLoading(false)
+    })
+  }
+
+  const onClickUploadButton = () => {
+    setModalType('upload-form')
+    setOpenModal(true)
+  }
+
+  const renderAddForm = () => {
+    return(
+      <Box className="modal-box" style={{height: '620px', width: '600px'}}>
+        {/* <div className="modal-header">{id ? 'EDIT' : 'ADD'} NEW POS</div> */}
+        <div className="tab-container">
+          <div className={activeTab == 'info' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('info')}}>Information</div>
+          <div className={activeTab == 'country' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('country')}}>Countries</div>
+          <div className={activeTab == 'translation' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('translation')}}>Translation</div>
+          {modalType === 'edit-form' &&
+            <div className={activeTab == 'variation' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('variation')}}>Variation</div>
+          }
+        </div>
+        { activeTab == 'info' && (
+          <>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                  <TextField
+                    label={'Product Code'}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={code}
+                    style={{marginTop: '20px'}}
+                    onChange={(e) => {
+                      setCode(e.target.value)
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+              </Grid>
+              <Grid item xs={8}>
+                  <TextField
+                    label={'Product Name'}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={name}
+                    style={{marginTop: '20px'}}
+                    onChange={(e) => {
+                      setName(e.target.value)
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label={'Product Link'}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  value={link}
+                  style={{marginTop: '20px'}}
+                  onChange={(e) => {
+                    setLink(e.target.value)
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label={'Category'}
+                  variant="outlined"
+                  size="small"
+                  select
+                  fullWidth
+                  value={category}
+                  style={{marginTop: '20px'}}
+                  onChange={(e) => {
+                    setCategory(e.target.value)
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                >
+                  <MenuItem key={1} value={'Serums'}>
+                    Serums
+                  </MenuItem>
+                  <MenuItem key={1} value={'Pre-serums'}>
+                    Pre-serums
+                  </MenuItem>
+                  <MenuItem key={1} value={'Eye Care'}>
+                    Eye Care
+                  </MenuItem>
+                  <MenuItem key={1} value={'Lotions'}>
+                    Lotions
+                  </MenuItem>
+                  <MenuItem key={1} value={'Powders'}>
+                    Powders
+                  </MenuItem>
+                  <MenuItem key={1} value={'UV Protection'}>
+                    UV Protection
+                  </MenuItem>
+                    
+                </TextField>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label={'Collection'}
+                  variant="outlined"
+                  size="small"
+                  select
+                  fullWidth
+                  value={collection}
+                  style={{marginTop: '20px'}}
+                  onChange={(e) => {
+                    setCollection(e.target.value)
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                >
+                  <MenuItem key={1} value={'Dior Prestige	'}>
+                    Dior Prestige	
+                  </MenuItem>
+                  <MenuItem key={1} value={'Capture Totale'}>
+                    Capture Totale
+                  </MenuItem>
+                  <MenuItem key={1} value={'Dior Prestige Light-in-White'}>
+                    Dior Prestige Light-in-White
+                  </MenuItem>
+                  <MenuItem key={1} value={'Forever'}>
+                    Forever
+                  </MenuItem>
+                  <MenuItem key={1} value={'Dior Prestige'}>
+                    Dior Prestige
+                  </MenuItem>
+                </TextField>
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  label={'Axis'}
+                  variant="outlined"
+                  size="small"
+                  select
+                  fullWidth
+                  value={axis}
+                  style={{marginTop: '20px'}}
+                  onChange={(e) => {
+                    setAxis(e.target.value)
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                >
+                  <MenuItem key={1} value={'Makeup'}>
+                    Makeup
+                  </MenuItem>
+                  <MenuItem key={1} value={'Skincare'}>
+                    Skincare
+                  </MenuItem>
+                </TextField>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{marginTop: '20px', width: '100%'}}
+                  onClick={() => {saveProduct()}}
+                >
+                  Save
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <div className="image-container">
+                    {imageUrl && (
+                      <img
+                        src={imageUrl}
+                        alt="product"
+                        className="image"
+                      />
+                    )}
+                    <ImageIcon htmlColor="silver" />
+                    <FileUpload setImageUrl={setImageUrl}/>
+                  </div>
+              </Grid>
+            </Grid>
+          </>
+        )}
+
+        { activeTab == 'country' && (
+          <>
+            <p>This product is available for below countries *</p>
+            <div style={{
+              height: '400px', 
+              overflow: 'auto',
+              padding: '15px',
+              border: '1px solid #5A5A5A',
+              borderRadius: '10px'  
+            }}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <FormControlLabel 
+                    control={<Checkbox checked={checked('All')} onChange={()=>handleChangeCheckbox('All')}/>} 
+                    label={'All'} 
+                  />
+                </Grid>
+                {listCountries.map(e => (
+                  <Grid item xs={6}>
+                      <FormControlLabel 
+                        control={<Checkbox checked={checked(e)} onChange={()=>handleChangeCheckbox(e)}/>} 
+                        label={e} 
+                      />
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{marginTop: '20px', width: '100%'}}
+              onClick={() => {saveProduct()}}
+            >
+              Save
+            </Button>
+          </>
+        )}
+
+
+        { activeTab == 'translation' && (
+          <>
+            <p>Please input product name translations: </p>
+            <div style={{
+              height: '400px', 
+              overflow: 'auto',
+              padding: '15px',
+              border: '1px solid #5A5A5A',
+              borderRadius: '10px'
+            }}>
+              <Grid container spacing={2}>
+                <Grid item xs={4} style={{textAlign:'center'}}>
+                  <p>Arabic :</p>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    label={'Product Name'}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={arabicProductName}
+                    style={{marginTop: '20px'}}
+                    onChange={(e) => {
+                      setArabicProductName(e.target.value)
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item xs={4} style={{textAlign:'center'}}>
+                  <p>French :</p>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    label={'Product Name'}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={frenchProductName}
+                    style={{marginTop: '20px'}}
+                    onChange={(e) => {
+                      setFrenchProductName(e.target.value)
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item xs={4} style={{textAlign:'center'}}>
+                  <p>German :</p>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    label={'Product Name'}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={germanProductName}
+                    style={{marginTop: '20px'}}
+                    onChange={(e) => {
+                      setGermanProductName(e.target.value)
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item xs={4} style={{textAlign:'center'}}>
+                  <p>Hindi :</p>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    label={'Product Name'}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={hindiProductName}
+                    style={{marginTop: '20px'}}
+                    onChange={(e) => {
+                      setHindiProductName(e.target.value)
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item xs={4} style={{textAlign:'center'}}>
+                  <p>Japanese :</p>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    label={'Product Name'}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={japaneseProductName}
+                    style={{marginTop: '20px'}}
+                    onChange={(e) => {
+                      setJapaneseProductName(e.target.value)
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+              </Grid>
+            </div>
+            <Button
+                  variant="contained"
+                  color="primary"
+                  style={{marginTop: '20px', width: '100%'}}
+                  onClick={() => {saveProduct()}}
+                >
+              Save
+            </Button>
+          </>
+        )}
+
+        { activeTab == 'variation' && (
+          <div style={{overflow: 'auto', height: '500px'}}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Variant</TableCell>
+                  <TableCell>Product Code</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Collection</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {variants && variants.map((e) => {
+                  return(
+                    <TableRow>
+                      <TableCell>{e.name}</TableCell>
+                      <TableCell>{e.code}</TableCell>
+                      <TableCell>{e.category}</TableCell>
+                      <TableCell>{e.collection}</TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+
+
+      </Box>
+
+    )
+  }
+
+
   // const branchesSelect = branchesInfo.map((e) => return({id: e.id, name: e.name, code: e.code}))
   return (
-    <Layout title={t('sidebar.beauty_consultant')}>
+    <Layout title={'Product Catalog'}>
       <Modal
         open={openModal}
         onClose={()=>{setOpenModal(false)}}
@@ -227,323 +651,19 @@ export default function BrandDetailsPage() {
         aria-describedby="simple-modal-description"
         style={{display:'flex',alignItems:'center',justifyContent:'center'}}
       >
-        <Box className="modal-box" style={{height: '620px', width: '600px'}}>
-          {/* <div className="modal-header">{id ? 'EDIT' : 'ADD'} NEW POS</div> */}
-          <div className="tab-container">
-            <div className={activeTab == 'info' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('info')}}>Information</div>
-            <div className={activeTab == 'country' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('country')}}>Countries</div>
-            <div className={activeTab == 'translation' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('translation')}}>Translation</div>
-          </div>
-          { activeTab == 'info' && (
-            <>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                    <TextField
-                      label={'Product Code'}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={code}
-                      style={{marginTop: '20px'}}
-                      onChange={(e) => {
-                        setCode(e.target.value)
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
-                <Grid item xs={8}>
-                    <TextField
-                      label={'Product Name'}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={name}
-                      style={{marginTop: '20px'}}
-                      onChange={(e) => {
-                        setName(e.target.value)
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label={'Product Link'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={link}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setLink(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label={'Category'}
-                    variant="outlined"
-                    size="small"
-                    select
-                    fullWidth
-                    value={category}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setCategory(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  >
-                    <MenuItem key={1} value={'Serums'}>
-                      Serums
-                    </MenuItem>
-                    <MenuItem key={1} value={'Pre-serums'}>
-                      Pre-serums
-                    </MenuItem>
-                    <MenuItem key={1} value={'Eye Care'}>
-                      Eye Care
-                    </MenuItem>
-                    <MenuItem key={1} value={'Lotions'}>
-                      Lotions
-                    </MenuItem>
-                    <MenuItem key={1} value={'Powders'}>
-                      Powders
-                    </MenuItem>
-                    <MenuItem key={1} value={'UV Protection'}>
-                      UV Protection
-                    </MenuItem>
-                      
-                  </TextField>
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label={'Collection'}
-                    variant="outlined"
-                    size="small"
-                    select
-                    fullWidth
-                    value={collection}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setCollection(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  >
-                    <MenuItem key={1} value={'Dior Prestige	'}>
-                      Dior Prestige	
-                    </MenuItem>
-                    <MenuItem key={1} value={'Capture Totale'}>
-                      Capture Totale
-                    </MenuItem>
-                    <MenuItem key={1} value={'Dior Prestige Light-in-White'}>
-                      Dior Prestige Light-in-White
-                    </MenuItem>
-                    <MenuItem key={1} value={'Forever'}>
-                      Forever
-                    </MenuItem>
-                    <MenuItem key={1} value={'Dior Prestige'}>
-                      Dior Prestige
-                    </MenuItem>
-                  </TextField>
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    label={'Axis'}
-                    variant="outlined"
-                    size="small"
-                    select
-                    fullWidth
-                    value={axis}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setAxis(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  >
-                    <MenuItem key={1} value={'Makeup'}>
-                      Makeup
-                    </MenuItem>
-                    <MenuItem key={1} value={'Skincare'}>
-                      Skincare
-                    </MenuItem>
-                  </TextField>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{marginTop: '20px', width: '100%'}}
-                    onClick={() => {saveProduct()}}
-                  >
-                    Save
-                  </Button>
-                </Grid>
-                <Grid item xs={6}>
-                  <div className="image-container">
-                      {imageUrl && (
-                        <img
-                          src={imageUrl}
-                          alt="product"
-                          className="image"
-                        />
-                      )}
-                      <ImageIcon htmlColor="silver" />
-                      <FileUpload setImageUrl={setImageUrl}/>
-                    </div>
-                </Grid>
-              </Grid>
-            </>
-          )}
-
-          { activeTab == 'country' && (
-            <>
-              <p>This product is available for below countries *</p>
-              <div style={{
-                height: '400px', 
-                overflow: 'auto',
-                padding: '15px',
-                border: '1px solid #5A5A5A',
-                borderRadius: '10px'  
-              }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <FormControlLabel 
-                      control={<Checkbox checked={checked('All')} onChange={()=>handleChangeCheckbox('All')}/>} 
-                      label={'All'} 
-                    />
-                  </Grid>
-                  {listCountries.map(e => (
-                    <Grid item xs={6}>
-                        <FormControlLabel 
-                          control={<Checkbox checked={checked(e)} onChange={()=>handleChangeCheckbox(e)}/>} 
-                          label={e} 
-                        />
-                    </Grid>
-                  ))}
-                </Grid>
-              </div>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{marginTop: '20px', width: '100%'}}
-                onClick={() => {saveProduct()}}
-              >
-                Save
-              </Button>
-            </>
-          )}
-
-
-          { activeTab == 'translation' && (
-            <>
-              <p>Please input product name translations: </p>
-              <div style={{
-                height: '400px', 
-                overflow: 'auto',
-                padding: '15px',
-                border: '1px solid #5A5A5A',
-                borderRadius: '10px'
-              }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={4} style={{textAlign:'center'}}>
-                    <p>Arabic :</p>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <TextField
-                      label={'Product Name'}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={arabicProductName}
-                      style={{marginTop: '20px'}}
-                      onChange={(e) => {
-                        setArabicProductName(e.target.value)
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                  <Grid item xs={4} style={{textAlign:'center'}}>
-                    <p>French :</p>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <TextField
-                      label={'Product Name'}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={frenchProductName}
-                      style={{marginTop: '20px'}}
-                      onChange={(e) => {
-                        setFrenchProductName(e.target.value)
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                  <Grid item xs={4} style={{textAlign:'center'}}>
-                    <p>German :</p>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <TextField
-                      label={'Product Name'}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={germanProductName}
-                      style={{marginTop: '20px'}}
-                      onChange={(e) => {
-                        setGermanProductName(e.target.value)
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                  <Grid item xs={4} style={{textAlign:'center'}}>
-                    <p>Hindi :</p>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <TextField
-                      label={'Product Name'}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={hindiProductName}
-                      style={{marginTop: '20px'}}
-                      onChange={(e) => {
-                        setHindiProductName(e.target.value)
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                  <Grid item xs={4} style={{textAlign:'center'}}>
-                    <p>Japanese :</p>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <TextField
-                      label={'Product Name'}
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={japaneseProductName}
-                      style={{marginTop: '20px'}}
-                      onChange={(e) => {
-                        setJapaneseProductName(e.target.value)
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                </Grid>
-              </div>
-              <Button
-                    variant="contained"
-                    color="primary"
-                    style={{marginTop: '20px', width: '100%'}}
-                    onClick={() => {saveProduct()}}
-                  >
-                Save
-              </Button>
-            </>
-          )}
-
-        </Box>
+        <>
+          {(modalType === 'add-form' || modalType === 'edit-form') && renderAddForm()}
+          {modalType === 'upload-form' && 
+            <UploadFormProduct
+              token={token} 
+              onClose={() => setOpenModal(false)}
+              saveUploadUrl='http://localhost:3000/api/dior/product_recommendations/import'
+              exampleFileUrl='https://portal-apptree-bucket.s3.ap-northeast-2.amazonaws.com/uploads/images/dior/import_company_branches/3b33bed2-1fc8-49be-ac58-db00000effc9-products.xlsx'
+              modelName='Products'
+            />
+          }
+          {(modalType === 'export-form') && <ExportFormProduct />}
+        </>
       </Modal>
       <Grid container direction="column" spacing={2} wrap="nowrap">
         <Grid item xs>
@@ -592,30 +712,11 @@ export default function BrandDetailsPage() {
             ]}
             toolbar={{
               search: true,
-              filter: true,
+              filter: false,
               pagination: true,
-              export: true,
+              export: false,
             }}
             toolbarButtons={toolbarButtons}
-            filters={[
-              { label: t('brand_details.all'), key: '-id' },
-              {
-                label: t('brand_details.country'),
-                key: 'country',
-              },
-              {
-                label: t('brand_details.name'),
-                key: 'name',
-              },
-              {
-                label: t('brand_details.email'),
-                key: 'email',
-              },
-              {
-                label: t('brand_details.status'),
-                key: 'status',
-              },
-            ]} 
           />
         </Grid>
       </Grid>

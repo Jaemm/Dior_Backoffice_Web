@@ -1,11 +1,28 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { InferType } from 'yup';
 
 import { DataTable } from '../components/DataTable';
 
 import { Layout } from '../components/Layout';
-import { Customers } from './AssignedCustomers';
+// import { Customers } from './AssignedCustomers';
+import {
+  numberSchema,
+  objectSchema,
+  stringSchema,
+} from '../helpers/SchemaHelpers';
+
+export type Customers = InferType<typeof customersSchema>;
+export const customersSchema = objectSchema({
+  app_name: stringSchema(),
+  country: stringSchema(),
+  email: stringSchema(),
+  id: numberSchema(),
+  name: stringSchema(),
+  phone: stringSchema(),
+  surname: stringSchema(),
+});
 
 function CustomerRecord() {
   const { t } = useTranslation();

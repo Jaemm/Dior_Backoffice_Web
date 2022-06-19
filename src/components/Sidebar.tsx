@@ -132,17 +132,17 @@ export function Sidebar() {
         <ListItem
           button
           component={Link}
-          to="/customer-record"
-          selected={match.path.includes('/customer-record')}
+          to="/registered-devices"
+          selected={match.path.includes('/registered-devices')}
           className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/customer-record') ? 
+            { match.path.includes('/registered-devices') ? 
                 <AccountCircle style={{color: 'white'}}/>
                 : <AccountCircle />
               }
           </ListItemIcon>
-          <ListItemText primary={t('sidebar.customer_record')} />
+          <ListItemText primary={'Registered Device'} />
         </ListItem>
         {(accessFlags.has_access_to_brand_details_customer_record ||
           accessFlags.has_access_to_brand_details) && (
