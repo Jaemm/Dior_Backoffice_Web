@@ -257,10 +257,8 @@ export default function BrandDetailsPage() {
   }
 
   const onClickExportButton = () => {
-    // setModalType('export-form')
-    // setOpenModal(true)
     setExportLoading(true)
-    const url = 'http://localhost:3000/api/dior/product_recommendations/export'
+    const url = 'https://v2-app.chowis.com/api/dior/product_recommendations/export'
     axios({
       method: 'GET',
       url: url,
@@ -657,7 +655,7 @@ export default function BrandDetailsPage() {
             <UploadFormProduct
               token={token} 
               onClose={() => setOpenModal(false)}
-              saveUploadUrl='http://localhost:3000/api/dior/product_recommendations/import'
+              saveUploadUrl='https://v2-app.chowis.com/api/dior/product_recommendations/import'
               exampleFileUrl='https://portal-apptree-bucket.s3.ap-northeast-2.amazonaws.com/uploads/images/dior/import_company_branches/3b33bed2-1fc8-49be-ac58-db00000effc9-products.xlsx'
               modelName='Products'
             />
