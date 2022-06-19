@@ -29,6 +29,7 @@ import reportWebVitals from './reportWebVitals';
 import ProductCatalog from './pages/ProductCatalog';
 import EditProductCatalog from './components/EditProductCatalog';
 import StoreDetails from './pages/StatisticsAndReportsDetailPage';
+import ProductRecommendationsPage from './pages/ProductRecommendationsPage'
 
 const localeMap = {
   en: enLocale,
@@ -87,6 +88,10 @@ ReactDOM.render(
                   </Route>
                   <Route path="/statistics">
                     <StatisticsAndReports />
+                  </Route>
+
+                  <Route path="/product-recommendations">
+                    <ProductRecommendationsPage />
                   </Route>
 
                   <Route path="/logout">

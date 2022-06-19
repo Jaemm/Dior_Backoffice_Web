@@ -162,37 +162,22 @@ export function Sidebar() {
             <ListItemText primary="Product Catalog" />
           </ListItem>
         )}
-{/* 
-        {accessFlags.has_access_to_registered_devices && (
-          <ListItem
-            button
-            component={Link}
-            to="/registered-devices"
-            selected={match.path === '/registered-devices'}
-          >
-            <ListItemIcon>
-              <Devices />
-            </ListItemIcon>
-            <ListItemText primary={t('sidebar.registered_devices')} />
-          </ListItem>
-        )}
+        <ListItem
+          button
+          component={Link}
+          to="/product-recommendations"
+          selected={match.path.includes('/product-recommendations')}
+          className="menu"
+        >
+          <ListItemIcon>
+            { match.path.includes('/product-recommendations') ? 
+                <AccountCircle style={{color: 'white'}}/>
+                : <AccountCircle />
+              }
+          </ListItemIcon>
+          <ListItemText primary={'Product Recommendation'} />
+        </ListItem>
 
-        {accessFlags.has_access_to_statistics && (
-          <ListItem
-            button
-            component={Link}
-            to="/statistics"
-            onClick={() => {
-              setOpen(!open);
-            }}
-            selected={match.path.startsWith('/statistics')}
-          >
-            <ListItemIcon>
-              <Assignment />
-            </ListItemIcon>
-            <ListItemText primary={t('sidebar.statistics_and_reports')} />
-          </ListItem>
-        )} */}
       </List>
       <Divider />
       <List>
