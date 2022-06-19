@@ -86,6 +86,7 @@ export default function BrandDetailsPage() {
     setAxis(null)
     setCollection(null)
     setImageUrl(null)
+    setActiveTab('info')
     setModalType('add-form')
     setOpenModal(true)
   }
@@ -101,6 +102,7 @@ export default function BrandDetailsPage() {
     setCollection(product.collection)
     setImageUrl(product.image_url)
     setVariants(product.product_variants)
+    setActiveTab('info')
     setModalType('edit-form')
     setOpenModal(true)
     if(product.countries){
