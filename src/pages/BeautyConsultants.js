@@ -23,7 +23,7 @@ export default function BrandDetailsPage() {
   const api = useAPI();
   const { t } = useTranslation();
   const branchesInfo = useRequest(() =>
-    api.requestResource('/api/dior/company_branches')
+    api.requestResource('/api/dior/company_branches?page=1&per=10000')
   );
   const { token } = useAppContext();
   const csvFile = useRef(null) 

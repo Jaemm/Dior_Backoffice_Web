@@ -233,7 +233,7 @@ export default function ProductRecommendationsPage() {
       console.log(res)
       if(res.status === 200){
         // reload
-        // setReloadNow(true)
+        window.location.reload()
         setOpenModal(false)
       }
     })
@@ -532,7 +532,7 @@ export default function ProductRecommendationsPage() {
   }
 
   return(
-    <Layout title={'Product Catalog'} disableLayout={true}>
+    <Layout title={'Product Catalog'}>
       <Modal
         open={openModal}
         onClose={()=>{setOpenModal(false)}}

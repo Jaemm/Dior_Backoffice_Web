@@ -71,14 +71,14 @@ export function Header({ title }: SectionHeaderProps, props: BoxProps) {
   return (
     <Box {...props} style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: 'white', padding: '20px' }}>
       <div className="title">{title}</div>
-      {showUpdatePasswordDialog && (
+      {/* {showUpdatePasswordDialog && (
         <ChangePassword
           open
           onClose={() => {
             setShowUpdatePasswordDialog(false);
           }}
         />
-      )}
+      )} */}
       {/* <FormControl
         variant="outlined"
         style={{ marginRight: 10, minWidth: 350 }}
@@ -103,7 +103,7 @@ export function Header({ title }: SectionHeaderProps, props: BoxProps) {
           )}
         </Select>
       </FormControl> */}
-      <Button
+      {/* <Button
         variant="outlined"
         size="large"
         aria-controls="user-menu"
@@ -112,8 +112,8 @@ export function Header({ title }: SectionHeaderProps, props: BoxProps) {
         endIcon={<Person />}
       >
         {user.id}
-      </Button>
-      <Menu
+      </Button> */}
+      {/* <Menu
         id="user-menu"
         anchorEl={anchorEl}
         keepMounted
@@ -128,7 +128,7 @@ export function Header({ title }: SectionHeaderProps, props: BoxProps) {
         >
           {t('update_password.change_password')}
         </MenuItem>
-      </Menu>
+      </Menu> */}
     </Box>
   );
 }

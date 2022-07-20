@@ -199,13 +199,27 @@ export function Login() {
                   </Grid>
                 </Grid>
               </Box>
+
             </CardContentDiv>
+            <PoweredbyText> Powered by Chowis</PoweredbyText>
 
       </Box>
     </Box>
   );
 }
 
+const PoweredbyText = styled.h1`
+    bottom: 0;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgb(90, 90, 90);
+    font-weight: 400;
+    font-size: 20px;
+`
 
 const CardContentDiv = styled.div`
 
