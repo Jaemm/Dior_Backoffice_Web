@@ -5,9 +5,12 @@ import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, 
   TableHead,
   TableRow,
   InputLabel,
-  Select
+  Select,
+  Collapse,
+  IconButton
 } from '@material-ui/core';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import { TableWrapper } from '../components/TableWrapper';
 
 import { useRequest } from 'ahooks';
 import React, {useState, useRef, useEffect} from 'react';
@@ -16,6 +19,10 @@ import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
 import countries from 'country-list'
 import axios from 'axios'
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
@@ -40,6 +47,7 @@ export default function ProductRecommendationsPage() {
   const [name, setName] = useState('')
   const [id, setId] = useState('')
   const { token } = useAppContext();
+  const [open, setOpen] = useState(-1);
 
   useEffect (() => {
     fetchProductGroups()
@@ -532,7 +540,7 @@ export default function ProductRecommendationsPage() {
   }
 
   return(
-    <Layout title={'Product Catalog'}>
+    <Layout title={'Product Catalog'} disableLayout={false}>
       <Modal
         open={openModal}
         onClose={()=>{setOpenModal(false)}}
@@ -566,8 +574,8 @@ export default function ProductRecommendationsPage() {
             </Button>
           </div>
 
-          <Grid container spacing={4}>
-          {productGroups.map((e, idx) => {
+          <Grid container>
+          {/* {productGroups.map((e, idx) => {
             return(
               <Grid item xs={4}>
                 <div className='product-recommendations-card'>
@@ -610,7 +618,134 @@ export default function ProductRecommendationsPage() {
                 </div>
               </Grid>
             )
-          })}
+          })} */}
+            {/* <div className="recommendation-group-header">
+              <div style={{width: '100px'}}>
+                <Checkbox color="primary"/>
+              </div>
+              <div style={{width: '20px'}}></div>
+              <div style={{width: '200px'}}>Group Name</div>
+              <div style={{width: '100px'}}>Routine</div>
+              <div style={{width: '100px'}}>Access Rights</div>
+              <div style={{width: '100px'}}>Status</div>
+              <div style={{width: '150px'}}>No. of Products</div>
+            </div>
+            {productGroups.map((productGroup, idx) => {
+              return(
+                <div className="recommendation-group-body">
+                  <div style={{width: '100px'}}>
+                      <Checkbox color="primary"/>
+                  </div>
+                  <div style={{width: '20px'}}>
+                    <ArrowCircleDownIcon />
+                  </div>
+                  <div style={{width: '200px'}}>{productGroup.name}</div>
+                  <div style={{width: '100px'}}>{productGroup.routine}</div>
+                  <div style={{width: '100px'}}>{productGroup.countries.join(',')}</div>
+                  <div style={{width: '100px'}}>Active</div>
+                  <div style={{width: '150px'}}>{productGroup.products}</div>
+                </div>
+              )
+            })} */}
+          <TableWrapper
+            style={{
+              maxHeight: '100%',
+              overflow: 'hidden',
+              overflowX: 'initial',
+              position: 'relative',
+            }}
+            // isLoading={results.isValidating}
+          >
+            <Table size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "rgba(211,211,211,.2)" }}>
+                  <TableCell>
+                    <Checkbox color="primary" />
+                  </TableCell>
+                  <TableCell scope="header">Group Name</TableCell>
+                  <TableCell>Routine</TableCell>
+                  <TableCell>Access Rights</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>No. of Products</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {productGroups.map((productGroup, index) => (
+                  <>
+                    <TableRow key={productGroup.id}>
+                      <TableCell>
+                        <Checkbox color="primary" />
+                        <IconButton
+                          aria-label="expand row"
+                          size="small"
+                          onClick={() => setOpen(open === index ? -1 : index)}
+                        >
+                          {open === index ? (
+                            <KeyboardArrowUpIcon />
+                          ) : (
+                            <KeyboardArrowDownIcon />
+                          )}
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>{productGroup.name}</TableCell>
+                      <TableCell>{productGroup.routine}</TableCell>
+                      <TableCell>{productGroup.countries.join(',')}</TableCell>
+                      <TableCell>Active</TableCell>
+                      <TableCell>{productGroup.products.length}</TableCell>
+                      <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{width: '100%'}}
+                        onClick={()=>{onClickEditGroup(productGroup.id)}}
+                      >
+                        Edit
+                      </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={6} sx={{ paddingBottom: 0, paddingTop: 0, border: '0px'}}>
+                        <Collapse in={open === index} timeout="auto" unmountOnExit>
+                        <TableWrapper
+                          style={{
+                            maxHeight: '100%',
+                            overflow: 'hidden',
+                            overflowX: 'initial',
+                            position: 'relative',
+                          }}
+                          // isLoading={results.isValidating}
+                        >
+                          <Table size="small" aria-label="a dense table">
+                            <TableHead>
+                              <TableRow sx={{ backgroundColor: "rgba(211,211,211,.2)" }}>
+                                <TableCell scope="header">Product Name</TableCell>
+                                <TableCell>Code</TableCell>
+                                <TableCell>Category</TableCell>
+                                <TableCell>Collection</TableCell>
+                              </TableRow>
+                            </TableHead>
+
+                            <TableBody>
+                              {productGroup.products.map((product, index) => (
+                                <TableRow key={product.id}>
+                                  <TableCell>{product.name}</TableCell>
+                                  <TableCell>{product.code}</TableCell>
+                                  <TableCell>{product.category}</TableCell>
+                                  <TableCell>{product.collection}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                          </TableWrapper>
+                        </Collapse>
+                      </TableCell>
+                    </TableRow>
+                  </>
+                ))}
+              </TableBody>
+            </Table>
+          </TableWrapper>
           </Grid>
           
 
