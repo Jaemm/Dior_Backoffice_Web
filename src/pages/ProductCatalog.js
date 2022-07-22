@@ -10,6 +10,8 @@ import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
+
+
 import countries from 'country-list'
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
@@ -25,6 +27,7 @@ import { useAppContext } from '../data/AppContext';
 import axios from 'axios';
 import ImageIcon from '@material-ui/icons/Image';
 import FileUpload from '../components/FileUpload';
+
 
 import { DataTable } from '../components/DataTable';
 import NewDataTable from '../components/NewDataTable';
@@ -66,6 +69,7 @@ export default function BrandDetailsPage() {
   const [modalType, setModalType] = useState('')
   const [dataInCSV, setDataInCSV] = useState('')
   const [exportLoading, setExportLoading] = useState(false)
+  const [variantId, setVariantId] = useState(false)
 
   const listCountries = countries.getNames()
   console.log(listCountries)
@@ -88,6 +92,22 @@ export default function BrandDetailsPage() {
     setImageUrl(null)
     setActiveTab('info')
     setModalType('add-form')
+    setVariantId(null)
+    setOpenModal(true)
+  }
+
+  const onClickAddNewVariantButton = (variantId) => {
+    setId(null)
+    setCode(null)
+    setName(null)
+    setLink(null)
+    setCategory(null)
+    setAxis(null)
+    setCollection(null)
+    setImageUrl(null)
+    setActiveTab('info')
+    setModalType('add-form')
+    setVariantId(variantId)
     setOpenModal(true)
   }
 
@@ -102,6 +122,7 @@ export default function BrandDetailsPage() {
     setCollection(product.collection)
     setImageUrl(product.image_url)
     setVariants(product.product_variants)
+    setVariantId(product.product_recommendation_id)
     setActiveTab('info')
     setModalType('edit-form')
     setOpenModal(true)
@@ -119,6 +140,27 @@ export default function BrandDetailsPage() {
       setGermanProductName(german?.value)
       setHindiProductName(hindi?.value)
       setJapaneseProductName(japanese?.value)
+    }
+  }
+
+
+  const deleteSingleProduct = (id) => {
+    if (window.confirm("Delete the item?")) {
+      axios({
+        method: 'DELETE',
+        url: `https://v2-app.chowis.com/api/pmx/product_recommendations/${id}`,
+        headers: {
+          'X-CHOWIS-CONSULTANT-TOKEN': token,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+        if(res.status === 200){
+          // reload
+          setReloadNow(true)
+          setOpenModal(false)
+        }
+      })
     }
   }
 
@@ -209,7 +251,8 @@ export default function BrandDetailsPage() {
       routine: axis,
       image_url: imageUrl,
       countries: selectedCountries.filter(e => e !== 'All'),
-      product_translations: translations
+      product_translations: translations,
+      product_recommendation_id: variantId
     }
     let method, url
     if(id){
@@ -609,13 +652,22 @@ export default function BrandDetailsPage() {
 
         { activeTab == 'variation' && (
           <div style={{overflow: 'auto', height: '500px'}}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{marginTop: '10px', float: 'right'}}
+                onClick={() => {onClickAddNewVariantButton(id)}}
+              >
+                Add New Variant
+              </Button>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Variant</TableCell>
-                  <TableCell>Product Code</TableCell>
+                  <TableCell>Code</TableCell>
                   <TableCell>Category</TableCell>
                   <TableCell>Collection</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -626,6 +678,25 @@ export default function BrandDetailsPage() {
                       <TableCell>{e.code}</TableCell>
                       <TableCell>{e.category}</TableCell>
                       <TableCell>{e.collection}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          style={{marginRight: '10px'}}
+                          onClick={() => {onClickEditButton(e)}}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          style={{marginRight: '10px'}}
+                          onClick={() => {deleteSingleProduct(e.id)}}
+                        >
+                          Delete
+                        </Button>
+                        
+                      </TableCell>
                     </TableRow>
                   )
                 })}
