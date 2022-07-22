@@ -217,11 +217,11 @@ export default function BrandDetailsPage() {
           }}
           InputLabelProps={{ shrink: true }}
         >
-          <MenuItem key={1} value={'FRANCE'}>
-            FRANCE
+          <MenuItem key={1} value={'France'}>
+            France
           </MenuItem>
-          <MenuItem key={1} value={'KOREA'}>
-            KOREA
+          <MenuItem key={1} value={'Japan'}>
+            Japan
           </MenuItem>
         </TextField>
         <TextField

@@ -184,7 +184,7 @@ export default function BrandDetailsPage() {
   const renderAddForm = () => {
     return(
       <Box className="modal-box" style={{height: '620px'}}>
-        <div className="modal-header">ADD NEW POS</div>
+        <div className="modal-header">ADD NEW BC</div>
         <TextField
           label={'Country'}
           variant="outlined"
@@ -198,11 +198,11 @@ export default function BrandDetailsPage() {
           }}
           InputLabelProps={{ shrink: true }}
         >
-          <MenuItem key={1} value={'FRANCE'}>
-            FRANCE
+          <MenuItem key={1} value={'France'}>
+            France
           </MenuItem>
-          <MenuItem key={1} value={'KOREA'}>
-            KOREA
+          <MenuItem key={1} value={'Japan'}>
+            Japan
           </MenuItem>
         </TextField>
         <TextField
