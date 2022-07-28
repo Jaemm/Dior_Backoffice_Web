@@ -51,7 +51,7 @@ export default function AnalysisHistoryPage() {
     <Layout
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Link to="/customer-record/">{t('sidebar.customer_record')}</Link>
+          <Link to="/beauty-consultants/">Beauty Consultant</Link>
           <Typography display="initial">
             {t('sidebar.analysis_history')}
           </Typography>

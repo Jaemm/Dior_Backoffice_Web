@@ -248,32 +248,7 @@ export default function BrandDetailsPage() {
           }}
           InputLabelProps={{ shrink: true }}
         />
-        <TextField
-          label={'BC Email'}
-          variant="outlined"
-          size="small"
-          fullWidth
-          value={email}
-          style={{marginTop: '20px'}}
-          onChange={(e) => {
-            setEmail(e.target.value)
-          }}
-          InputLabelProps={{ shrink: true }}
-        />
-        <TextField
-          label={'Password'}
-          variant="outlined"
-          size="small"
-          fullWidth
-          value={password}
-          type="password"
-          style={{marginTop: '20px', marginBottom: '20px'}}
-          onChange={(e) => {
-            setPassword(e.target.value)
-          }}
-          InputLabelProps={{ shrink: true }}
-        />
-        <FormControl>
+        <FormControl style={{marginTop: '20px'}}>
           <FormLabel id="demo-radio-buttons-group-label">Is Active</FormLabel>
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
@@ -348,7 +323,7 @@ export default function BrandDetailsPage() {
               { label: 'Pos Code', key: 'pos_code' },
               { label: 'BC Code', key: 'code' },
               { label: t('brand_details.name'), key: 'name' },
-              { label: t('brand_details.email'), key: 'email' },
+              { label: t('brand_details.email'), key: 'pos_email' },
               { label: t('brand_details.status'), key: 'status' },
               { label: 'Details', key: 'details',
                 content: ({ id }) => (

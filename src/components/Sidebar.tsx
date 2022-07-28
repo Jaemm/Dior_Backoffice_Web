@@ -182,6 +182,21 @@ export function Sidebar() {
       <Divider />
       <List>
         <ListItem
+            button
+            component={Link}
+            to="/market-managements"
+            selected={match.path.includes('/market-managements')}
+            className="menu"
+          >
+            <ListItemIcon>
+              { match.path.includes('/market-managements') ? 
+                  <AccountCircle style={{color: 'white'}}/>
+                  : <AccountCircle />
+                }
+            </ListItemIcon>
+            <ListItemText primary={'Market Management'} />
+          </ListItem>
+        <ListItem
           button
           onClick={() => {
             setShowLogoutConfirmation(true);

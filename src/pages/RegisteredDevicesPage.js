@@ -114,13 +114,6 @@ export default function RegisteredDevicesPage() {
               { label: t('brand_details.name'), key: 'name' },
               { label: t('brand_details.email'), key: 'email' },
               { label: t('brand_details.status'), key: 'status' },
-              { label: 'Details', key: 'details',
-                content: ({ id }) => (
-                  <Link to={`/brand-details/${id}/`}>
-                    {t('analysis_history.view_details')}
-                  </Link>
-                ),
-              }
             ]}
             toolbar={{
               search: true,
