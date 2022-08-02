@@ -66,6 +66,8 @@ export default function BrandDetailsPage() {
   const [dataInCSV, setDataInCSV] = useState('')
   const [exportLoading, setExportLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
+
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -148,6 +150,10 @@ export default function BrandDetailsPage() {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
   };
+
+  const handleClickShowPasswordModal = () => {
+    setShowPasswordModal(!showPasswordModal)
+  }
 
   const toolbarButtons =
     <Grid item>
@@ -309,7 +315,7 @@ export default function BrandDetailsPage() {
           <OutlinedInput
             className='MuiOutlinedInput-sizeSmall'
             id="outlined-adornment-password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPasswordModal ? 'text' : 'password'}
             value={password}
             onChange={(e) => {
               setPassword(e.target.value)
@@ -319,11 +325,11 @@ export default function BrandDetailsPage() {
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
+                  onClick={handleClickShowPasswordModal}
                   // onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showPasswordModal ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
             }
