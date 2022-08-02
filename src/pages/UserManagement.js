@@ -29,8 +29,14 @@ export default function RegisteredDevicesPage() {
   const csvFile = useRef(null) 
 
   const [openModal, setOpenModal] = useState(false)
-  const [code, setCode] = useState('')
+
   const [name, setName] = useState('')
+  const [surname, setSurname] = useState('')
+  const [email, setEmail] = useState('')
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [countries, setCountries] = useState([])
+  const [password, setPassword] = useState('')
+
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [modalType, setModalType] = useState('')
@@ -48,7 +54,7 @@ export default function RegisteredDevicesPage() {
 
   const onClickExportButton = () => {
     setExportLoading(true)
-    const url = 'https://v2-app.chowis.com/api/dior/countries/export'
+    const url = 'https://v2-app.chowis.com/api/dior/admins/export'
     axios({
       method: 'GET',
       url: url,
@@ -83,7 +89,7 @@ export default function RegisteredDevicesPage() {
     if (window.confirm("Delete the item?")) {
       axios({
         method: 'DELETE',
-        url: 'https://v2-app.chowis.com/api/dior/countries/delete_multiple',
+        url: 'https://v2-app.chowis.com/api/dior/admins/delete_multiple',
         data: bcData,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
@@ -138,18 +144,20 @@ export default function RegisteredDevicesPage() {
       </Grid>
     </Grid>
 
-const saveCountry = () => {
-  const countryData = {
+const saveUser = () => {
+  const userData = {
     name: name,
-    code: code,
-    url_and_port: ecrm,
-    default_recommendation: productRecommendation
+    surname: surname,
+    email: email,
+    is_admin: isAdmin,
+    countries: countries,
+    password: password
   }
 
   axios({
     method: 'POST',
-    url: 'https://v2-app.chowis.com/api/dior/countries',
-    data: countryData,
+    url: 'https://v2-app.chowis.com/api/dior/admins',
+    data: userData,
     headers: {
       'X-CHOWIS-CONSULTANT-TOKEN': token,
     },
@@ -166,22 +174,10 @@ const saveCountry = () => {
 
 const renderAddForm = () => {
   return(
-    <Box className="modal-box" style={{height: '420px'}}>
-      <div className="modal-header">Add New Market</div>
+    <Box className="modal-box" style={{height: '500px'}}>
+      <div className="modal-header">Add New User</div>
       <TextField
-        label={'Market Code'}
-        variant="outlined"
-        size="small"
-        fullWidth
-        value={code}
-        style={{marginTop: '20px'}}
-        onChange={(e) => {
-          setCode(e.target.value)
-        }}
-        InputLabelProps={{ shrink: true }}
-      />
-      <TextField
-        label={'Market Name'}
+        label={'FIrst Name'}
         variant="outlined"
         size="small"
         fullWidth
@@ -193,43 +189,67 @@ const renderAddForm = () => {
         InputLabelProps={{ shrink: true }}
       />
       <TextField
-        label={'Product Recommendation'}
-        variant="outlined"
-        size="small"
-        select
-        fullWidth
-        value={productRecommendation}
-        style={{marginTop: '20px'}}
-        onChange={(e) => {
-          setProductRecommendation(e.target.value)
-        }}
-        InputLabelProps={{ shrink: true }}
-      >
-        {branchesInfo && branchesInfo?.data?.data && branchesInfo?.data?.data.map(e => 
-          <MenuItem key={e.id} value={e.id}>
-            {e.code}
-          </MenuItem>
-        )}
-      </TextField>
-      <TextField
-        label={'eCRM '}
+        label={'Last Name'}
         variant="outlined"
         size="small"
         fullWidth
-        value={ecrm}
+        value={surname}
         style={{marginTop: '20px'}}
         onChange={(e) => {
-          setEcrm(e.target.value)
+          setSurname(e.target.value)
         }}
         InputLabelProps={{ shrink: true }}
       />
+      <TextField
+        label={'Email'}
+        variant="outlined"
+        size="small"
+        fullWidth
+        value={email}
+        style={{marginTop: '20px'}}
+        onChange={(e) => {
+          setEmail(e.target.value)
+        }}
+        InputLabelProps={{ shrink: true }}
+      />
+      <TextField
+        label={'Password'}
+        variant="outlined"
+        type="password"
+        size="small"
+        fullWidth
+        value={password}
+        style={{marginTop: '20px'}}
+        onChange={(e) => {
+          setPassword(e.target.value)
+        }}
+        InputLabelProps={{ shrink: true }}
+      />
+
+      <FormControl style={{marginTop: '20px'}}>
+        <FormLabel id="demo-radio-buttons-group-label">Is Admin?</FormLabel>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="female"
+          name="radio-buttons-group"
+          class="is-active-radio-div"
+          value={isAdmin ? "0" : "1"}
+          onChange={(e) => {
+            setIsAdmin(e.target.value == "0")
+          }}
+          row
+        >
+          <FormControlLabel value="0" control={<Radio />} label="Yes" />
+          <FormControlLabel value="1" control={<Radio />} label="No" />
+        </RadioGroup>
+      </FormControl>
 
       <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '30px'}}>
         <Button
           variant="contained"
           color="primary"
           style={{marginRight: '10px', width: '192px'}}
-          onClick={() => {saveCountry()}}
+          onClick={() => {saveUser()}}
         >
           Save
         </Button>
@@ -248,7 +268,7 @@ const renderAddForm = () => {
 
 
   return (
-    <Layout title={'Market Management'}>
+    <Layout title={'User Management'}>
       <Modal
         open={openModal}
         onClose={()=>{setOpenModal(false)}}
@@ -274,21 +294,26 @@ const renderAddForm = () => {
         <Grid item xs>
           <DataTable
             dataIndex="id"
-            resource_url="/api/dior/countries"
+            resource_url="/api/dior/admins"
             headers={headers}
             reloadNow={reloadNow}
             setReloadNow={setReloadNow}
             setSelectedRowIdsFromParent={setSelectedRowIds}
             columns={[
-              { label: 'Market Code', key: 'code' },
-              { label: 'Market Name', key: 'name' },
-              { label: 'Default Recommendation', key: '' },
-              { label: 'eCRM URL & port', key: '' },
+              { label: 'First Name', key: 'name' },
+              { label: 'Last Name', key: 'surname' },
+              { label: 'Email', key: 'email' },
+              { label: 'Countries', key: 'countries' },
+              { label: 'is Admin', key: 'consultant_position_id',
+                content: ({ consultant_position_id }) => (
+                  consultant_position_id == 5 ? "Yes" : "No"
+                ),
+              }
             ]}
             toolbar={{
               search: true,
               filter: false,
-              pagination: false,
+              pagination: true,
               export: false,
             }}
             toolbarButtons={toolbarButtons}

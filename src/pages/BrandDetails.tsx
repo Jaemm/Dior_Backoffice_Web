@@ -1,10 +1,13 @@
-import { Grid, Button, Modal, Box, TextField, MenuItem } from '@material-ui/core';
+import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, IconButton, InputLabel, OutlinedInput, InputAdornment } from '@material-ui/core';
 import { useRequest } from 'ahooks';
 import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
-
+import {
+  Visibility,
+  VisibilityOff,
+} from '@material-ui/icons';
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
 // import { parseDateString } from '../helpers/dateHelpers';
@@ -52,6 +55,7 @@ export default function BrandDetailsPage() {
 
   const [openModal, setOpenModal] = useState(false)
   const [modalType, setModalType] = useState('')
+  const [id, setId] = useState(null)
   const [country, setCountry] = useState('')
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
@@ -61,6 +65,7 @@ export default function BrandDetailsPage() {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [dataInCSV, setDataInCSV] = useState('')
   const [exportLoading, setExportLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -71,6 +76,18 @@ export default function BrandDetailsPage() {
 
   const onClickAddButton = () => {
     // alert('onClickAddButton')
+    setModalType('add-form')
+    setOpenModal(true)
+  }
+
+  const onClickEditButton = (product: any) => {
+    console.log(product)
+    setId(product.id)
+    setCountry(product.country)
+    setCode(product.code)
+    setName(product.name)
+    setEmail(product.email)
+    setPassword(product.password)
     setModalType('add-form')
     setOpenModal(true)
   }
@@ -128,6 +145,10 @@ export default function BrandDetailsPage() {
     }
   }
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword)
+  };
+
   const toolbarButtons =
     <Grid item>
       <Grid container spacing={2}>
@@ -181,23 +202,46 @@ export default function BrandDetailsPage() {
       email: email,
       password: password
     }
+    let url = 'https://v2-app.chowis.com/api/dior/company_branches'
+    if(id){
+      url = `https://v2-app.chowis.com/api/dior/company_branches/${id}`
+      axios({
+        method: 'PUT',
+        url: url,
+        data: posData,
+        headers: {
+          'X-CHOWIS-CONSULTANT-TOKEN': token,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+        if(res.status === 200){
+          // reload
+          setReloadNow(true)
+          setOpenModal(false)
+        }
+      })
+    }else{
+      url = 'https://v2-app.chowis.com/api/dior/company_branches'
+      axios({
+        method: 'POST',
+        url: url,
+        data: posData,
+        headers: {
+          'X-CHOWIS-CONSULTANT-TOKEN': token,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+        if(res.status === 200){
+          // reload
+          setReloadNow(true)
+          setOpenModal(false)
+        }
+      })
+    }
 
-    axios({
-      method: 'POST',
-      url: 'https://v2-app.chowis.com/api/dior/company_branches',
-      data: posData,
-      headers: {
-        'X-CHOWIS-CONSULTANT-TOKEN': token,
-      },
-    })
-    .then((res) => {
-      console.log(res)
-      if(res.status === 200){
-        // reload
-        setReloadNow(true)
-        setOpenModal(false)
-      }
-    })
+
   }
 
   const renderAddForm = () => {
@@ -260,19 +304,45 @@ export default function BrandDetailsPage() {
           }}
           InputLabelProps={{ shrink: true }}
         />
-        <TextField
+       <FormControl variant="outlined" style={{marginTop: '20px', marginBottom: '20px', width: '100%'}}>
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            className='MuiOutlinedInput-sizeSmall'
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value)
+            }}
+            style={{height: '2.7rem'}}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  // onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+        {/* <TextField
           label={'Password'}
           variant="outlined"
           size="small"
           fullWidth
           value={password}
-          type="password"
+          // type={}
           style={{marginTop: '20px', marginBottom: '20px'}}
           onChange={(e) => {
             setPassword(e.target.value)
           }}
           InputLabelProps={{ shrink: true }}
-        />
+        /> */}
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <Button
             variant="contained"
@@ -332,25 +402,34 @@ export default function BrandDetailsPage() {
               { label: t('brand_details.name'), key: 'name' },
               { label: t('brand_details.email'), key: 'email' },
               { label: t('brand_details.total_devices'), key: 'total_devices' },
-              { label: t('brand_details.password'), key: 'password' },
+              { label: t('brand_details.password'), key: 'password',
+              content: (props) =>
+                <div>
+                {showPassword ? props.password : '********'}
+                <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                // onMouseDown={handleMouseDownPassword}
+                edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+                </div>
+              },
               { label: t('brand_details.last_consultation_date'), key: 'last_consultation_date' },
-              // {
-              //   label: t('brand_details.status'),
-              //   key: 'status',
-              //   content: ({ status }) =>
-              //     status
-              //       ? t('brand_details.active')
-              //       : t('brand_details.inactive'),
-              // },
-              // {
-              //   label: t('brand_details.assigned_customers'),
-              //   key: 'id',
-              //   content: ({ id }) => (
-              //     <Link to={`/brand-details/${id}/`}>
-              //       {t('brand_details.view_customers')}
-              //     </Link>
-              //   ),
-              // },
+              { label: 'Action', key: 'id',
+              content: (props) =>
+                <div className="">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{marginRight: '10px'}}
+                    onClick={() => {onClickEditButton(props)}}
+                  >
+                    Edit
+                  </Button>
+                </div>
+              }
             ]}
             toolbar={{
               search: true,

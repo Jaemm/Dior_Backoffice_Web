@@ -187,15 +187,30 @@ export function Sidebar() {
             to="/market-managements"
             selected={match.path.includes('/market-managements')}
             className="menu"
-          >
-            <ListItemIcon>
-              { match.path.includes('/market-managements') ? 
-                  <AccountCircle style={{color: 'white'}}/>
-                  : <AccountCircle />
-                }
-            </ListItemIcon>
-            <ListItemText primary={'Market Management'} />
-          </ListItem>
+        >
+          <ListItemIcon>
+            { match.path.includes('/market-managements') ? 
+                <AccountCircle style={{color: 'white'}}/>
+                : <AccountCircle />
+              }
+          </ListItemIcon>
+          <ListItemText primary={'Market Management'} />
+        </ListItem>
+        <ListItem
+            button
+            component={Link}
+            to="/user-managements"
+            selected={match.path.includes('/user-managements')}
+            className="menu"
+        >
+          <ListItemIcon>
+            { match.path.includes('/user-managements') ? 
+                <AccountCircle style={{color: 'white'}}/>
+                : <AccountCircle />
+              }
+          </ListItemIcon>
+          <ListItemText primary={'User Management'} />
+        </ListItem>
         <ListItem
           button
           onClick={() => {

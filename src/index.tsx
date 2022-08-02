@@ -31,6 +31,8 @@ import EditProductCatalog from './components/EditProductCatalog';
 import StoreDetails from './pages/StatisticsAndReportsDetailPage';
 import ProductRecommendationsPage from './pages/ProductRecommendationsPage'
 import MarketManagement from './pages/MarketManagement'
+import UserManagement from './pages/UserManagement'
+
 const localeMap = {
   en: enLocale,
 };
@@ -96,6 +98,10 @@ ReactDOM.render(
 
                   <Route path="/market-managements">
                     <MarketManagement />
+                  </Route>
+
+                  <Route path="/user-managements">
+                    <UserManagement />
                   </Route>
 
                   <Route path="/logout">
