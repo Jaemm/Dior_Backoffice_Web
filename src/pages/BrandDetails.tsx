@@ -68,6 +68,7 @@ export default function BrandDetailsPage() {
   const [exportLoading, setExportLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
+  const [selectedRow, setSelectedRow] = useState([]);
 
   const headers = [
     { label: 'Name', key: 'name' },
@@ -128,7 +129,10 @@ export default function BrandDetailsPage() {
     const posData = {
       ids: selectedRowIds
     }
-    if (window.confirm("Delete the item?")) {
+    let message = "Are you sure want to delete below BC ? \n\n"
+    let rowInfo = selectedRow.map((e:any) => `${e.country}-${e.code}-${e.name}\n`)
+    console.log(rowInfo.join(''))
+    if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
         url: 'https://v2-app.chowis.com/api/dior/company_branches/delete_multiple',
@@ -415,6 +419,7 @@ export default function BrandDetailsPage() {
             reloadNow={reloadNow}
             setReloadNow={setReloadNow}
             setSelectedRowIdsFromParent={setSelectedRowIds}
+            setSelectedRowFromParent={setSelectedRow}
             columns={[
               { label: t('brand_details.country'), key: 'country' },
               { label: t('brand_details.code'), key: 'code' },

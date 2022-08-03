@@ -52,6 +52,7 @@ export default function BrandDetailsPage() {
   const [variants, setVariants] = useState([])
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [selectedRow, setSelectedRow] = useState([]);
   const [bcCode, setBcCode] = useState('')
   const [link, setLink] = useState('')
   const [category, setCategory] = useState('')
@@ -169,7 +170,10 @@ export default function BrandDetailsPage() {
     const productData = {
       ids: selectedRowIds
     }
-    if (window.confirm("Delete the item?")) {
+    let message = "Are you sure want to delete below BC ? \n\n"
+    let rowInfo = selectedRow.map((e) => `${e.name}-${e.category}-${e.collection}\n`)
+    console.log(rowInfo.join(''))
+    if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
         url: 'https://v2-app.chowis.com/api/pmx/product_recommendations/delete_multiple',
@@ -745,6 +749,7 @@ export default function BrandDetailsPage() {
             reloadNow={reloadNow}
             setReloadNow={setReloadNow}
             setSelectedRowIdsFromParent={setSelectedRowIds}
+            setSelectedRowFromParent={setSelectedRow}
             columns={[
               {
                 label: 'Product Image',
