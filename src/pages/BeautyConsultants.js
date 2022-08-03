@@ -69,7 +69,10 @@ export default function BrandDetailsPage() {
     const bcData = {
       ids: selectedRowIds
     }
-    if (window.confirm("Are you sure want to delete below BC ? \n\nFrance-F01-F931830-Fathi Abdul Rahim\nFrance-F01-F931830-Fathi Abdul Rahim")) {
+    let message = "Are you sure want to delete below BC ? \n\n"
+    let rowInfo = selectedRow.map(e => `${e.country}-${e.pos_code}-${e.code}-${e.name}\n`)
+    console.log(rowInfo.join(''))
+    if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
         url: 'https://v2-app.chowis.com/api/dior/company_consultants/delete_multiple',

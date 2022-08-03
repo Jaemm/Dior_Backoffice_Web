@@ -1,7 +1,10 @@
 import React, {useState, useRef} from 'react';
-import { Grid, Button, Modal, Box, TextField, MenuItem } from '@material-ui/core';
+import { Grid, Button, Modal, Box, TextField, MenuItem, IconButton } from '@material-ui/core';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import {
+  Close
+} from '@material-ui/icons';
 
 const UploadForm = (props) => {
   const inputFile = useRef(null) 
@@ -82,6 +85,18 @@ const UploadForm = (props) => {
   return(      
     <Box className="modal-box">
       <div className="modal-header">Upload a list of {modelName}</div>
+      <div style={{
+          justifyContent: 'end',
+          position: 'absolute',
+          top: '21%',
+          right: '34%'
+        }}>
+          <IconButton
+            onClick={()=>{onClose()}}
+          >
+            <Close />
+          </IconButton>
+        </div>
       <div className="modal-subheader" style={{marginTop: '40px'}}>Please download sample file</div>
       <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
         <Button
