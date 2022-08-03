@@ -1,4 +1,4 @@
-import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Item, FormGroup, Checkbox, List, ListItem, ListItemText,
+import { Grid, Button, Modal, Box, TextField, MenuItem, IconButton, FormLabel, RadioGroup, FormControlLabel, Radio, Item, FormGroup, Checkbox, List, ListItem, ListItemText,
   Table,
   TableBody,
   TableCell,
@@ -26,6 +26,7 @@ import {
 import { useAppContext } from '../data/AppContext';
 import axios from 'axios';
 import ImageIcon from '@material-ui/icons/Image';
+import {Close} from '@material-ui/icons'
 import FileUpload from '../components/FileUpload';
 
 
@@ -37,8 +38,12 @@ import { setISODay } from 'date-fns';
 export default function BrandDetailsPage() {
   const api = useAPI();
   const { t } = useTranslation();
-  const branchesInfo = useRequest(() =>
-    api.requestResource('/api/dior/company_branches')
+  const collectionInfo = useRequest(() =>
+    api.requestResource('/api/dior/product_recommendations/get_collection')
+  );
+
+  const categoryInfo = useRequest(() =>
+    api.requestResource('/api/dior/product_recommendations/get_category')
   );
   const { token } = useAppContext();
   const csvFile = useRef(null) 
@@ -333,10 +338,28 @@ export default function BrandDetailsPage() {
     setOpenModal(true)
   }
 
+  console.log(collectionInfo.data)
+
+  const collectionSelect = collectionInfo?.data?.data.map((e) => ({key: e, label: e}))
+  const categorySelect = categoryInfo?.data?.data.map((e) => ({key: e, label: e}))
+
+
   const renderAddForm = () => {
     return(
       <Box className="modal-box" style={{height: '620px', width: '600px'}}>
         {/* <div className="modal-header">{id ? 'EDIT' : 'ADD'} NEW POS</div> */}
+        <div style={{
+          justifyContent: 'end',
+          position: 'absolute',
+          top: '14%',
+          right: '32%'
+        }}>
+          <IconButton
+            onClick={()=>{setOpenModal(false)}}
+          >
+            <Close />
+          </IconButton>
+        </div>
         <div className="tab-container">
           <div className={activeTab == 'info' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('info')}}>Information</div>
           <div className={activeTab == 'country' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('country')}}>Countries</div>
@@ -744,7 +767,7 @@ export default function BrandDetailsPage() {
         <Grid item xs>
           <DataTable
             dataIndex="id"
-            resource_url="/api/pmx/product_recommendations"
+            resource_url="/api/dior/product_recommendations"
             headers={headers}
             reloadNow={reloadNow}
             setReloadNow={setReloadNow}
@@ -783,6 +806,14 @@ export default function BrandDetailsPage() {
                   >
                     Edit
                   </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {deleteSingleProduct(props.id)}}
+                  >
+                    Delete
+                  </Button>
+                  
                 </div>
               }
             ]}
@@ -791,7 +822,13 @@ export default function BrandDetailsPage() {
               filter: false,
               pagination: true,
               export: false,
+              filter_select: true,
+              filter_select2: true
             }}
+            filter_label='Filter by Category'
+            filter_label_2='Filter by Collection'
+            filters={categorySelect}
+            filters2={collectionSelect}
             toolbarButtons={toolbarButtons}
           />
         </Grid>

@@ -93,7 +93,7 @@ const UploadForm = (props) => {
       <div style={{
           justifyContent: 'end',
           position: 'absolute',
-          top: '21%',
+          top: '23%',
           right: '34%'
         }}>
           <IconButton
