@@ -439,29 +439,15 @@ export default function BrandDetailsPage() {
             ]}
             toolbar={{
               search: true,
-              filter: true,
+              filter: false,
               pagination: true,
               export: true,
+              filter_select: true
             }}
             toolbarButtons={toolbarButtons}
             filters={[
-              { label: t('brand_details.all'), key: '-id' },
-              {
-                label: t('brand_details.country'),
-                key: 'country',
-              },
-              {
-                label: t('brand_details.name'),
-                key: 'name',
-              },
-              {
-                label: t('brand_details.email'),
-                key: 'email',
-              },
-              {
-                label: t('brand_details.status'),
-                key: 'status',
-              },
+              { label: 'France', key: 'france' },
+              { label: 'Japan', key: 'japan' },
             ]} 
           />
         </Grid>

@@ -54,6 +54,7 @@ interface DataTableProps<T> {
     filter?: boolean;
     filter_by_date?: boolean;
     export?: boolean;
+    filter_select?: boolean;
   };
   toolbarButtons?: any;
   reloadNow?: any;
@@ -91,11 +92,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
           limit: NumberParam,
         }
       : {}),
-    // ...(props.toolbar?.filter
-    //   ? {
-    //       filter_by: withDefault(StringParam, "all"),
-    //     }
-    //   : {}),
+    ...(props.toolbar?.filter_select
+      ? {
+          filter_by: withDefault(StringParam, ""),
+        }
+      : {}),
     ...(props.toolbar?.filter_by_date
       ? {
           from: withDefault(DateParam, null),
@@ -132,6 +133,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
             to: query.to ? format(query.to, 'yyyyMMdd') : undefined,
           }
         : {}),
+        ...(props.toolbar?.filter_select
+          ? {
+              filter_by: query.filter_by,
+            }
+          : {}),
     },
     {
       shouldFetch:
@@ -223,6 +229,28 @@ export function DataTable<T>(props: DataTableProps<T>) {
               </Grid>
             )}
 
+            {props.toolbar?.filter_select && (
+              <Grid item md={3}>
+              <TextField
+                label={t('datatable.filter_by')}
+                select
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={query.filter_by}
+                onChange={(e) => {
+                  setQuery({ filter_by: e.target.value });
+                }}
+              >
+                {props.filters?.map(({ label, key }) => (
+                  <MenuItem key={key} value={key}>
+                    {label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            )}            
+
             {props.toolbar?.filter && (
               <Grid item md={3}>
                 <TextField
@@ -270,6 +298,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
                             to: null,
                           }
                         : {}),
+                        ...(props.toolbar?.filter_select
+                          ? {
+                              filter_by: '',
+                            }
+                          : {}),
                     });
                   }}
                 >

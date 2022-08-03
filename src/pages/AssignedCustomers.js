@@ -58,7 +58,7 @@ export function CustomerDetailsPage() {
     <Layout
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Link to="/brand-details/">{t("sidebar.brand_details")}</Link>
+          <Link to="/beauty-consultants/">Beauty Consultants</Link>
           <Typography display="initial">
             {t("assigned_customers.assigned_customers")}
           </Typography>
