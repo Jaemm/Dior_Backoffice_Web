@@ -55,13 +55,18 @@ interface DataTableProps<T> {
     filter_by_date?: boolean;
     export?: boolean;
     filter_select?: boolean;
+    filter_select2?:boolean;
   };
   toolbarButtons?: any;
+  filter_label?: any;
+  filter_label_2?: any;
   reloadNow?: any;
   setReloadNow?: any;
   setSelectedRowIdsFromParent?: any;
+  setSelectedRowFromParent?: any;
   pageSize?: number;
   filters?: Array<{ key: string; label: string }>;
+  filters2?: Array<{ key: string; label: string }>;
   shouldFetch?: boolean;
   export_url?: string;
   disableCheckbox?: boolean;
@@ -73,6 +78,8 @@ export function DataTable<T>(props: DataTableProps<T>) {
   const { t } = useTranslation();
 
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
+  const [selectedRow, setSelectedRow] = useState<string[]>([]);
+
   const [filterHeader, setFilterHeader] = useState({ column: '', order: '' });
 
   // console.log('Data table props', props?.pageSize);
@@ -97,6 +104,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
           filter_by: withDefault(StringParam, ""),
         }
       : {}),
+      ...(props.toolbar?.filter_select2
+        ? {
+            filter_by_2: withDefault(StringParam, ""),
+          }
+        : {}),
     ...(props.toolbar?.filter_by_date
       ? {
           from: withDefault(DateParam, null),
@@ -138,6 +150,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
               filter_by: query.filter_by,
             }
           : {}),
+          ...(props.toolbar?.filter_select2
+            ? {
+                filter_by_2: query.filter_by_2,
+              }
+            : {}),
     },
     {
       shouldFetch:
@@ -232,7 +249,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
             {props.toolbar?.filter_select && (
               <Grid item md={3}>
               <TextField
-                label={t('datatable.filter_by')}
+                label={props.filter_label ? props.filter_label : t('datatable.filter_by')}
                 select
                 variant="outlined"
                 size="small"
@@ -249,7 +266,29 @@ export function DataTable<T>(props: DataTableProps<T>) {
                 ))}
               </TextField>
             </Grid>
-            )}            
+            )}   
+
+            {props.toolbar?.filter_select2 && (
+              <Grid item md={3}>
+              <TextField
+                label={props.filter_label_2 ? props.filter_label_2 : t('datatable.filter_by')}
+                select
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={query.filter_by_2}
+                onChange={(e) => {
+                  setQuery({ filter_by_2: e.target.value });
+                }}
+              >
+                {props.filters2?.map(({ label, key }) => (
+                  <MenuItem key={key} value={key}>
+                    {label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            )}         
 
             {props.toolbar?.filter && (
               <Grid item md={3}>
@@ -303,6 +342,11 @@ export function DataTable<T>(props: DataTableProps<T>) {
                               filter_by: '',
                             }
                           : {}),
+                          ...(props.toolbar?.filter_select2
+                            ? {
+                                filter_by_2: '',
+                              }
+                            : {}),
                     });
                   }}
                 >
@@ -368,13 +412,24 @@ export function DataTable<T>(props: DataTableProps<T>) {
                             const rowIds = results.data?.data?.map(
                               (r) => r[props.dataIndex as string] as string
                             ) || []
-                            console.log('rowIds', rowIds)
+                            const rows = results.data?.data?.map(
+                              (r) => r as any
+                            ) || []
+                            setSelectedRow(rows)
+                            console.log('rows', rows)
                             setSelectedRowIds(rowIds);
+                            if(props.setSelectedRowFromParent){
+                              props.setSelectedRowFromParent(rows)
+                            }
                             if(props.setSelectedRowIdsFromParent){
                               props.setSelectedRowIdsFromParent(rowIds)
                             }
                           } else {
+                            setSelectedRow([])
                             setSelectedRowIds([]);
+                            if(props.setSelectedRowFromParent){
+                              props.setSelectedRowFromParent([])
+                            }
                             if(props.setSelectedRowIdsFromParent){
                               props.setSelectedRowIdsFromParent([])
                             }
@@ -468,7 +523,15 @@ export function DataTable<T>(props: DataTableProps<T>) {
                                   ...(selectedRowIds || []),
                                   record[props.dataIndex as string] as string,
                                 ]
+                                const rows:any = [
+                                  ...(selectedRow || []),
+                                  record as any,
+                                ]
+                                setSelectedRow(rows)
                                 setSelectedRowIds(rowIds);
+                                if(props.setSelectedRowFromParent){
+                                  props.setSelectedRowFromParent(rows)
+                                }
                                 if(props.setSelectedRowIdsFromParent){
                                   props.setSelectedRowIdsFromParent(rowIds)
                                 }
@@ -477,7 +540,15 @@ export function DataTable<T>(props: DataTableProps<T>) {
                                   (r) =>
                                     r !== record[props.dataIndex as string]
                                 )
+                                const rows = selectedRow?.filter(
+                                  (r) =>
+                                    r !== record as any
+                                )
+                                setSelectedRow(rows)
                                 setSelectedRowIds(rowIds);
+                                if(props.setSelectedRowFromParent){
+                                  props.setSelectedRowFromParent(rows)
+                                }
                                 if(props.setSelectedRowIdsFromParent){
                                   props.setSelectedRowIdsFromParent(rowIds)
                                 }

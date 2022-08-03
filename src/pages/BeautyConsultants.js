@@ -1,10 +1,12 @@
-import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, IconButton } from '@material-ui/core';
 import { useRequest } from 'ahooks';
 import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
-
+import {
+  Close
+} from '@material-ui/icons';
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
 // import { parseDateString } from '../helpers/dateHelpers';
@@ -36,6 +38,8 @@ export default function BrandDetailsPage() {
   const [password, setPassword] = useState('')
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [selectedRow, setSelectedRow] = useState([]);
+
   const [bcCode, setBcCode] = useState('')
   const [modalType, setModalType] = useState('')
   const [dataInCSV, setDataInCSV] = useState('')
@@ -65,7 +69,7 @@ export default function BrandDetailsPage() {
     const bcData = {
       ids: selectedRowIds
     }
-    if (window.confirm("Delete the item?")) {
+    if (window.confirm("Are you sure want to delete below BC ? \n\nFrance-F01-F931830-Fathi Abdul Rahim\nFrance-F01-F931830-Fathi Abdul Rahim")) {
       axios({
         method: 'DELETE',
         url: 'https://v2-app.chowis.com/api/dior/company_consultants/delete_multiple',
@@ -185,6 +189,18 @@ export default function BrandDetailsPage() {
     return(
       <Box className="modal-box" style={{height: '620px'}}>
         <div className="modal-header">ADD NEW BC</div>
+        <div style={{
+          justifyContent: 'end',
+          position: 'absolute',
+          top: '14%',
+          right: '34%'
+        }}>
+          <IconButton
+            onClick={()=>{setOpenModal(false)}}
+          >
+            <Close />
+          </IconButton>
+        </div>
         <TextField
           label={'Country'}
           variant="outlined"
@@ -284,8 +300,13 @@ export default function BrandDetailsPage() {
     )
   }
 
+  // const listOfBranches = branchesInfo && branchesInfo?.data?.data && branchesInfo?.data?.data.map(e => { "label": e.code, "key": e.id }) || [];
+
+
   console.log('branchesInfo', branchesInfo)
-  // const branchesSelect = branchesInfo.map((e) => return({id: e.id, name: e.name, code: e.code}))
+  const branchesSelect = branchesInfo?.data?.data.map((e) => ({key: e.id, name: e.name, label: e.code}))
+  console.log('branchesSelect', branchesSelect)
+
   return (
     <Layout title={t('sidebar.beauty_consultant')}>
       <Modal
@@ -318,6 +339,7 @@ export default function BrandDetailsPage() {
             reloadNow={reloadNow}
             setReloadNow={setReloadNow}
             setSelectedRowIdsFromParent={setSelectedRowIds}
+            setSelectedRowFromParent={setSelectedRow}
             columns={[
               { label: t('brand_details.country'), key: 'country' },
               { label: 'Pos Code', key: 'pos_code' },
@@ -335,30 +357,21 @@ export default function BrandDetailsPage() {
             ]}
             toolbar={{
               search: true,
-              filter: true,
+              filter: false,
               pagination: true,
               export: true,
+              filter_select: true,
+              filter_select2: true
             }}
+            filter_label='Filter by Country'
+            filter_label_2='Filter by POS'
+
             toolbarButtons={toolbarButtons}
             filters={[
-              { label: t('brand_details.all'), key: '-id' },
-              {
-                label: t('brand_details.country'),
-                key: 'country',
-              },
-              {
-                label: t('brand_details.name'),
-                key: 'name',
-              },
-              {
-                label: t('brand_details.email'),
-                key: 'email',
-              },
-              {
-                label: t('brand_details.status'),
-                key: 'status',
-              },
+              { label: 'France', key: 'france' },
+              { label: 'Japan', key: 'japan' },
             ]} 
+            filters2={branchesSelect}
           />
         </Grid>
       </Grid>

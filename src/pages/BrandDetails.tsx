@@ -457,6 +457,7 @@ export default function BrandDetailsPage() {
               export: true,
               filter_select: true
             }}
+            filter_label='Filter by Country'
             toolbarButtons={toolbarButtons}
             filters={[
               { label: 'France', key: 'france' },
