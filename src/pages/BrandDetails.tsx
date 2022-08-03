@@ -7,6 +7,7 @@ import { InferType } from 'yup';
 import {
   Visibility,
   VisibilityOff,
+  Close
 } from '@material-ui/icons';
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
@@ -254,6 +255,18 @@ export default function BrandDetailsPage() {
     return(
       <Box className="modal-box">
         <div className="modal-header">ADD NEW POS</div>
+        <div style={{
+          justifyContent: 'end',
+          position: 'absolute',
+          top: '24%',
+          right: '34%'
+        }}>
+          <IconButton
+            onClick={()=>{setOpenModal(false)}}
+          >
+            <Close />
+          </IconButton>
+        </div>
         <TextField
           label={'Country'}
           variant="outlined"
@@ -411,15 +424,15 @@ export default function BrandDetailsPage() {
               { label: t('brand_details.password'), key: 'password',
               content: (props) =>
                 <div>
-                {showPassword ? props.password : '********'}
-                <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                // onMouseDown={handleMouseDownPassword}
-                edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
+                  {showPassword ? props.password : '********'}
+                  <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  // onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
                 </div>
               },
               { label: t('brand_details.last_consultation_date'), key: 'last_consultation_date' },
