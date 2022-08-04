@@ -129,7 +129,7 @@ export default function BrandDetailsPage() {
     const posData = {
       ids: selectedRowIds
     }
-    let message = "Are you sure want to delete below BC ? \n\n"
+    let message = "Are you sure want to delete below POS ? \n\n"
     let rowInfo = selectedRow.map((e:any) => `${e.country}-${e.code}-${e.name}\n`)
     console.log(rowInfo.join(''))
     if (window.confirm(`${message}${rowInfo.join('')}`)) {
@@ -260,12 +260,15 @@ export default function BrandDetailsPage() {
       <Box className="modal-box">
         <div className="modal-header">ADD NEW POS</div>
         <div style={{
-          justifyContent: 'end',
-          position: 'absolute',
-          top: '24%',
-          right: '34%'
+          width: '100%',
+          height: '100%',
+          position: 'absolute'
         }}>
           <IconButton
+            style={{
+              top: '-2em',
+              right: '-17em'
+            }}
             onClick={()=>{setOpenModal(false)}}
           >
             <Close />

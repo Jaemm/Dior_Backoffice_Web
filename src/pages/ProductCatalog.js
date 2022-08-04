@@ -175,7 +175,7 @@ export default function BrandDetailsPage() {
     const productData = {
       ids: selectedRowIds
     }
-    let message = "Are you sure want to delete below BC ? \n\n"
+    let message = "Are you sure want to delete below Products ? \n\n"
     let rowInfo = selectedRow.map((e) => `${e.name}-${e.category}-${e.collection}\n`)
     console.log(rowInfo.join(''))
     if (window.confirm(`${message}${rowInfo.join('')}`)) {
@@ -349,12 +349,15 @@ export default function BrandDetailsPage() {
       <Box className="modal-box" style={{height: '620px', width: '600px'}}>
         {/* <div className="modal-header">{id ? 'EDIT' : 'ADD'} NEW POS</div> */}
         <div style={{
-          justifyContent: 'end',
-          position: 'absolute',
-          top: '14%',
-          right: '32%'
+          width: '100%',
+          height: '100%',
+          position: 'absolute'
         }}>
           <IconButton
+            style={{
+              top: '-1em',
+              right: '-20em'
+            }}
             onClick={()=>{setOpenModal(false)}}
           >
             <Close />

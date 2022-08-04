@@ -91,12 +91,15 @@ const UploadForm = (props) => {
     <Box className="modal-box">
       <div className="modal-header">Upload a list of {modelName}</div>
       <div style={{
-          justifyContent: 'end',
-          position: 'absolute',
-          top: '23%',
-          right: '34%'
+          width: '100%',
+          height: '100%',
+          position: 'absolute'
         }}>
           <IconButton
+            style={{
+              top: '-2em',
+              right: '-17em'
+            }}
             onClick={()=>{onClose()}}
           >
             <Close />

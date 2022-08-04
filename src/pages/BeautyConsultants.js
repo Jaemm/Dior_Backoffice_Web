@@ -193,12 +193,15 @@ export default function BrandDetailsPage() {
       <Box className="modal-box" style={{height: '620px'}}>
         <div className="modal-header">ADD NEW BC</div>
         <div style={{
-          justifyContent: 'end',
-          position: 'absolute',
-          top: '14%',
-          right: '34%'
+          width: '100%',
+          height: '100%',
+          position: 'absolute'
         }}>
           <IconButton
+            style={{
+              top: '-2em',
+              right: '-17em'
+            }}
             onClick={()=>{setOpenModal(false)}}
           >
             <Close />
