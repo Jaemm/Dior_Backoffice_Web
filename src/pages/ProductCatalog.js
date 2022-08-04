@@ -45,6 +45,10 @@ export default function BrandDetailsPage() {
   const categoryInfo = useRequest(() =>
     api.requestResource('/api/dior/product_recommendations/get_category')
   );
+
+  const countriesInfo = useRequest(() =>
+    api.requestResource('api/dior/countries')
+  );
   const { token } = useAppContext();
   const csvFile = useRef(null) 
 
@@ -76,6 +80,7 @@ export default function BrandDetailsPage() {
   const [dataInCSV, setDataInCSV] = useState('')
   const [exportLoading, setExportLoading] = useState(false)
   const [variantId, setVariantId] = useState(false)
+  const [translations, setTranslations] = useState([])
   let { search } = useLocation();
   const query = new URLSearchParams(search);
 
@@ -102,6 +107,7 @@ export default function BrandDetailsPage() {
     setModalType('add-form')
     setVariantId(null)
     setOpenModal(true)
+    setTranslations([]);
   }
 
   const onClickAddNewVariantButton = (variantId) => {
@@ -138,16 +144,7 @@ export default function BrandDetailsPage() {
       setSelectedCountries(product.countries)
     }
     if(product.product_translations){
-      let arabic = product.product_translations.find(e=>e.field_name == 'product_name' && e.language == 'arabic')
-      let french = product.product_translations.find(e=>e.field_name == 'product_name' && e.language == 'french')
-      let german = product.product_translations.find(e=>e.field_name == 'product_name' && e.language == 'german')
-      let hindi = product.product_translations.find(e=>e.field_name == 'product_name' && e.language == 'hindi')
-      let japanese = product.product_translations.find(e=>e.field_name == 'product_name' && e.language == 'japanese')
-      setArabicProductName(arabic?.value)
-      setFrenchProductName(french?.value)
-      setGermanProductName(german?.value)
-      setHindiProductName(hindi?.value)
-      setJapaneseProductName(japanese?.value)
+      setTranslations(product.product_translations);
     }
   }
 
@@ -245,14 +242,6 @@ export default function BrandDetailsPage() {
     </Grid>
 
   const saveProduct = () => {
-    const translations = [
-      {field_name: 'product_name', language: 'arabic', value: arabicProductName},
-      {field_name: 'product_name', language: 'french', value: frenchProductName},
-      {field_name: 'product_name', language: 'german', value: germanProductName},
-      {field_name: 'product_name', language: 'hindi', value: hindiProductName},
-      {field_name: 'product_name', language: 'japanese', value: japaneseProductName},
-    ]
-
     const productData = {
       code: code,
       name: name,
@@ -347,15 +336,31 @@ export default function BrandDetailsPage() {
 
   const collectionSelect = collectionInfo?.data?.data.map((e) => ({key: e, label: e}))
   const categorySelect = categoryInfo?.data?.data.map((e) => ({key: e, label: e}))
+  const countriesSelect = countriesInfo?.data?.data.map((e) => ({key: e.name, label: e.name}))
 
 
+  const setProductNameInLanguage = (language, value) => {
+    //{"field_name": 'product_name', language: 'arabic', value: arabicProductName}
+    const languageTranslation = translations.find(e => e.language === language)
+    if(languageTranslation){
+      const newData = translations.map(item => 
+        item.language === language 
+        ? {...item, value: value} 
+        : item 
+      )
+      setTranslations(newData)
+    }else{
+      const newElement = {field_name: 'product_name', language: language, value: value}
+      setTranslations(translations => [...translations, newElement]);
+    }
+  }
+
+  console.log('translations', translations)
   const renderAddForm = () => {
     return(
       <Box className="modal-box" style={{height: '620px', width: '600px'}}>
         {/* <div className="modal-header">{id ? 'EDIT' : 'ADD'} NEW POS</div> */}
         <div style={{
-          width: '100%',
-          height: '100%',
           position: 'absolute'
         }}>
           <IconButton
@@ -587,24 +592,29 @@ export default function BrandDetailsPage() {
               borderRadius: '10px'
             }}>
               <Grid container spacing={2}>
-                <Grid item xs={4} style={{textAlign:'center'}}>
-                  <p>Arabic :</p>
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    label={'Product Name'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={arabicProductName}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setArabicProductName(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={4} style={{textAlign:'center'}}>
+                {countriesSelect.map(e => 
+                  <>
+                    <Grid item xs={4} style={{textAlign:'center'}}>
+                    <p>{e.label} :</p>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <TextField
+                        label={'Product Name'}
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                        value={translations.find(f => f.language === e.label)?.value}
+                        style={{marginTop: '20px'}}
+                        onChange={(f) => {
+                          setProductNameInLanguage(e.label, f.target.value)
+                        }}
+                        InputLabelProps={{ shrink: true }}
+                      />
+                    </Grid>
+                  </>
+                )}
+
+                {/* <Grid item xs={4} style={{textAlign:'center'}}>
                   <p>French :</p>
                 </Grid>
                 <Grid item xs={8}>
@@ -671,7 +681,7 @@ export default function BrandDetailsPage() {
                     }}
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
             </div>
             <Button

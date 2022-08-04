@@ -121,7 +121,7 @@ const UploadForm = (props) => {
 
       <input type="file" ref={inputFile} style={{display: 'none'}} onChange={(e)=>{onUploadFile(e.target.files)}}/>
       <div style={{fontFamily: 'Pretendard', fontStyle: 'normal', fontWeight: '500', fontSize: '18px', lineHeight: '22px', color: '#5A5A5A'}}>
-        Please select Excel POS list to upload:
+        Please select Excel {modelName} list to upload:
       </div>
       <div style={{display: 'flex'}}>
         <div className="upload-field"><span style={{marginLeft: '10px'}}>{filename ? filename : 'Link here'}</span></div>
