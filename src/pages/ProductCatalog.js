@@ -8,7 +8,7 @@ import { Grid, Button, Modal, Box, TextField, MenuItem, IconButton, FormLabel, R
 import { useRequest } from 'ahooks';
 import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { InferType } from 'yup';
 
 
@@ -76,6 +76,8 @@ export default function BrandDetailsPage() {
   const [dataInCSV, setDataInCSV] = useState('')
   const [exportLoading, setExportLoading] = useState(false)
   const [variantId, setVariantId] = useState(false)
+  let { search } = useLocation();
+  const query = new URLSearchParams(search);
 
   const listCountries = countries.getNames()
   console.log(listCountries)
@@ -312,7 +314,10 @@ export default function BrandDetailsPage() {
 
   const onClickExportButton = () => {
     setExportLoading(true)
-    const url = 'https://v2-app.chowis.com/api/dior/product_recommendations/export'
+    let url = `https://v2-app.chowis.com/api/dior/product_recommendations/export?`
+    if(query.get('filter_by')){url += `filter_by=${query.get('filter_by')}`}
+    if(query.get('filter_by_2')){url += `&filter_by_2=${query.get('filter_by_2')}`}
+    if(query.get('search')){url += `&search=${query.get('search')}`}
     axios({
       method: 'GET',
       url: url,

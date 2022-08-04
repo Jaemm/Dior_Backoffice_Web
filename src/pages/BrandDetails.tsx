@@ -2,7 +2,7 @@ import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, IconButton,
 import { useRequest } from 'ahooks';
 import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { InferType } from 'yup';
 import {
   Visibility,
@@ -69,6 +69,8 @@ export default function BrandDetailsPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [selectedRow, setSelectedRow] = useState([]);
+  let { search } = useLocation();
+  const query = new URLSearchParams(search);
 
   const headers = [
     { label: 'Name', key: 'name' },
@@ -103,7 +105,9 @@ export default function BrandDetailsPage() {
 
   const onClickExportButton = () => {
     setExportLoading(true)
-    const url = 'https://v2-app.chowis.com/api/dior/company_branches/export'
+    let url = `https://v2-app.chowis.com/api/dior/company_branches/export?`
+    if(query.get('filter_by')){url += `filter_by=${query.get('filter_by')}`}
+    if(query.get('search')){url += `&search=${query.get('search')}`}
     axios({
       method: 'GET',
       url: url,
@@ -370,6 +374,14 @@ export default function BrandDetailsPage() {
           InputLabelProps={{ shrink: true }}
         /> */}
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{marginRight: '10px', width: '192px'}}
+            onClick={()=>{setOpenModal(false)}}
+          >
+            Cancel
+          </Button>
           <Button
             variant="contained"
             color="primary"
