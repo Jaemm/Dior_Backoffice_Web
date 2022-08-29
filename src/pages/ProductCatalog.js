@@ -84,8 +84,8 @@ export default function BrandDetailsPage() {
   let { search } = useLocation();
   const query = new URLSearchParams(search);
 
-  const listCountries = countries.getNames()
-  console.log(listCountries)
+  // const listCountries = countries.getNames()
+  // console.log(listCountries)
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -153,7 +153,7 @@ export default function BrandDetailsPage() {
     if (window.confirm("Delete the item?")) {
       axios({
         method: 'DELETE',
-        url: `https://v2-app.chowis.com/api/pmx/product_recommendations/${id}`,
+        url: `https://v2-app.chowis.com/api/dior/product_recommendations/${id}`,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
         },
@@ -180,7 +180,7 @@ export default function BrandDetailsPage() {
     if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
-        url: 'https://v2-app.chowis.com/api/pmx/product_recommendations/delete_multiple',
+        url: 'https://v2-app.chowis.com/api/dior/product_recommendations/delete_multiple',
         data: productData,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
@@ -225,7 +225,7 @@ export default function BrandDetailsPage() {
           </Button>
           <Button
             variant="contained"
-            onClick={()=> {onClickExportButton()}}
+            onClick={()=> onClickExportButtonModal()}
             disabled={exportLoading}
             color="primary">
             {exportLoading ? 'Loading ...' : 'Export'}
@@ -257,10 +257,10 @@ export default function BrandDetailsPage() {
     let method, url
     if(id){
       method = 'PUT'
-      url = `https://v2-app.chowis.com/api/pmx/product_recommendations/${id}`
+      url = `https://v2-app.chowis.com/api/dior/product_recommendations/${id}`
     }else{
       method = 'POST'
-      url = 'https://v2-app.chowis.com/api/pmx/product_recommendations'
+      url = 'https://v2-app.chowis.com/api/dior/product_recommendations'
     }
 
     axios({
@@ -290,7 +290,8 @@ export default function BrandDetailsPage() {
       if(selectedCountries.includes('All')){
         setSelectedCountries([])
       }else{
-        setSelectedCountries([...listCountries, 'All'])
+        const allCountries = countriesInfo?.data?.data.map(e => e.name)
+        setSelectedCountries([...allCountries, 'All'])
       }
     }else{
       if(selectedCountries.includes(country)){
@@ -299,6 +300,11 @@ export default function BrandDetailsPage() {
         setSelectedCountries([...selectedCountries, country])
       }
     }
+  }
+
+  const onClickExportButtonModal = () => {
+    setModalType('export-form')
+    setOpenModal(true)
   }
 
   const onClickExportButton = () => {
@@ -440,24 +446,14 @@ export default function BrandDetailsPage() {
                   }}
                   InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem key={1} value={'Serums'}>
-                    Serums
-                  </MenuItem>
-                  <MenuItem key={1} value={'Pre-serums'}>
-                    Pre-serums
-                  </MenuItem>
-                  <MenuItem key={1} value={'Eye Care'}>
-                    Eye Care
-                  </MenuItem>
-                  <MenuItem key={1} value={'Lotions'}>
-                    Lotions
-                  </MenuItem>
-                  <MenuItem key={1} value={'Powders'}>
-                    Powders
-                  </MenuItem>
-                  <MenuItem key={1} value={'UV Protection'}>
-                    UV Protection
-                  </MenuItem>
+                  {categorySelect.map(e => {
+                    return(
+                      <MenuItem key={e.key} value={e.label}>
+                        {e.label}
+                      </MenuItem>
+                    )
+                  })}
+
                     
                 </TextField>
               </Grid>
@@ -475,21 +471,13 @@ export default function BrandDetailsPage() {
                   }}
                   InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem key={1} value={'Dior Prestige	'}>
-                    Dior Prestige	
-                  </MenuItem>
-                  <MenuItem key={1} value={'Capture Totale'}>
-                    Capture Totale
-                  </MenuItem>
-                  <MenuItem key={1} value={'Dior Prestige Light-in-White'}>
-                    Dior Prestige Light-in-White
-                  </MenuItem>
-                  <MenuItem key={1} value={'Forever'}>
-                    Forever
-                  </MenuItem>
-                  <MenuItem key={1} value={'Dior Prestige'}>
-                    Dior Prestige
-                  </MenuItem>
+                  {collectionSelect.map(e => {
+                    return(
+                      <MenuItem key={e.key} value={e.label}>
+                        {e.label}
+                      </MenuItem>
+                    )
+                  })}
                 </TextField>
               </Grid>
             </Grid>
@@ -559,11 +547,11 @@ export default function BrandDetailsPage() {
                     label={'All'} 
                   />
                 </Grid>
-                {listCountries.map(e => (
+                {countriesSelect.map(e => (
                   <Grid item xs={6}>
                       <FormControlLabel 
-                        control={<Checkbox checked={checked(e)} onChange={()=>handleChangeCheckbox(e)}/>} 
-                        label={e} 
+                        control={<Checkbox checked={checked(e.label)} onChange={()=>handleChangeCheckbox(e.label)}/>} 
+                        label={e.label} 
                       />
                   </Grid>
                 ))}
@@ -595,7 +583,7 @@ export default function BrandDetailsPage() {
                 {countriesSelect.map(e => 
                   <>
                     <Grid item xs={4} style={{textAlign:'center'}}>
-                    <p>{e.label} :</p>
+                      <p>{e.label} :</p>
                     </Grid>
                     <Grid item xs={8}>
                       <TextField
@@ -613,75 +601,6 @@ export default function BrandDetailsPage() {
                     </Grid>
                   </>
                 )}
-
-                {/* <Grid item xs={4} style={{textAlign:'center'}}>
-                  <p>French :</p>
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    label={'Product Name'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={frenchProductName}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setFrenchProductName(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={4} style={{textAlign:'center'}}>
-                  <p>German :</p>
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    label={'Product Name'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={germanProductName}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setGermanProductName(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={4} style={{textAlign:'center'}}>
-                  <p>Hindi :</p>
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    label={'Product Name'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={hindiProductName}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setHindiProductName(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={4} style={{textAlign:'center'}}>
-                  <p>Japanese :</p>
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    label={'Product Name'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={japaneseProductName}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setJapaneseProductName(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid> */}
               </Grid>
             </div>
             <Button
@@ -778,7 +697,7 @@ export default function BrandDetailsPage() {
               modelName='Products'
             />
           }
-          {(modalType === 'export-form') && <ExportFormProduct />}
+          {(modalType === 'export-form') && <ExportFormProduct onClose={() => setOpenModal(false)} />}
         </>
       </Modal>
       <Grid container direction="column" spacing={2} wrap="nowrap">

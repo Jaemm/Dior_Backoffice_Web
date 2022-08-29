@@ -315,3 +315,30 @@ new-header {
   margin-top: 20px;
   padding: 20px;
 }
+.scrollmenu {
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.card-details-statistic {
+  padding: 20px;
+  width: 90%;
+  /* max-width: 300px; */
+  min-width: 250px;
+  height: 112px;
+  margin-right: 30px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.button-details-statistic {
+  width: 25px;
+  height: 100%;
+  border-radius: 7px;
+  border: none;
+  outline: none;
+  background-image: linear-gradient(to bottom, #373737, #bfbebe);
+  color: #fff;
+}

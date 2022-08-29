@@ -112,7 +112,7 @@ const StatisticsReprotsLineChart = () => {
   const fetchCustomerAnalysisData = () => {
     axios
       .get(
-        'https://v2-app.chowis.com/api/partnerdb/statistics/customers_analysis',
+        'https://v2-app.chowis.com/api/dior/statistics/overall_by_date',
         {
           params: {
             from: from,
@@ -168,61 +168,29 @@ const StatisticsReprotsLineChart = () => {
             <Typography style={{ fontSize: '12px', marginLeft: 5 }}>
               Consultations
             </Typography>
+            <div
+              style={{
+                background: '#494949',
+                width: '10px',
+                height: '10px',
+                borderRadius: '2px',
+                marginLeft: '10px'
+              }}
+            ></div>
+            <Typography style={{ fontSize: '12px', marginLeft: 5 }}>
+              QR Code Generated
+            </Typography>
+            
           </div>
         </Footer>
-      </div>
-      <div className="date-picker">
-        <FormControl
-          variant="outlined"
-          style={{ minWidth: 350, marginBottom: 10 }}
-          size="small"
-        >
-          <InputLabel id="demo-simple-select-outlined-label">
-            Representation
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={representation}
-            onChange={() => setRepresentation()}
-            label="Representation"
-          >
-            {/* <MenuItem value="per day">Per Day</MenuItem> */}
-            <MenuItem value="per week">Per Week</MenuItem>
-            {/* <MenuItem value="per month">Per Month</MenuItem> */}
-          </Select>
-        </FormControl>
-        <DesktopDateRangePicker
-          clearable
-          value={[dateRange2.from, dateRange2.to]}
-          onChange={([from, to]) => {
-            if (from && to) {
-              setDateRange2({ from, to });
-            }
-          }}
-          renderInput={(startProps, endProps) => (
-            <>
-              <TextField
-                size="small"
-                // fullWidth
-                {...startProps}
-                helperText=""
-                variant="outlined"
-              />
-              <TextField
-                size="small"
-                // fullWidth
-                {...endProps}
-                variant="outlined"
-                helperText=""
-              />
-            </>
-          )}
-        />
       </div>
     </TabHeader>
   );
 
+  // month: I18n.l(current_time, format: "%B"),
+  // total_customers: customers.count,
+  // total_consultations: consultations.count,
+  // total_qr_codes: consultations.count
   return (
     <>
       <Paper elevation={3} style={{ width: '100%' }}>
@@ -233,16 +201,23 @@ const StatisticsReprotsLineChart = () => {
 
             <LineSeries
               name="customer"
-              valueField="customer"
-              argumentField="date"
+              valueField="total_customers"
+              argumentField="month"
               color="#309FC9"
               seriesComponent={Line}
             />
             <LineSeries
               name="analysis"
-              valueField="analysis"
-              argumentField="date"
+              valueField="total_consultations"
+              argumentField="month"
               color="#FF896B"
+              seriesComponent={Line}
+            />
+            <LineSeries
+              name="qr_code"
+              valueField="total_qr_codes"
+              argumentField="month"
+              color="#494949"
               seriesComponent={Line}
             />
 

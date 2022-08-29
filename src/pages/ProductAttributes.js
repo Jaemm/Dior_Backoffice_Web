@@ -23,15 +23,18 @@ import UploadForm from '../components/UploadForm';
 export default function RegisteredDevicesPage() {
   const api = useAPI();
   const { t } = useTranslation();
-  const branchesInfo = useRequest(() =>
-    api.requestResource('/api/dior/company_branches')
+  // const branchesInfo = useRequest(() =>
+  //   api.requestResource('/api/dior/company_branches')
+  // );
+  const countriesInfo = useRequest(() =>
+    api.requestResource('api/dior/countries')
   );
   const { token } = useAppContext();
   const csvFile = useRef(null) 
 
   const [openModal, setOpenModal] = useState(false)
-  const [code, setCode] = useState('')
-  const [name, setName] = useState('')
+  const [value, setValue] = useState('')
+  const [type, setType] = useState('')
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
@@ -40,6 +43,8 @@ export default function RegisteredDevicesPage() {
   const [exportLoading, setExportLoading] = useState(false)
   const [ecrm, setEcrm] = useState('')
   const [productRecommendation, setProductRecommendation] = useState('')
+  const [translations, setTranslations] = useState([])
+
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -56,7 +61,7 @@ export default function RegisteredDevicesPage() {
 
   const onClickExportButton = () => {
     setExportLoading(true)
-    const url = 'https://v2-app.chowis.com/api/dior/countries/export'
+    const url = 'https://v2-app.chowis.com/api/dior/product_attributes/export'
     axios({
       method: 'GET',
       url: url,
@@ -79,6 +84,9 @@ export default function RegisteredDevicesPage() {
 
   const onClickAddButton = () => {
     // alert('onClickAddButton')
+    setValue('')
+    setType('')
+    setTranslations([])
     setModalType('add-form')
     setOpenModal(true)
   }
@@ -88,13 +96,13 @@ export default function RegisteredDevicesPage() {
     const bcData = {
       ids: selectedRowIds
     }
-    let message = "Are you sure want to delete below Countries ? \n\n"
-    let rowInfo = selectedRow.map(e => `${e.code}-${e.name}-${e.default_recommendation}-${e.url_and_port}\n`)
+    let message = "Are you sure want to delete below Attributes ? \n\n"
+    let rowInfo = selectedRow.map(e => `${e.typ}-${e.value}\n`)
     console.log(rowInfo.join(''))
     if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
-        url: 'https://v2-app.chowis.com/api/dior/countries/delete_multiple',
+        url: 'https://v2-app.chowis.com/api/dior/product_attributes/delete_multiple',
         data: bcData,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
@@ -162,18 +170,17 @@ export default function RegisteredDevicesPage() {
       </Grid>
     </Grid>
 
-const saveCountry = (close = true) => {
-  const countryData = {
-    name: name,
-    code: code,
-    url_and_port: ecrm,
-    default_recommendation: productRecommendation
+const saveProductAttribute = (close = true) => {
+  const productAttributeData = {
+    typ: type,
+    value: value,
+    product_translations: translations,
   }
 
   axios({
     method: 'POST',
-    url: 'https://v2-app.chowis.com/api/dior/countries',
-    data: countryData,
+    url: 'https://v2-app.chowis.com/api/dior/product_attributes',
+    data: productAttributeData,
     headers: {
       'X-CHOWIS-CONSULTANT-TOKEN': token,
     },
@@ -189,10 +196,27 @@ const saveCountry = (close = true) => {
     }
   })
 }
+const countriesSelect = countriesInfo?.data?.data.map((e) => ({key: e.name, label: e.name}))
+
+const setProductNameInLanguage = (language, value) => {
+  //{"field_name": 'product_name', language: 'arabic', value: arabicProductName}
+  const languageTranslation = translations.find(e => e.language === language)
+  if(languageTranslation){
+    const newData = translations.map(item => 
+      item.language === language 
+      ? {...item, value: value} 
+      : item 
+    )
+    setTranslations(newData)
+  }else{
+    const newElement = {field_name: 'product_name', language: language, value: value}
+    setTranslations(translations => [...translations, newElement]);
+  }
+}
 
 const renderAddForm = () => {
   return(
-    <Box className="modal-box" style={{height: '420px'}}>
+    <Box className="modal-box" style={{height: '480px'}}>
       <div className="modal-header">Add New Market</div>
       <div style={{
           position: 'absolute'
@@ -208,61 +232,61 @@ const renderAddForm = () => {
           </IconButton>
         </div>
       <TextField
-        label={'Market Code'}
+        label={'Attribute Type (Axis, Category, Collection)'}
         variant="outlined"
         size="small"
         fullWidth
-        value={code}
+        value={type}
         style={{marginTop: '20px'}}
         onChange={(e) => {
-          setCode(e.target.value)
+          setType(e.target.value)
         }}
         InputLabelProps={{ shrink: true }}
       />
       <TextField
-        label={'Market Name'}
+        label={'Attribute Name'}
         variant="outlined"
         size="small"
         fullWidth
-        value={name}
+        value={value}
         style={{marginTop: '20px'}}
         onChange={(e) => {
-          setName(e.target.value)
+          setValue(e.target.value)
         }}
         InputLabelProps={{ shrink: true }}
       />
-      <TextField
-        label={'Product Recommendation'}
-        variant="outlined"
-        size="small"
-        select
-        fullWidth
-        value={productRecommendation}
-        style={{marginTop: '20px'}}
-        onChange={(e) => {
-          setProductRecommendation(e.target.value)
-        }}
-        InputLabelProps={{ shrink: true }}
-      >
-        {recommendationList.map(e => 
-          <MenuItem key={e} value={e}>
-            {e}
-          </MenuItem>
-        )}
-      </TextField>
-      <TextField
-        label={'eCRM '}
-        variant="outlined"
-        size="small"
-        fullWidth
-        value={ecrm}
-        style={{marginTop: '20px'}}
-        onChange={(e) => {
-          setEcrm(e.target.value)
-        }}
-        InputLabelProps={{ shrink: true }}
-      />
-
+      <div style={{
+        height: '200px', 
+        marginTop: '10px',
+        overflow: 'auto',
+        padding: '15px',
+        border: '1px solid #5A5A5A',
+        borderRadius: '10px'
+      }}>
+        <Grid container spacing={2}>
+          {countriesSelect.map(e => 
+            <>
+              <Grid item xs={4} style={{textAlign:'center'}}>
+                <p>{e.label} :</p>
+              </Grid>
+              <Grid item xs={8}>
+                <TextField
+                  label={'Product Name'}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  value={translations.find(f => f.language === e.label)?.value}
+                  style={{marginTop: '20px'}}
+                  onChange={(f) => {
+                    setProductNameInLanguage(e.label, f.target.value)
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+            </>
+          )}
+        </Grid>
+      </div>
       <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '30px'}}>
         <Button
           variant="contained"
@@ -276,7 +300,7 @@ const renderAddForm = () => {
           variant="contained"
           color="primary"
           style={{marginRight: '10px', width: '192px'}}
-          onClick={() => {saveCountry()}}
+          onClick={() => {saveProductAttribute()}}
         >
           Save
         </Button>
@@ -284,7 +308,7 @@ const renderAddForm = () => {
           variant="contained"
           color="primary"
           style={{width: '192px'}}
-          onClick={() => {saveCountry(false)}}
+          onClick={() => {saveProductAttribute(false)}}
         >
           Save & New
         </Button>
@@ -295,7 +319,7 @@ const renderAddForm = () => {
 
 
   return (
-    <Layout title={'Market Management'}>
+    <Layout title={'Product Attributes'}>
       <Modal
         open={openModal}
         onClose={()=>{setOpenModal(false)}}
@@ -309,9 +333,9 @@ const renderAddForm = () => {
             <UploadForm 
               token={token} 
               onClose={() => setOpenModal(false)}
-              saveUploadUrl='https://v2-app.chowis.com/api/dior/countries/import'
-              exampleFileUrl='https://chws-my.sharepoint.com/:x:/g/personal/fathi_chowis_com/EQIE16zUl11Hux4rQnSwRz0BW3CPN7-akr7txTbpzsP-wQ?rtime=wM4iYx562kg'
-              modelName='Countries'
+              saveUploadUrl='https://v2-app.chowis.com/api/dior/product_attributes/import'
+              exampleFileUrl=''
+              modelName='Attributes'
             />
           }
         </>
@@ -321,17 +345,15 @@ const renderAddForm = () => {
         <Grid item xs>
           <DataTable
             dataIndex="id"
-            resource_url="/api/dior/countries"
+            resource_url="/api/dior/product_attributes"
             headers={headers}
             reloadNow={reloadNow}
             setReloadNow={setReloadNow}
             setSelectedRowIdsFromParent={setSelectedRowIds}
             setSelectedRowFromParent={setSelectedRow}
             columns={[
-              { label: 'Market Code', key: 'code' },
-              { label: 'Market Name', key: 'name' },
-              { label: 'Default Recommendation', key: 'default_recommendation' },
-              { label: 'eCRM URL & port', key: 'url_and_port' },
+              { label: 'Attribute Type', key: 'typ' },
+              { label: 'Attribute Name', key: 'value' },
             ]}
             toolbar={{
               search: true,

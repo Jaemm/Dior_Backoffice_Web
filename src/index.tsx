@@ -32,7 +32,8 @@ import StoreDetails from './pages/StatisticsAndReportsDetailPage';
 import ProductRecommendationsPage from './pages/ProductRecommendationsPage'
 import MarketManagement from './pages/MarketManagement'
 import UserManagement from './pages/UserManagement'
-
+import ProductAttributes from './pages/ProductAttributes'
+import StatisticReportDetail from './pages/StatisticReportDetail'
 const localeMap = {
   en: enLocale,
 };
@@ -88,6 +89,10 @@ ReactDOM.render(
                   <Route path="/statistics/reports/:store_id/store-details/">
                     <StoreDetails />
                   </Route>
+                  <Route path="/statistics/:report_type">
+                    <StatisticReportDetail />
+                  </Route>
+
                   <Route path="/statistics">
                     <StatisticsAndReports />
                   </Route>
@@ -102,6 +107,10 @@ ReactDOM.render(
 
                   <Route path="/user-managements">
                     <UserManagement />
+                  </Route>
+
+                  <Route path="/product-attributes">
+                    <ProductAttributes />
                   </Route>
 
                   <Route path="/logout">

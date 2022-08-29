@@ -191,7 +191,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
       setQuery({ filter_by: `${key}` });
     }
   };
-
+  console.log(selectedRowIds)
   return (
     <>
       <Grid container direction="column" spacing={2} wrap="nowrap">
@@ -527,6 +527,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
                                   ...(selectedRow || []),
                                   record as any,
                                 ]
+                                console.log(rows , rowIds)
                                 setSelectedRow(rows)
                                 setSelectedRowIds(rowIds);
                                 if(props.setSelectedRowFromParent){

@@ -178,6 +178,22 @@ export function Sidebar() {
           <ListItemText primary={'Product Recommendation'} />
         </ListItem>
 
+        <ListItem
+          button
+          component={Link}
+          to="/statistics"
+          selected={match.path.includes('/statistics')}
+          className="menu"
+        >
+          <ListItemIcon>
+            { match.path.includes('/statistics') ? 
+                <AccountCircle style={{color: 'white'}}/>
+                : <AccountCircle />
+              }
+          </ListItemIcon>
+          <ListItemText primary={'Statistics'} />
+        </ListItem>
+
       </List>
       <Divider />
       <List>
@@ -210,6 +226,21 @@ export function Sidebar() {
               }
           </ListItemIcon>
           <ListItemText primary={'User Management'} />
+        </ListItem>
+        <ListItem
+            button
+            component={Link}
+            to="/product-attributes"
+            selected={match.path.includes('/product-attributes')}
+            className="menu"
+        >
+          <ListItemIcon>
+            { match.path.includes('/product-attributes') ? 
+                <AccountCircle style={{color: 'white'}}/>
+                : <AccountCircle />
+              }
+          </ListItemIcon>
+          <ListItemText primary={'Product Attributes'} />
         </ListItem>
         <ListItem
           button

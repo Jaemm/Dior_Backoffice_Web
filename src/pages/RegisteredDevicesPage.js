@@ -85,7 +85,7 @@ export default function RegisteredDevicesPage() {
         </Button>
         <a
           href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
-          download="bc_list.csv"
+          download="devices_list.csv"
           ref={csvFile}
           style={{display: 'none'}}
         >

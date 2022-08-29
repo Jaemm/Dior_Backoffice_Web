@@ -1,9 +1,10 @@
-import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { Grid, Button, Modal, Box, TextField, Checkbox, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, IconButton } from '@material-ui/core';
 import { useRequest } from 'ahooks';
 import React, {useState, useRef} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { InferType } from 'yup';
+import {Close} from '@material-ui/icons'
 
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
@@ -19,17 +20,22 @@ import axios from 'axios';
 import { DataTable } from '../components/DataTable';
 import NewDataTable from '../components/NewDataTable';
 import UploadForm from '../components/UploadForm';
+import { setISODay } from 'date-fns';
 export default function RegisteredDevicesPage() {
   const api = useAPI();
   const { t } = useTranslation();
   const branchesInfo = useRequest(() =>
     api.requestResource('/api/dior/company_branches')
   );
+  const countriesInfo = useRequest(() =>
+    api.requestResource('api/dior/countries')
+  );
   const { token } = useAppContext();
   const csvFile = useRef(null) 
 
   const [openModal, setOpenModal] = useState(false)
 
+  const [id, setId] = useState('')
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
   const [email, setEmail] = useState('')
@@ -39,11 +45,14 @@ export default function RegisteredDevicesPage() {
 
   const [reloadNow, setReloadNow] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [selectedRow, setSelectedRow] = useState([]);
   const [modalType, setModalType] = useState('')
   const [dataInCSV, setDataInCSV] = useState('')
   const [exportLoading, setExportLoading] = useState(false)
   const [ecrm, setEcrm] = useState('')
   const [productRecommendation, setProductRecommendation] = useState('')
+  const [selectedCountries, setSelectedCountries] = useState([])
+
   const headers = [
     { label: 'Name', key: 'name' },
     { label: 'ID', key: 'id' },
@@ -86,7 +95,10 @@ export default function RegisteredDevicesPage() {
     const bcData = {
       ids: selectedRowIds
     }
-    if (window.confirm("Delete the item?")) {
+    let message = "Are you sure want to delete below Users ? \n\n"
+    let rowInfo = selectedRow.map(e => `${e.name}-${e.surname}-${e.email}\n`)
+    console.log(rowInfo.join(''))
+    if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
         url: 'https://v2-app.chowis.com/api/dior/admins/delete_multiple',
@@ -105,6 +117,30 @@ export default function RegisteredDevicesPage() {
       })
     }
   }
+
+  const checked = (country) => {
+    return selectedCountries.includes(country)
+  }
+
+  const handleChangeCheckbox = (country) => {
+    if(country === 'All'){
+      if(selectedCountries.includes('All')){
+        setSelectedCountries([])
+      }else{
+        const allCountries = countriesInfo?.data?.data.map(e => e.name)
+        setSelectedCountries([...allCountries, 'All'])
+      }
+    }else{
+      if(selectedCountries.includes(country)){
+        setSelectedCountries(selectedCountries.filter(e => e !== country))
+      }else{
+        setSelectedCountries([...selectedCountries, country])
+      }
+    }
+  }
+
+  const countriesSelect = countriesInfo?.data?.data.map((e) => ({key: e.name, label: e.name}))
+
 
 
   const toolbarButtons =
@@ -127,6 +163,13 @@ export default function RegisteredDevicesPage() {
           
         </Button>
         <Button
+            variant="contained"
+            onClick={()=> {onClickUploadButton()}}
+            style={{marginRight: '10px'}}
+            color="primary">
+            Upload
+        </Button>
+        <Button
           variant="contained"
           onClick={()=> {onClickExportButton()}}
           disabled={exportLoading}
@@ -135,7 +178,7 @@ export default function RegisteredDevicesPage() {
         </Button>
         <a
           href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
-          download="bc_list.csv"
+          download="user_list.csv"
           ref={csvFile}
           style={{display: 'none'}}
         >
@@ -150,13 +193,20 @@ const saveUser = () => {
     surname: surname,
     email: email,
     is_admin: isAdmin,
-    countries: countries,
+    countries: selectedCountries,
     password: password
   }
-
+  let method, url
+  if(id){
+    method = 'PUT'
+    url = `https://v2-app.chowis.com/api/dior/admins/${id}`
+  }else{
+    method = 'POST'
+    url = 'https://v2-app.chowis.com/api/dior/admins'
+  }
   axios({
-    method: 'POST',
-    url: 'https://v2-app.chowis.com/api/dior/admins',
+    method: method,
+    url: url,
     data: userData,
     headers: {
       'X-CHOWIS-CONSULTANT-TOKEN': token,
@@ -172,10 +222,39 @@ const saveUser = () => {
   })
 }
 
+const onClickUploadButton = () => {
+  setModalType('upload-form')
+  setOpenModal(true)
+}
+
+const openEditUser = (props) => {
+  setId(props.id)
+  setModalType('add-form')
+  setName(props.name)
+  setSurname(props.surname)
+  setEmail(props.email)
+  setIsAdmin(props.isAdmin)
+  setSelectedCountries(props.countries)
+  setOpenModal(true)
+}
+
 const renderAddForm = () => {
   return(
-    <Box className="modal-box" style={{height: '500px'}}>
+    <Box className="modal-box" style={{height: '750px'}}>
       <div className="modal-header">Add New User</div>
+      <div style={{
+          position: 'absolute'
+        }}>
+          <IconButton
+            style={{
+              top: '-2em',
+              right: '-17em'
+            }}
+            onClick={()=>{setOpenModal(false)}}
+          >
+            <Close />
+          </IconButton>
+        </div>
       <TextField
         label={'FIrst Name'}
         variant="outlined"
@@ -243,8 +322,45 @@ const renderAddForm = () => {
           <FormControlLabel value="1" control={<Radio />} label="No" />
         </RadioGroup>
       </FormControl>
+      {!isAdmin && 
+        <>
+          <p>Please select countries for the user *</p>
+          <div style={{
+            height: '200px', 
+            overflow: 'auto',
+            padding: '15px',
+            border: '1px solid #5A5A5A',
+            borderRadius: '10px'  
+          }}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <FormControlLabel 
+                  control={<Checkbox checked={checked('All')} onChange={()=>handleChangeCheckbox('All')}/>} 
+                  label={'All'} 
+                />
+              </Grid>
+              {countriesSelect.map(e => (
+                <Grid item xs={6}>
+                    <FormControlLabel 
+                      control={<Checkbox checked={checked(e.label)} onChange={()=>handleChangeCheckbox(e.label)}/>} 
+                      label={e.label} 
+                    />
+                </Grid>
+              ))}
+            </Grid>
+          </div>
+        </>
+      }
 
       <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '30px'}}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{marginRight: '10px', width: '192px'}}
+          onClick={()=>{setOpenModal(false)}}
+        >
+          Cancel
+        </Button>
         <Button
           variant="contained"
           color="primary"
@@ -283,8 +399,8 @@ const renderAddForm = () => {
               token={token} 
               onClose={() => setOpenModal(false)}
               saveUploadUrl='https://v2-app.chowis.com/api/dior/company_consultants/import'
-              exampleFileUrl=''
-              modelName='BC'
+              exampleFileUrl='https://chws-my.sharepoint.com/:x:/g/personal/fathi_chowis_com/EbDpng_TpMFFiPsCaUv2KgwBemaQ9bzazGXY62Ykl7wjRA?e=fBdjfN'
+              modelName='User'
             />
           }
         </>
@@ -299,43 +415,44 @@ const renderAddForm = () => {
             reloadNow={reloadNow}
             setReloadNow={setReloadNow}
             setSelectedRowIdsFromParent={setSelectedRowIds}
+            setSelectedRowFromParent={setSelectedRow}
             columns={[
               { label: 'First Name', key: 'name' },
               { label: 'Last Name', key: 'surname' },
               { label: 'Email', key: 'email' },
-              { label: 'Countries', key: 'countries' },
+              { label: 'Countries', key: 'countries',
+                content: ({countries}) => (
+                  countries.join(', ')
+                )
+              },
               { label: 'is Admin', key: 'consultant_position_id',
                 content: ({ consultant_position_id }) => (
                   consultant_position_id == 5 ? "Yes" : "No"
                 ),
-              }
+              },
+              { label: 'Countries', key: 'countries',
+                content: (props) => (
+                  <Button
+                  variant="contained"
+                  color="primary"
+                  style={{marginRight: '10px', width: '192px'}}
+                  onClick={() => {openEditUser(props)}}
+                  >
+                    Edit
+                  </Button>
+                )
+              },
             ]}
             toolbar={{
               search: true,
               filter: false,
               pagination: true,
               export: false,
+              filter_select: true,
             }}
+            filter_label='Filter by Country'
+            filters={countriesSelect}
             toolbarButtons={toolbarButtons}
-            filters={[
-              { label: t('brand_details.all'), key: '-id' },
-              {
-                label: t('brand_details.country'),
-                key: 'country',
-              },
-              {
-                label: t('brand_details.name'),
-                key: 'name',
-              },
-              {
-                label: t('brand_details.email'),
-                key: 'default_recommendation',
-              },
-              {
-                label: t('brand_details.status'),
-                key: 'url_and_port',
-              },
-            ]} 
           />
         </Grid>
       </Grid>

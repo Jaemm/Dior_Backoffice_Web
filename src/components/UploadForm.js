@@ -11,7 +11,7 @@ const UploadForm = (props) => {
   const [loadingUpload, setLoadingUpload] = useState(false)
   const [filename, setFileName] = useState('')
   const [publicUrl, setPublicUrl] = useState('')
-  const {token, onClose, saveUploadUrl, modelName} = props
+  const {token, onClose, saveUploadUrl, modelName, exampleFileUrl} = props
   const { enqueueSnackbar } = useSnackbar();
 
   const onBrowseFileClick = () => {
@@ -106,6 +106,7 @@ const UploadForm = (props) => {
             variant="contained"
             color="primary"
             style={{marginRight: '10px', borderRadius: '15px'}}
+            onClick={() => window.open(exampleFileUrl, '_blank').focus()}
         >
           Download
         </Button>
@@ -115,7 +116,7 @@ const UploadForm = (props) => {
 
       <input type="file" ref={inputFile} style={{display: 'none'}} onChange={(e)=>{onUploadFile(e.target.files)}}/>
       <div style={{fontFamily: 'Pretendard', fontStyle: 'normal', fontWeight: '500', fontSize: '18px', lineHeight: '22px', color: '#5A5A5A'}}>
-        Please select Excel ${modelName} list to upload:
+        Please select Excel {modelName} list to upload:
       </div>
       <div style={{display: 'flex'}}>
         <div className="upload-field"><span style={{marginLeft: '10px'}}>{filename ? filename : 'Link here'}</span></div>

@@ -100,6 +100,9 @@ export default function BrandDetailsPage() {
     if(query.get('filter_by')){url += `filter_by=${query.get('filter_by')}`}
     if(query.get('filter_by_2')){url += `&filter_by_2=${query.get('filter_by_2')}`}
     if(query.get('search')){url += `&search=${query.get('search')}`}
+    if(selectedRowIds){
+      url += `&ids=${selectedRowIds}`
+    }
     axios({
       method: 'GET',
       url: url,

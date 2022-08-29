@@ -86,13 +86,15 @@ export function StatisticsAndReports(props: any) {
   const { t } = useTranslation();
   const api = useAPI();
 
-  const statistics = useRequest<Statistics>(() =>
-    api.requestResource('/api/partnerdb/statistics')
+  const statistics = useRequest<any>(() =>
+    api.requestResource('/api/dior/statistics/overall')
   );
 
-  const { data: companyInfo } = useRequest<{ data: CompanyInfo }>(() =>
-    api.requestResource('/api/partnerdb/companies/me')
+  const { data: mostPopularProducts } = useRequest<{ data: any }>(() =>
+    api.requestResource('/api/dior/statistics/most_popular_products')
   );
+
+  console.log(mostPopularProducts)
 
   const { store_id } = useParams<{ store_id: string }>();
   const [dateRange1, setDateRange1] = useState<{ from: Date; to: Date }>({
@@ -139,20 +141,47 @@ export function StatisticsAndReports(props: any) {
 
   return (
     <Layout title={t('statistics.title')}>
-      <StyledBox>
+      <StyledBox className="scrollmenu">
         <div className="card">
           <span>
-            <h3>{statistics.data?.total_customers}</h3>
+            <h3>{statistics.data?.total_clients}</h3>
             <p>Overall Clients (GLOBAL)</p>
           </span>
-          <button type="button">
+          <button type="button" onClick={event =>  window.location.href='/statistics/overall-clients'}>
             <img src={Arrow} alt="/" />
           </button>
         </div>
         <div className="card">
           <span>
-            <h3>{statistics.data?.total_analysis}</h3>
-            <p>Completed Consultation (GLOBAL)</p>
+            <h3>{statistics.data?.total_consultations}</h3>
+            <p>Consultations (GLOBAL)</p>
+          </span>
+          <button type="button" onClick={event =>  window.location.href='/statistics/overall-consultations'}>
+            <img src={Arrow} alt="/" />
+          </button>
+        </div>
+        <div className="card">
+          <span>
+            <h3>{formatNumber(statistics.data?.total_consultations || 0)}</h3>
+            <p>Generated QR Code (GLOBAL)</p>
+          </span>
+          <button type="button" onClick={event =>  window.location.href='/statistics/overall-consultations'}>
+            <img src={Arrow} alt="/" />
+          </button>
+        </div>
+        <div className="card">
+          <span>
+            <h3>{statistics.data?.total_consultations}</h3>
+            <p>Overall Analysis (GLOBAL)</p>
+          </span>
+          <button type="button" onClick={event =>  window.location.href='/statistics/overall-consultations'}>
+            <img src={Arrow} alt="/" />
+          </button>
+        </div>
+        <div className="card">
+          <span>
+            <h3>{statistics.data?.consultation_time}</h3>
+            <p>Consultation Time (Average)</p>
           </span>
           <button type="button">
             <img src={Arrow} alt="/" />
@@ -160,8 +189,8 @@ export function StatisticsAndReports(props: any) {
         </div>
         <div className="card">
           <span>
-            <h3>{formatNumber(statistics.data?.total_consultants || 0)}</h3>
-            <p>Number of BM (GLOBAL)</p>
+            <h3>{statistics.data?.total_devices}</h3>
+            <p>All Devices (GLOBAL)</p>
           </span>
           <button type="button">
             <img src={Arrow} alt="/" />
@@ -169,7 +198,7 @@ export function StatisticsAndReports(props: any) {
         </div>
         <div className="card">
           <span>
-            <h3>{statistics.data?.total_stores}</h3>
+            <h3>{statistics.data?.total_branches}</h3>
             <p>Number of stores (GLOBAL)</p>
           </span>
           <button type="button">
@@ -188,12 +217,26 @@ export function StatisticsAndReports(props: any) {
       </StyledBox>
 
       <Typography>
-        <b>{t('analysis_history.analysis')}</b>
+        <b>Most Popular Products</b>
       </Typography>
       <Divider />
       <Box marginBottom={2} />
+      <div className="scrollmenu" style={{display: 'flex'}}>
+        {mostPopularProducts && mostPopularProducts.data && mostPopularProducts.data.map((e:any) => {
+          return(
+            <div className="image-box" style={{width: '200px', height: '200px', marginRight: '10px'}}>
+              <img
+                className="image"
+                style={{width: 'initial'}}
+                src={e.image_url}
+                alt="product"
+              />
+            </div>
+          )
+        })}
+      </div>
 
-      <DataTable<AnalysisHistory>
+      {/* <DataTable<AnalysisHistory>
         dataIndex="store_id"
         headers={headers}
         resource_url="/api/partnerdb/statistics/brands"
@@ -216,7 +259,7 @@ export function StatisticsAndReports(props: any) {
           pagination: true,
           export: true,
         }}
-      />
+      /> */}
     </Layout>
   );
 }
@@ -228,7 +271,7 @@ const StyledBox = styled.div`
   margin-bottom: 30px;
 
   .card {
-    max-width: 350px;
+    max-width: 300px;
     min-width: 250px;
     height: 112px;
     margin-right: 30px;

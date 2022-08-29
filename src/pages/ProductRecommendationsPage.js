@@ -540,7 +540,7 @@ export default function ProductRecommendationsPage() {
   }
 
   return(
-    <Layout title={'Product Catalog'} disableLayout={false}>
+    <Layout title={'Product Recommendation`'} disableLayout={false}>
       <Modal
         open={openModal}
         onClose={()=>{setOpenModal(false)}}

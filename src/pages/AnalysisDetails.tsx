@@ -188,8 +188,8 @@ export default function AnalysisDetailsPage() {
     <Layout
       title={
         <Breadcrumbs aria-label="breadcrumb">
-          <Link to="/customer-record/">{t('sidebar.customer_record')}</Link>
-          <Link to="/customer-record/">{t('sidebar.analysis_history')}</Link>
+          <Link to="/beauty-consultants/">Beauty Consultants</Link>
+          <Link to={`/customer-record/${params.customer_id}`}>{t('sidebar.analysis_history')}</Link>
           <Typography display="initial">
             {t('sidebar.analysis_details')}
           </Typography>

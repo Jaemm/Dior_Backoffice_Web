@@ -63,7 +63,7 @@ const StatisticsBarChart = () => {
   const fetchCustomerAnalysisData = () => {
     axios
       .get(
-        'https://v2-app.chowis.com/api/partnerdb/statistics/customers_analysis',
+        'https://v2-app.chowis.com/api/dior/statistics/overall_per_country',
         {
           params: {
             from: from,
@@ -122,31 +122,22 @@ const StatisticsBarChart = () => {
               <Typography style={{ fontSize: '12px', marginLeft: 5 }}>
                 Consultations
               </Typography>
+              <div
+                style={{
+                  background: '#494949',
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '2px',
+                  marginLeft: '10px'
+                }}
+            ></div>
+            <Typography style={{ fontSize: '12px', marginLeft: 5 }}>
+              QR Code Generated
+            </Typography>
             </div>
           </Legend>
         </div>
-        <div className="date-picker">
-          <FormControl
-            variant="outlined"
-            style={{ minWidth: 150, marginBottom: 10 }}
-            size="small"
-          >
-            <InputLabel id="demo-simple-select-outlined-label">
-              Filter By
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={representation}
-              onChange={() => setRepresentation()}
-              label="Representation"
-            >
-              {/* <MenuItem value="per day">Per Day</MenuItem> */}
-              <MenuItem value="per week">Per Week</MenuItem>
-              {/* <MenuItem value="per month">Per Month</MenuItem> */}
-            </Select>
-          </FormControl>
-        </div>
+
       </TabHeader>
     );
   };
@@ -160,20 +151,25 @@ const StatisticsBarChart = () => {
 
           <BarSeries
             name="customer"
-            valueField="customer"
-            argumentField="date"
+            valueField="total_customers"
+            argumentField="country"
             color="#309FC9"
           />
           <BarSeries
-            name="analysis"
-            valueField="analysis"
-            argumentField="date"
+            name="consultations"
+            valueField="total_consultations"
+            argumentField="country"
             color="#FF896B"
           />
-
+          <BarSeries
+            name="qr_codes"
+            valueField="total_qr_codes"
+            argumentField="country"
+            color="#494949"
+          />
           <Animation />
 
-          <Title text="Overall Performance" textComponent={BarChartHeader} />
+          <Title text="Overall Performance (Per Country)" textComponent={BarChartHeader} />
           <Stack />
         </Chart>
       )}
