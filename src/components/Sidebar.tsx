@@ -1,3 +1,28 @@
+import { useState } from 'react';
+import { version } from '../../package.json';
+import { useTranslation } from 'react-i18next';
+import { useAccessFlags } from '../data/AccessFlags';
+import Logo from '../assets/images/dior-logo-sidebar.png';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import { ReactComponent as IconPos } from '../assets/icons/pos.svg';
+import { ReactComponent as IconUser } from '../assets/icons/user.svg';
+import { ReactComponent as IconRecom } from '../assets/icons/recom.svg';
+import { ReactComponent as IconBranch } from '../assets/icons/branch.svg';
+import { ReactComponent as IconBeauty } from '../assets/icons/beauty.svg';
+import { ReactComponent as IconLogout } from '../assets/icons/logout.svg';
+import { ReactComponent as IconMarket } from '../assets/icons/market.svg';
+import { ReactComponent as IconProduct } from '../assets/icons/product.svg';
+import { ReactComponent as IconPosActive } from '../assets/icons/pos-active.svg';
+import { ReactComponent as IconAttributes } from '../assets/icons/attributes.svg';
+import { ReactComponent as IconRegistered } from '../assets/icons/registered.svg';
+import { ReactComponent as IconUserActive } from '../assets/icons/user-active.svg';
+import { ReactComponent as IconRecomActive } from '../assets/icons/recom-active.svg';
+import { ReactComponent as IconBranchActive } from '../assets/icons/branch-active.svg';
+import { ReactComponent as IconBeautyActive } from '../assets/icons/beauty-active.svg';
+import { ReactComponent as IconMarketActive } from '../assets/icons/market-active.svg';
+import { ReactComponent as IconProductActive } from '../assets/icons/product-active.svg';
+import { ReactComponent as IconAttributesActive } from '../assets/icons/attributes-active.svg';
+import { ReactComponent as IconRegisteredActive } from '../assets/icons/registered-active.svg';
 import {
   Box,
   Button,
@@ -10,32 +35,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  MenuItem,
-  TextField,
   Typography,
 } from '@material-ui/core';
-import {
-  AccountCircle,
-  Assignment,
-  Devices,
-  PowerSettingsNew,
-  Sort,
-} from '@material-ui/icons';
-import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
-
-import { version } from '../../package.json';
-import { useAccessFlags } from '../data/AccessFlags';
-import { APP_LANGUAGES, useAppLanguage } from '../i18n/hooks';
-import Logo from '../assets/images/dior-logo-sidebar.png'
 
 export function Sidebar() {
   const match = useRouteMatch();
-  const [open, setOpen] = useState(true);
   const { t } = useTranslation();
-  const [currentLanguage, setLanguage] = useAppLanguage();
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const history = useHistory();
   const accessFlags = useAccessFlags();
@@ -48,7 +53,7 @@ export function Sidebar() {
       display="flex"
       flexDirection="column"
       style={{
-        background: 'linear-gradient(90deg, #FFFFFF -29.43%, #CBCBCB 100%)'
+        background: 'linear-gradient(90deg, #FFFFFF -29.43%, #CBCBCB 100%)',
       }}
     >
       <Dialog
@@ -90,10 +95,11 @@ export function Sidebar() {
       </Dialog>
 
       <Box width="200px" padding="16px">
-        {/* <Typography variant="h5" align="center">
-          Partners DB
-        </Typography> */}
-        <img src={Logo} style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
+        <img
+          src={Logo}
+          style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+          alt="logo.png"
+        />
       </Box>
       <Divider />
       <List>
@@ -106,10 +112,11 @@ export function Sidebar() {
             className="menu"
           >
             <ListItemIcon>
-              { match.path.includes('/brand-details') ? 
-                <Sort style={{color: 'white'}}/>
-                : <Sort />
-              }
+              {match.path.includes('/brand-details') ? (
+                <IconBranch />
+              ) : (
+                <IconBranchActive />
+              )}
             </ListItemIcon>
             <ListItemText primary={t('sidebar.brand_details')} />
           </ListItem>
@@ -122,10 +129,11 @@ export function Sidebar() {
           className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/beauty-consultants') ? 
-                <AccountCircle style={{color: 'white'}}/>
-                : <AccountCircle />
-              }
+            {match.path.includes('/beauty-consultants') ? (
+              <IconBeautyActive />
+            ) : (
+              <IconBeauty />
+            )}
           </ListItemIcon>
           <ListItemText primary={t('sidebar.beauty_consultant')} />
         </ListItem>
@@ -137,10 +145,11 @@ export function Sidebar() {
           className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/registered-devices') ? 
-                <AccountCircle style={{color: 'white'}}/>
-                : <AccountCircle />
-              }
+            {match.path.includes('/registered-devices') ? (
+              <IconRegisteredActive />
+            ) : (
+              <IconRegistered />
+            )}
           </ListItemIcon>
           <ListItemText primary={'Registered Device'} />
         </ListItem>
@@ -154,10 +163,11 @@ export function Sidebar() {
             className="menu"
           >
             <ListItemIcon>
-              { match.path.includes('/product-catalog') ? 
-                <LocalMallOutlinedIcon style={{color: 'white'}}/>
-                : <LocalMallOutlinedIcon />
-              }
+              {match.path.includes('/product-catalog') ? (
+                <IconProductActive />
+              ) : (
+                <IconProduct />
+              )}
             </ListItemIcon>
             <ListItemText primary="Product Catalog" />
           </ListItem>
@@ -170,10 +180,11 @@ export function Sidebar() {
           className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/product-recommendations') ? 
-                <AccountCircle style={{color: 'white'}}/>
-                : <AccountCircle />
-              }
+            {match.path.includes('/product-recommendations') ? (
+              <IconRecomActive />
+            ) : (
+              <IconRecom />
+            )}
           </ListItemIcon>
           <ListItemText primary={'Product Recommendation'} />
         </ListItem>
@@ -186,59 +197,62 @@ export function Sidebar() {
           className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/statistics') ? 
-                <AccountCircle style={{color: 'white'}}/>
-                : <AccountCircle />
-              }
+            {match.path.includes('/statistics') ? (
+              <IconPosActive />
+            ) : (
+              <IconPos />
+            )}
           </ListItemIcon>
           <ListItemText primary={'Statistics'} />
         </ListItem>
-
       </List>
       <Divider />
       <List>
         <ListItem
-            button
-            component={Link}
-            to="/market-managements"
-            selected={match.path.includes('/market-managements')}
-            className="menu"
+          button
+          component={Link}
+          to="/market-managements"
+          selected={match.path.includes('/market-managements')}
+          className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/market-managements') ? 
-                <AccountCircle style={{color: 'white'}}/>
-                : <AccountCircle />
-              }
+            {match.path.includes('/market-managements') ? (
+              <IconMarketActive />
+            ) : (
+              <IconMarket />
+            )}
           </ListItemIcon>
           <ListItemText primary={'Market Management'} />
         </ListItem>
         <ListItem
-            button
-            component={Link}
-            to="/user-managements"
-            selected={match.path.includes('/user-managements')}
-            className="menu"
+          button
+          component={Link}
+          to="/user-managements"
+          selected={match.path.includes('/user-managements')}
+          className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/user-managements') ? 
-                <AccountCircle style={{color: 'white'}}/>
-                : <AccountCircle />
-              }
+            {match.path.includes('/user-managements') ? (
+              <IconUserActive />
+            ) : (
+              <IconUser />
+            )}
           </ListItemIcon>
           <ListItemText primary={'User Management'} />
         </ListItem>
         <ListItem
-            button
-            component={Link}
-            to="/product-attributes"
-            selected={match.path.includes('/product-attributes')}
-            className="menu"
+          button
+          component={Link}
+          to="/product-attributes"
+          selected={match.path.includes('/product-attributes')}
+          className="menu"
         >
           <ListItemIcon>
-            { match.path.includes('/product-attributes') ? 
-                <AccountCircle style={{color: 'white'}}/>
-                : <AccountCircle />
-              }
+            {match.path.includes('/product-attributes') ? (
+              <IconAttributesActive />
+            ) : (
+              <IconAttributes />
+            )}
           </ListItemIcon>
           <ListItemText primary={'Product Attributes'} />
         </ListItem>
@@ -249,7 +263,7 @@ export function Sidebar() {
           }}
         >
           <ListItemIcon>
-            <PowerSettingsNew />
+            <IconLogout />
           </ListItemIcon>
           <ListItemText primary={t('sidebar.logout')} />
         </ListItem>
@@ -263,29 +277,6 @@ export function Sidebar() {
         flexGrow={1}
       >
         <Grid container direction="column" alignItems="stretch" spacing={2}>
-          <Grid item xs>
-            {/* <TextField
-              label={
-                currentLanguage !== 'en'
-                  ? `${t('language')}/Language`
-                  : t('language')
-              }
-              value={currentLanguage}
-              select
-              variant="outlined"
-              size="small"
-              fullWidth
-              onChange={(event) => {
-                setLanguage(event.target.value);
-              }}
-            >
-              {APP_LANGUAGES.map(({ code, value }) => (
-                <MenuItem key={code} value={code}>
-                  {value}
-                </MenuItem>
-              ))}
-            </TextField> */}
-          </Grid>
           <Grid item>
             <Typography color="textSecondary" align="center">
               {t('version')}: {version}
