@@ -113,9 +113,9 @@ export function Sidebar() {
           >
             <ListItemIcon>
               {match.path.includes('/brand-details') ? (
-                <IconBranch />
-              ) : (
                 <IconBranchActive />
+              ) : (
+                <IconBranch />
               )}
             </ListItemIcon>
             <ListItemText primary={t('sidebar.brand_details')} />
