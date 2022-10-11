@@ -23,7 +23,7 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { useRequest } from 'ahooks';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { InferType } from 'yup';
@@ -83,6 +83,7 @@ export default function BrandDetailsPage() {
   const [axis, setAxis] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [id, setId] = useState(null);
+  const [active, setActive] = useState();
   const [activeTab, setActiveTab] = useState('info');
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [arabicProductName, setArabicProductName] = useState('');
@@ -400,7 +401,25 @@ export default function BrandDetailsPage() {
     }
   };
 
-  console.log('translations', translations);
+  const samples = {
+    translation: [{ 'Product code': 'M001', Translation: 'Sauvage' }],
+    country: [
+      { 'Product code': 'F019004955', Exclusion: 'N' },
+      { 'Product code': 'F999375649', Exclusion: 'Y' },
+      { 'Product code': 'F999375703', Exclusion: 'Y' },
+      { 'Product code': 'F999375746', Exclusion: 'Y' },
+      { 'Product code': 'F999375751', Exclusion: 'Y' },
+      { 'Product code': 'F999375774', Exclusion: 'Y' },
+      { 'Product code': 'F999375783', Exclusion: 'Y' },
+      { 'Product code': 'F099033340', Exclusion: 'Y' },
+      { 'Product code': 'F999375850', Exclusion: 'Y' },
+    ],
+  };
+  console.log(activeTab);
+  console.log(samples[activeTab]);
+  useEffect(() => {
+    console.log(activeTab);
+  });
   const renderAddForm = () => {
     return (
       <Box className="modal-box" style={{ height: '620px', width: '600px' }}>
@@ -435,6 +454,7 @@ export default function BrandDetailsPage() {
             className={activeTab == 'country' ? 'active-tab' : 'tab'}
             onClick={() => {
               setActiveTab('country');
+              setActive('country');
             }}
           >
             Countries
@@ -443,6 +463,7 @@ export default function BrandDetailsPage() {
             className={activeTab == 'translation' ? 'active-tab' : 'tab'}
             onClick={() => {
               setActiveTab('translation');
+              setActive('translation');
             }}
           >
             Translation
@@ -764,7 +785,7 @@ export default function BrandDetailsPage() {
       </Box>
     );
   };
-  const listSample = [{ 'Product code': 'M001', Translation: 'Sauvage' }];
+
   // const branchesSelect = branchesInfo.map((e) => return({id: e.id, name: e.name, code: e.code}))
   return (
     <Layout title={'Product Catalog'}>
@@ -792,7 +813,7 @@ export default function BrandDetailsPage() {
               exampleFileUrl="https://portal-apptree-bucket.s3.ap-northeast-2.amazonaws.com/uploads/images/dior/import_company_branches/3b33bed2-1fc8-49be-ac58-db00000effc9-products.xlsx"
               modelName="Products"
               isExcel={true}
-              sample={listSample}
+              // sample={samples[]}
             />
           )}
           {modalType === 'export-form' && (

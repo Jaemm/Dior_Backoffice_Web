@@ -75,10 +75,67 @@ const UploadForm = (props) => {
     });
   };
 
+  const samples = {
+    translations: [{ 'Product code': 'M001', Translation: 'Sauvage' }],
+    countries: [
+      { 'Product code': 'F019004955', Exclusion: 'N' },
+      { 'Product code': 'F999375649', Exclusion: 'Y' },
+      { 'Product code': 'F999375703', Exclusion: 'Y' },
+      { 'Product code': 'F999375746', Exclusion: 'Y' },
+      { 'Product code': 'F999375751', Exclusion: 'Y' },
+      { 'Product code': 'F999375774', Exclusion: 'Y' },
+      { 'Product code': 'F999375783', Exclusion: 'Y' },
+      { 'Product code': 'F099033340', Exclusion: 'Y' },
+      { 'Product code': 'F999375850', Exclusion: 'Y' },
+    ],
+    products: [
+      {
+        'Product code': '001234',
+        'Product Name': 'YOLO',
+        'Product Link': '',
+        Category: 'Fluids',
+        Collection: 'YOLO',
+        Axis: 'Makeup',
+        'Image URL': '',
+        'Product Variant Code': '',
+      },
+      {
+        'Product code': '001235',
+        'Product Name': 'YOLO 0,5N',
+        'Product Link': '',
+        Category: 'Fluids',
+        Collection: 'YOLO',
+        Axis: 'Makeup',
+        'Image URL': '',
+        'Product Variant Code': '001234',
+      },
+      {
+        'Product code': '001236',
+        'Product Name': 'YOLO 00',
+        'Product Link': '',
+        Category: 'Fluids',
+        Collection: 'YOLO',
+        Axis: 'Makeup',
+        'Image URL': '',
+        'Product Variant Code': '001234',
+      },
+      {
+        'Product code': '001237',
+        'Product Name': 'YOLO 0N',
+        'Product Link': '',
+        Category: 'Fluids',
+        Collection: 'YOLO',
+        Axis: 'Makeup',
+        'Image URL': '',
+        'Product Variant Code': '001234',
+      },
+    ],
+  };
+
   const { makeExcel } = useExcel();
   const openInNewTab = (url) => {
     if (props.isExcel) {
-      makeExcel(props.sample);
+      makeExcel(samples[activeTab]);
     } else {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
@@ -166,7 +223,7 @@ const UploadForm = (props) => {
     });
   };
 
-  const countriesSelect = countriesInfo?.data?.data.map((e) => ({
+  const countriesSelect = countriesInfo?.data?.data?.map((e) => ({
     key: e.name,
     label: e.name,
   }));
@@ -328,26 +385,6 @@ const UploadForm = (props) => {
       )}
       {activeTab === 'pictures' && (
         <>
-          <div className="modal-subheader" style={{ marginTop: '40px' }}>
-            Please download sample file
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '10px',
-            }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ marginRight: '10px', borderRadius: '15px' }}
-              onClick={() => openInNewTab(exampleFileUrl)}
-            >
-              Download
-            </Button>
-          </div>
-          <div className="border" />
           <input
             type="file"
             multiple="multiple"
@@ -365,6 +402,8 @@ const UploadForm = (props) => {
               fontSize: '18px',
               lineHeight: '22px',
               color: '#5A5A5A',
+              textAlign: 'center',
+              margin: '30px 0 10px',
             }}
           >
             Please select product pictures to upload:
@@ -459,7 +498,7 @@ const UploadForm = (props) => {
               setCountry(e.target.value);
             }}
           >
-            {countriesSelect.map(({ label, key }) => (
+            {countriesSelect?.map(({ label, key }) => (
               <MenuItem key={key} value={key}>
                 {label}
               </MenuItem>
@@ -576,7 +615,7 @@ const UploadForm = (props) => {
               setCountry(e.target.value);
             }}
           >
-            {countriesSelect.map(({ label, key }) => (
+            {countriesSelect?.map(({ label, key }) => (
               <MenuItem key={key} value={key}>
                 {label}
               </MenuItem>
