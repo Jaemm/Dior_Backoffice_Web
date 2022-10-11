@@ -1,4 +1,21 @@
-import { Grid, Button, Modal, Box, TextField, MenuItem, IconButton, FormLabel, RadioGroup, FormControlLabel, Radio, Item, FormGroup, Checkbox, List, ListItem, ListItemText,
+import {
+  Grid,
+  Button,
+  Modal,
+  Box,
+  TextField,
+  MenuItem,
+  IconButton,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Item,
+  FormGroup,
+  Checkbox,
+  List,
+  ListItem,
+  ListItemText,
   Table,
   TableBody,
   TableCell,
@@ -6,17 +23,16 @@ import { Grid, Button, Modal, Box, TextField, MenuItem, IconButton, FormLabel, R
   TableRow,
 } from '@material-ui/core';
 import { useRequest } from 'ahooks';
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { InferType } from 'yup';
 
-
-import countries from 'country-list'
+import countries from 'country-list';
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
-import UploadFormProduct from '../components/UploadFormProduct'
-import ExportFormProduct from  '../components/ExportFormProduct'
+import UploadFormProduct from '../components/UploadFormProduct';
+import ExportFormProduct from '../components/ExportFormProduct';
 
 import {
   numberSchema,
@@ -26,14 +42,12 @@ import {
 import { useAppContext } from '../data/AppContext';
 import axios from 'axios';
 import ImageIcon from '@material-ui/icons/Image';
-import {Close} from '@material-ui/icons'
+import { Close } from '@material-ui/icons';
 import FileUpload from '../components/FileUpload';
-
 
 import { DataTable } from '../components/DataTable';
 import NewDataTable from '../components/NewDataTable';
 import { setISODay } from 'date-fns';
-
 
 export default function BrandDetailsPage() {
   const api = useAPI();
@@ -50,37 +64,37 @@ export default function BrandDetailsPage() {
     api.requestResource('api/dior/countries')
   );
   const { token } = useAppContext();
-  const csvFile = useRef(null) 
+  const csvFile = useRef(null);
 
-  const [openModal, setOpenModal] = useState(false)
-  const [country, setCountry] = useState('')
-  const [code, setCode] = useState('')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [variants, setVariants] = useState([])
-  const [reloadNow, setReloadNow] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
+  const [country, setCountry] = useState('');
+  const [code, setCode] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [variants, setVariants] = useState([]);
+  const [reloadNow, setReloadNow] = useState(false);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
-  const [bcCode, setBcCode] = useState('')
-  const [link, setLink] = useState('')
-  const [category, setCategory] = useState('')
-  const [collection, setCollection] = useState('')
-  const [axis, setAxis] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-  const [id, setId] = useState(null)
-  const [activeTab, setActiveTab] = useState('info')
-  const [selectedCountries, setSelectedCountries] = useState([])
-  const [arabicProductName, setArabicProductName] = useState('')
-  const [frenchProductName, setFrenchProductName] = useState('')
-  const [germanProductName, setGermanProductName] = useState('')
-  const [hindiProductName, setHindiProductName] = useState('')
-  const [japaneseProductName, setJapaneseProductName] = useState('')
-  const [modalType, setModalType] = useState('')
-  const [dataInCSV, setDataInCSV] = useState('')
-  const [exportLoading, setExportLoading] = useState(false)
-  const [variantId, setVariantId] = useState(false)
-  const [translations, setTranslations] = useState([])
+  const [bcCode, setBcCode] = useState('');
+  const [link, setLink] = useState('');
+  const [category, setCategory] = useState('');
+  const [collection, setCollection] = useState('');
+  const [axis, setAxis] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [id, setId] = useState(null);
+  const [activeTab, setActiveTab] = useState('info');
+  const [selectedCountries, setSelectedCountries] = useState([]);
+  const [arabicProductName, setArabicProductName] = useState('');
+  const [frenchProductName, setFrenchProductName] = useState('');
+  const [germanProductName, setGermanProductName] = useState('');
+  const [hindiProductName, setHindiProductName] = useState('');
+  const [japaneseProductName, setJapaneseProductName] = useState('');
+  const [modalType, setModalType] = useState('');
+  const [dataInCSV, setDataInCSV] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
+  const [variantId, setVariantId] = useState(false);
+  const [translations, setTranslations] = useState([]);
   let { search } = useLocation();
   const query = new URLSearchParams(search);
 
@@ -95,151 +109,160 @@ export default function BrandDetailsPage() {
   ];
 
   const onClickAddButton = () => {
-    setId(null)
-    setCode(null)
-    setName(null)
-    setLink(null)
-    setCategory(null)
-    setAxis(null)
-    setCollection(null)
-    setImageUrl(null)
-    setActiveTab('info')
-    setModalType('add-form')
-    setVariantId(null)
-    setOpenModal(true)
+    setId(null);
+    setCode(null);
+    setName(null);
+    setLink(null);
+    setCategory(null);
+    setAxis(null);
+    setCollection(null);
+    setImageUrl(null);
+    setActiveTab('info');
+    setModalType('add-form');
+    setVariantId(null);
+    setOpenModal(true);
     setTranslations([]);
-  }
+  };
 
   const onClickAddNewVariantButton = (variantId) => {
-    setId(null)
-    setCode(null)
-    setName(null)
-    setLink(null)
-    setCategory(null)
-    setAxis(null)
-    setCollection(null)
-    setImageUrl(null)
-    setActiveTab('info')
-    setModalType('add-form')
-    setVariantId(variantId)
-    setOpenModal(true)
-  }
+    setId(null);
+    setCode(null);
+    setName(null);
+    setLink(null);
+    setCategory(null);
+    setAxis(null);
+    setCollection(null);
+    setImageUrl(null);
+    setActiveTab('info');
+    setModalType('add-form');
+    setVariantId(variantId);
+    setOpenModal(true);
+  };
 
   const onClickEditButton = (product) => {
-    console.log(product)
-    setId(product.id)
-    setCode(product.code)
-    setName(product.name)
-    setLink(product.link)
-    setCategory(product.category)
-    setAxis(product.routine)
-    setCollection(product.collection)
-    setImageUrl(product.image_url)
-    setVariants(product.product_variants)
-    setVariantId(product.product_recommendation_id)
-    setActiveTab('info')
-    setModalType('edit-form')
-    setOpenModal(true)
-    if(product.countries){
-      setSelectedCountries(product.countries)
+    console.log(product);
+    setId(product.id);
+    setCode(product.code);
+    setName(product.name);
+    setLink(product.link);
+    setCategory(product.category);
+    setAxis(product.routine);
+    setCollection(product.collection);
+    setImageUrl(product.image_url);
+    setVariants(product.product_variants);
+    setVariantId(product.product_recommendation_id);
+    setActiveTab('info');
+    setModalType('edit-form');
+    setOpenModal(true);
+    if (product.countries) {
+      setSelectedCountries(product.countries);
     }
-    if(product.product_translations){
+    if (product.product_translations) {
       setTranslations(product.product_translations);
     }
-  }
-
+  };
 
   const deleteSingleProduct = (id) => {
-    if (window.confirm("Delete the item?")) {
+    if (window.confirm('Delete the item?')) {
       axios({
         method: 'DELETE',
         url: `https://v2-app.chowis.com/api/dior/product_recommendations/${id}`,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
         },
-      })
-      .then((res) => {
-        console.log(res)
-        if(res.status === 200){
+      }).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
           // reload
-          setReloadNow(true)
-          setOpenModal(false)
+          setReloadNow(true);
+          setOpenModal(false);
         }
-      })
+      });
     }
-  }
+  };
 
   const deleteMultiplePos = () => {
-    console.log(selectedRowIds)
+    console.log(selectedRowIds);
     const productData = {
-      ids: selectedRowIds
-    }
-    let message = "Are you sure want to delete below Products ? \n\n"
-    let rowInfo = selectedRow.map((e) => `${e.name}-${e.category}-${e.collection}\n`)
-    console.log(rowInfo.join(''))
+      ids: selectedRowIds,
+    };
+    let message = 'Are you sure want to delete below Products ? \n\n';
+    let rowInfo = selectedRow.map(
+      (e) => `${e.name}-${e.category}-${e.collection}\n`
+    );
+    console.log(rowInfo.join(''));
     if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
-        url: 'https://v2-app.chowis.com/api/dior/product_recommendations/delete_multiple',
+        url:
+          'https://v2-app.chowis.com/api/dior/product_recommendations/delete_multiple',
         data: productData,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
         },
-      })
-      .then((res) => {
-        console.log(res)
-        if(res.status === 200){
+      }).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
           // reload
-          setReloadNow(true)
-          setOpenModal(false)
+          setReloadNow(true);
+          setOpenModal(false);
         }
-      })
+      });
     }
-  }
+  };
 
-  const toolbarButtons =
+  const toolbarButtons = (
     <Grid item>
       <Grid container spacing={2}>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{marginRight: '10px'}}
-            onClick={() => {onClickAddButton()}}
-          >
-            Add
-          </Button>
-          <Button
-            variant="contained"
-            onClick={()=> {deleteMultiplePos()}}
-            style={{marginRight: '10px'}}
-            color="primary">
-            Delete
-            
-          </Button>
-          <Button
-            variant="contained"
-            onClick={()=> {onClickUploadButton()}}
-            style={{marginRight: '10px'}}
-            color="primary">
-            Upload
-          </Button>
-          <Button
-            variant="contained"
-            onClick={()=> onClickExportButtonModal()}
-            disabled={exportLoading}
-            color="primary">
-            {exportLoading ? 'Loading ...' : 'Export'}
-          </Button>
-          <a
-            href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
-            download="product_list.csv"
-            ref={csvFile}
-            style={{display: 'none'}}
-          >
-            download
-          </a>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginRight: '10px' }}
+          onClick={() => {
+            onClickAddButton();
+          }}
+        >
+          Add
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            deleteMultiplePos();
+          }}
+          style={{ marginRight: '10px' }}
+          color="primary"
+        >
+          Delete
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            onClickUploadButton();
+          }}
+          style={{ marginRight: '10px' }}
+          color="primary"
+        >
+          Upload
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => onClickExportButtonModal()}
+          disabled={exportLoading}
+          color="primary"
+        >
+          {exportLoading ? 'Loading ...' : 'Export'}
+        </Button>
+        <a
+          href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
+          download="product_list.csv"
+          ref={csvFile}
+          style={{ display: 'none' }}
+        >
+          download
+        </a>
       </Grid>
     </Grid>
+  );
 
   const saveProduct = () => {
     const productData = {
@@ -250,17 +273,17 @@ export default function BrandDetailsPage() {
       collection: collection,
       routine: axis,
       image_url: imageUrl,
-      countries: selectedCountries.filter(e => e !== 'All'),
+      countries: selectedCountries.filter((e) => e !== 'All'),
       product_translations: translations,
-      product_recommendation_id: variantId
-    }
-    let method, url
-    if(id){
-      method = 'PUT'
-      url = `https://v2-app.chowis.com/api/dior/product_recommendations/${id}`
-    }else{
-      method = 'POST'
-      url = 'https://v2-app.chowis.com/api/dior/product_recommendations'
+      product_recommendation_id: variantId,
+    };
+    let method, url;
+    if (id) {
+      method = 'PUT';
+      url = `https://v2-app.chowis.com/api/dior/product_recommendations/${id}`;
+    } else {
+      method = 'POST';
+      url = 'https://v2-app.chowis.com/api/dior/product_recommendations';
     }
 
     axios({
@@ -270,153 +293,201 @@ export default function BrandDetailsPage() {
       headers: {
         'X-CHOWIS-CONSULTANT-TOKEN': token,
       },
-    })
-    .then((res) => {
-      console.log(res)
-      if(res.status === 200){
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
         // reload
-        setReloadNow(true)
-        setOpenModal(false)
+        setReloadNow(true);
+        setOpenModal(false);
       }
-    })
-  }
+    });
+  };
 
   const checked = (country) => {
-    return selectedCountries.includes(country)
-  }
+    return selectedCountries.includes(country);
+  };
 
   const handleChangeCheckbox = (country) => {
-    if(country === 'All'){
-      if(selectedCountries.includes('All')){
-        setSelectedCountries([])
-      }else{
-        const allCountries = countriesInfo?.data?.data.map(e => e.name)
-        setSelectedCountries([...allCountries, 'All'])
+    if (country === 'All') {
+      if (selectedCountries.includes('All')) {
+        setSelectedCountries([]);
+      } else {
+        const allCountries = countriesInfo?.data?.data.map((e) => e.name);
+        setSelectedCountries([...allCountries, 'All']);
       }
-    }else{
-      if(selectedCountries.includes(country)){
-        setSelectedCountries(selectedCountries.filter(e => e !== country))
-      }else{
-        setSelectedCountries([...selectedCountries, country])
+    } else {
+      if (selectedCountries.includes(country)) {
+        setSelectedCountries(selectedCountries.filter((e) => e !== country));
+      } else {
+        setSelectedCountries([...selectedCountries, country]);
       }
     }
-  }
+  };
 
   const onClickExportButtonModal = () => {
-    setModalType('export-form')
-    setOpenModal(true)
-  }
+    setModalType('export-form');
+    setOpenModal(true);
+  };
 
   const onClickExportButton = () => {
-    setExportLoading(true)
-    let url = `https://v2-app.chowis.com/api/dior/product_recommendations/export?`
-    if(query.get('filter_by')){url += `filter_by=${query.get('filter_by')}`}
-    if(query.get('filter_by_2')){url += `&filter_by_2=${query.get('filter_by_2')}`}
-    if(query.get('search')){url += `&search=${query.get('search')}`}
+    setExportLoading(true);
+    let url = `https://v2-app.chowis.com/api/dior/product_recommendations/export?`;
+    if (query.get('filter_by')) {
+      url += `filter_by=${query.get('filter_by')}`;
+    }
+    if (query.get('filter_by_2')) {
+      url += `&filter_by_2=${query.get('filter_by_2')}`;
+    }
+    if (query.get('search')) {
+      url += `&search=${query.get('search')}`;
+    }
     axios({
       method: 'GET',
       url: url,
       headers: {
         'X-CHOWIS-CONSULTANT-TOKEN': token,
       },
-    })
-    .then((res) => {
-      console.log(res)
-      if(res.status === 200){
-        setDataInCSV(res.data)
-        if(csvFile && csvFile.current){
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        setDataInCSV(res.data);
+        if (csvFile && csvFile.current) {
           // @ts-ignore: Object is possibly 'null'.
-          csvFile.current.click()
+          csvFile.current.click();
         }
       }
-      setExportLoading(false)
-    })
-  }
+      setExportLoading(false);
+    });
+  };
 
   const onClickUploadButton = () => {
-    setModalType('upload-form')
-    setOpenModal(true)
-  }
+    setModalType('upload-form');
+    setOpenModal(true);
+  };
 
-  console.log(collectionInfo.data)
+  console.log(collectionInfo.data);
 
-  const collectionSelect = collectionInfo?.data?.data.map((e) => ({key: e, label: e}))
-  const categorySelect = categoryInfo?.data?.data.map((e) => ({key: e, label: e}))
-  const countriesSelect = countriesInfo?.data?.data.map((e) => ({key: e.name, label: e.name}))
-
+  const collectionSelect = collectionInfo?.data?.data.map((e) => ({
+    key: e,
+    label: e,
+  }));
+  const categorySelect = categoryInfo?.data?.data.map((e) => ({
+    key: e,
+    label: e,
+  }));
+  const countriesSelect = countriesInfo?.data?.data.map((e) => ({
+    key: e.name,
+    label: e.name,
+  }));
 
   const setProductNameInLanguage = (language, value) => {
     //{"field_name": 'product_name', language: 'arabic', value: arabicProductName}
-    const languageTranslation = translations.find(e => e.language === language)
-    if(languageTranslation){
-      const newData = translations.map(item => 
-        item.language === language 
-        ? {...item, value: value} 
-        : item 
-      )
-      setTranslations(newData)
-    }else{
-      const newElement = {field_name: 'product_name', language: language, value: value}
-      setTranslations(translations => [...translations, newElement]);
+    const languageTranslation = translations.find(
+      (e) => e.language === language
+    );
+    if (languageTranslation) {
+      const newData = translations.map((item) =>
+        item.language === language ? { ...item, value: value } : item
+      );
+      setTranslations(newData);
+    } else {
+      const newElement = {
+        field_name: 'product_name',
+        language: language,
+        value: value,
+      };
+      setTranslations((translations) => [...translations, newElement]);
     }
-  }
+  };
 
-  console.log('translations', translations)
+  console.log('translations', translations);
   const renderAddForm = () => {
-    return(
-      <Box className="modal-box" style={{height: '620px', width: '600px'}}>
+    return (
+      <Box className="modal-box" style={{ height: '620px', width: '600px' }}>
         {/* <div className="modal-header">{id ? 'EDIT' : 'ADD'} NEW POS</div> */}
-        <div style={{
-          position: 'absolute'
-        }}>
+        <div
+          style={{
+            position: 'absolute',
+          }}
+        >
           <IconButton
             style={{
               top: '-1em',
-              right: '-20em'
+              right: '-20em',
             }}
-            onClick={()=>{setOpenModal(false)}}
+            onClick={() => {
+              setOpenModal(false);
+            }}
           >
             <Close />
           </IconButton>
         </div>
         <div className="tab-container">
-          <div className={activeTab == 'info' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('info')}}>Information</div>
-          <div className={activeTab == 'country' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('country')}}>Countries</div>
-          <div className={activeTab == 'translation' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('translation')}}>Translation</div>
-          {modalType === 'edit-form' &&
-            <div className={activeTab == 'variation' ? 'active-tab' : 'tab'} onClick={() => {setActiveTab('variation')}}>Variation</div>
-          }
+          <div
+            className={activeTab == 'info' ? 'active-tab' : 'tab'}
+            onClick={() => {
+              setActiveTab('info');
+            }}
+          >
+            Information
+          </div>
+          <div
+            className={activeTab == 'country' ? 'active-tab' : 'tab'}
+            onClick={() => {
+              setActiveTab('country');
+            }}
+          >
+            Countries
+          </div>
+          <div
+            className={activeTab == 'translation' ? 'active-tab' : 'tab'}
+            onClick={() => {
+              setActiveTab('translation');
+            }}
+          >
+            Translation
+          </div>
+          {modalType === 'edit-form' && (
+            <div
+              className={activeTab == 'variation' ? 'active-tab' : 'tab'}
+              onClick={() => {
+                setActiveTab('variation');
+              }}
+            >
+              Variation
+            </div>
+          )}
         </div>
-        { activeTab == 'info' && (
+        {activeTab == 'info' && (
           <>
             <Grid container spacing={2}>
               <Grid item xs={4}>
-                  <TextField
-                    label={'Product Code'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={code}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setCode(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
+                <TextField
+                  label={'Product Code'}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  value={code}
+                  style={{ marginTop: '20px' }}
+                  onChange={(e) => {
+                    setCode(e.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                />
               </Grid>
               <Grid item xs={8}>
-                  <TextField
-                    label={'Product Name'}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={name}
-                    style={{marginTop: '20px'}}
-                    onChange={(e) => {
-                      setName(e.target.value)
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                  />
+                <TextField
+                  label={'Product Name'}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  value={name}
+                  style={{ marginTop: '20px' }}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -425,9 +496,9 @@ export default function BrandDetailsPage() {
                   size="small"
                   fullWidth
                   value={link}
-                  style={{marginTop: '20px'}}
+                  style={{ marginTop: '20px' }}
                   onChange={(e) => {
-                    setLink(e.target.value)
+                    setLink(e.target.value);
                   }}
                   InputLabelProps={{ shrink: true }}
                 />
@@ -440,21 +511,19 @@ export default function BrandDetailsPage() {
                   select
                   fullWidth
                   value={category}
-                  style={{marginTop: '20px'}}
+                  style={{ marginTop: '20px' }}
                   onChange={(e) => {
-                    setCategory(e.target.value)
+                    setCategory(e.target.value);
                   }}
                   InputLabelProps={{ shrink: true }}
                 >
-                  {categorySelect.map(e => {
-                    return(
+                  {categorySelect.map((e) => {
+                    return (
                       <MenuItem key={e.key} value={e.label}>
                         {e.label}
                       </MenuItem>
-                    )
+                    );
                   })}
-
-                    
                 </TextField>
               </Grid>
               <Grid item xs={6}>
@@ -465,18 +534,18 @@ export default function BrandDetailsPage() {
                   select
                   fullWidth
                   value={collection}
-                  style={{marginTop: '20px'}}
+                  style={{ marginTop: '20px' }}
                   onChange={(e) => {
-                    setCollection(e.target.value)
+                    setCollection(e.target.value);
                   }}
                   InputLabelProps={{ shrink: true }}
                 >
-                  {collectionSelect.map(e => {
-                    return(
+                  {collectionSelect.map((e) => {
+                    return (
                       <MenuItem key={e.key} value={e.label}>
                         {e.label}
                       </MenuItem>
-                    )
+                    );
                   })}
                 </TextField>
               </Grid>
@@ -491,9 +560,9 @@ export default function BrandDetailsPage() {
                   select
                   fullWidth
                   value={axis}
-                  style={{marginTop: '20px'}}
+                  style={{ marginTop: '20px' }}
                   onChange={(e) => {
-                    setAxis(e.target.value)
+                    setAxis(e.target.value);
                   }}
                   InputLabelProps={{ shrink: true }}
                 >
@@ -507,52 +576,62 @@ export default function BrandDetailsPage() {
                 <Button
                   variant="contained"
                   color="primary"
-                  style={{marginTop: '20px', width: '100%'}}
-                  onClick={() => {saveProduct()}}
+                  style={{ marginTop: '20px', width: '100%' }}
+                  onClick={() => {
+                    saveProduct();
+                  }}
                 >
                   Save
                 </Button>
               </Grid>
               <Grid item xs={6}>
                 <div className="image-container">
-                    {imageUrl && (
-                      <img
-                        src={imageUrl}
-                        alt="product"
-                        className="image"
-                      />
-                    )}
-                    <ImageIcon htmlColor="silver" />
-                    <FileUpload setImageUrl={setImageUrl}/>
-                  </div>
+                  {imageUrl && (
+                    <img src={imageUrl} alt="product" className="image" />
+                  )}
+                  <ImageIcon htmlColor="silver" />
+                  <FileUpload setImageUrl={setImageUrl} />
+                </div>
               </Grid>
             </Grid>
           </>
         )}
 
-        { activeTab == 'country' && (
+        {activeTab == 'country' && (
           <>
             <p>This product is available for below countries *</p>
-            <div style={{
-              height: '400px', 
-              overflow: 'auto',
-              padding: '15px',
-              border: '1px solid #5A5A5A',
-              borderRadius: '10px'  
-            }}>
+            <div
+              style={{
+                height: '400px',
+                overflow: 'auto',
+                padding: '15px',
+                border: '1px solid #5A5A5A',
+                borderRadius: '10px',
+              }}
+            >
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <FormControlLabel 
-                    control={<Checkbox checked={checked('All')} onChange={()=>handleChangeCheckbox('All')}/>} 
-                    label={'All'} 
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checked('All')}
+                        onChange={() => handleChangeCheckbox('All')}
+                      />
+                    }
+                    label={'All'}
                   />
                 </Grid>
-                {countriesSelect.map(e => (
+                {countriesSelect.map((e) => (
                   <Grid item xs={6}>
-                      <FormControlLabel 
-                        control={<Checkbox checked={checked(e.label)} onChange={()=>handleChangeCheckbox(e.label)}/>} 
-                        label={e.label} 
-                      />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={checked(e.label)}
+                          onChange={() => handleChangeCheckbox(e.label)}
+                        />
+                      }
+                      label={e.label}
+                    />
                   </Grid>
                 ))}
               </Grid>
@@ -560,29 +639,32 @@ export default function BrandDetailsPage() {
             <Button
               variant="contained"
               color="primary"
-              style={{marginTop: '20px', width: '100%'}}
-              onClick={() => {saveProduct()}}
+              style={{ marginTop: '20px', width: '100%' }}
+              onClick={() => {
+                saveProduct();
+              }}
             >
               Save
             </Button>
           </>
         )}
 
-
-        { activeTab == 'translation' && (
+        {activeTab == 'translation' && (
           <>
             <p>Please input product name translations: </p>
-            <div style={{
-              height: '400px', 
-              overflow: 'auto',
-              padding: '15px',
-              border: '1px solid #5A5A5A',
-              borderRadius: '10px'
-            }}>
+            <div
+              style={{
+                height: '400px',
+                overflow: 'auto',
+                padding: '15px',
+                border: '1px solid #5A5A5A',
+                borderRadius: '10px',
+              }}
+            >
               <Grid container spacing={2}>
-                {countriesSelect.map(e => 
+                {countriesSelect.map((e) => (
                   <>
-                    <Grid item xs={4} style={{textAlign:'center'}}>
+                    <Grid item xs={4} style={{ textAlign: 'center' }}>
                       <p>{e.label} :</p>
                     </Grid>
                     <Grid item xs={8}>
@@ -591,39 +673,46 @@ export default function BrandDetailsPage() {
                         variant="outlined"
                         size="small"
                         fullWidth
-                        value={translations.find(f => f.language === e.label)?.value}
-                        style={{marginTop: '20px'}}
+                        value={
+                          translations.find((f) => f.language === e.label)
+                            ?.value
+                        }
+                        style={{ marginTop: '20px' }}
                         onChange={(f) => {
-                          setProductNameInLanguage(e.label, f.target.value)
+                          setProductNameInLanguage(e.label, f.target.value);
                         }}
                         InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                   </>
-                )}
+                ))}
               </Grid>
             </div>
             <Button
-                  variant="contained"
-                  color="primary"
-                  style={{marginTop: '20px', width: '100%'}}
-                  onClick={() => {saveProduct()}}
-                >
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '20px', width: '100%' }}
+              onClick={() => {
+                saveProduct();
+              }}
+            >
               Save
             </Button>
           </>
         )}
 
-        { activeTab == 'variation' && (
-          <div style={{overflow: 'auto', height: '500px'}}>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{marginTop: '10px', float: 'right'}}
-                onClick={() => {onClickAddNewVariantButton(id)}}
-              >
-                Add New Variant
-              </Button>
+        {activeTab == 'variation' && (
+          <div style={{ overflow: 'auto', height: '500px' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '10px', float: 'right' }}
+              onClick={() => {
+                onClickAddNewVariantButton(id);
+              }}
+            >
+              Add New Variant
+            </Button>
             <Table>
               <TableHead>
                 <TableRow>
@@ -635,69 +724,80 @@ export default function BrandDetailsPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {variants && variants.map((e) => {
-                  return(
-                    <TableRow>
-                      <TableCell>{e.name}</TableCell>
-                      <TableCell>{e.code}</TableCell>
-                      <TableCell>{e.category}</TableCell>
-                      <TableCell>{e.collection}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          style={{marginRight: '10px'}}
-                          onClick={() => {onClickEditButton(e)}}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          style={{marginRight: '10px'}}
-                          onClick={() => {deleteSingleProduct(e.id)}}
-                        >
-                          Delete
-                        </Button>
-                        
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
+                {variants &&
+                  variants.map((e) => {
+                    return (
+                      <TableRow>
+                        <TableCell>{e.name}</TableCell>
+                        <TableCell>{e.code}</TableCell>
+                        <TableCell>{e.category}</TableCell>
+                        <TableCell>{e.collection}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginRight: '10px' }}
+                            onClick={() => {
+                              onClickEditButton(e);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginRight: '10px' }}
+                            onClick={() => {
+                              deleteSingleProduct(e.id);
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           </div>
         )}
-
-
       </Box>
-
-    )
-  }
-
-
+    );
+  };
+  const listSample = [{ 'Product code': 'M001', Translation: 'Sauvage' }];
   // const branchesSelect = branchesInfo.map((e) => return({id: e.id, name: e.name, code: e.code}))
   return (
     <Layout title={'Product Catalog'}>
       <Modal
         open={openModal}
-        onClose={()=>{setOpenModal(false)}}
+        onClose={() => {
+          setOpenModal(false);
+        }}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
         <>
-          {(modalType === 'add-form' || modalType === 'edit-form') && renderAddForm()}
-          {modalType === 'upload-form' && 
+          {(modalType === 'add-form' || modalType === 'edit-form') &&
+            renderAddForm()}
+          {modalType === 'upload-form' && (
             <UploadFormProduct
-              token={token} 
+              token={token}
               onClose={() => setOpenModal(false)}
-              saveUploadUrl='https://v2-app.chowis.com/api/dior/product_recommendations/import'
-              exampleFileUrl='https://portal-apptree-bucket.s3.ap-northeast-2.amazonaws.com/uploads/images/dior/import_company_branches/3b33bed2-1fc8-49be-ac58-db00000effc9-products.xlsx'
-              modelName='Products'
+              saveUploadUrl="https://v2-app.chowis.com/api/dior/product_recommendations/import"
+              exampleFileUrl="https://portal-apptree-bucket.s3.ap-northeast-2.amazonaws.com/uploads/images/dior/import_company_branches/3b33bed2-1fc8-49be-ac58-db00000effc9-products.xlsx"
+              modelName="Products"
+              isExcel={true}
+              sample={listSample}
             />
-          }
-          {(modalType === 'export-form') && <ExportFormProduct onClose={() => setOpenModal(false)} />}
+          )}
+          {modalType === 'export-form' && (
+            <ExportFormProduct onClose={() => setOpenModal(false)} />
+          )}
         </>
       </Modal>
       <Grid container direction="column" spacing={2} wrap="nowrap">
@@ -714,45 +814,48 @@ export default function BrandDetailsPage() {
               {
                 label: 'Product Image',
                 key: 'image',
-                content: ({ image_url }) =>
-                <div className="image-box">
-                {image_url ? (
-                  <img
-                    className="image"
-                    src={image_url}
-                    alt="product"
-                  />
-                ) : (
-                  <p>No Image</p>
-                )}
-              </div>
+                content: ({ image_url }) => (
+                  <div className="image-box">
+                    {image_url ? (
+                      <img className="image" src={image_url} alt="product" />
+                    ) : (
+                      <p>No Image</p>
+                    )}
+                  </div>
+                ),
               },
               { label: 'Product Name', key: 'name' },
               { label: 'Category', key: 'category' },
               { label: 'Collection', key: 'collection' },
               { label: 'Axis', key: 'routine' },
               { label: 'Link', key: 'link' },
-              { label: 'Action', key: '',
-              content: (props) =>
-                <div className="">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{marginRight: '10px'}}
-                    onClick={() => {onClickEditButton(props)}}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {deleteSingleProduct(props.id)}}
-                  >
-                    Delete
-                  </Button>
-                  
-                </div>
-              }
+              {
+                label: 'Action',
+                key: '',
+                content: (props) => (
+                  <div className="">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{ marginRight: '10px' }}
+                      onClick={() => {
+                        onClickEditButton(props);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        deleteSingleProduct(props.id);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                ),
+              },
             ]}
             toolbar={{
               search: true,
@@ -760,10 +863,10 @@ export default function BrandDetailsPage() {
               pagination: true,
               export: false,
               filter_select: true,
-              filter_select2: true
+              filter_select2: true,
             }}
-            filter_label='Filter by Category'
-            filter_label_2='Filter by Collection'
+            filter_label="Filter by Category"
+            filter_label_2="Filter by Collection"
             filters={categorySelect}
             filters2={collectionSelect}
             toolbarButtons={toolbarButtons}
