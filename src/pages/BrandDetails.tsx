@@ -1,14 +1,22 @@
-import { Grid, Button, Modal, Box, TextField, MenuItem, FormControl, IconButton, InputLabel, OutlinedInput, InputAdornment } from '@material-ui/core';
+import {
+  Grid,
+  Button,
+  Modal,
+  Box,
+  TextField,
+  MenuItem,
+  FormControl,
+  IconButton,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+} from '@material-ui/core';
 import { useRequest } from 'ahooks';
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { InferType } from 'yup';
-import {
-  Visibility,
-  VisibilityOff,
-  Close
-} from '@material-ui/icons';
+import { Visibility, VisibilityOff, Close } from '@material-ui/icons';
 import { useAPI } from '../api/API';
 import { Layout } from '../components/Layout';
 // import { parseDateString } from '../helpers/dateHelpers';
@@ -52,25 +60,34 @@ export default function BrandDetailsPage() {
     api.requestResource('/api/partnerdb/companies/me')
   );
   const { token } = useAppContext();
-  const csvFile = useRef(null) 
+  const csvFile = useRef(null);
 
-  const [openModal, setOpenModal] = useState(false)
-  const [modalType, setModalType] = useState('')
-  const [id, setId] = useState(null)
-  const [country, setCountry] = useState('')
-  const [code, setCode] = useState('')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [reloadNow, setReloadNow] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [id, setId] = useState(null);
+  const [country, setCountry] = useState('');
+  const [code, setCode] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [reloadNow, setReloadNow] = useState(false);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
-  const [dataInCSV, setDataInCSV] = useState('')
-  const [exportLoading, setExportLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
+  const [dataInCSV, setDataInCSV] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]);
   let { search } = useLocation();
   const query = new URLSearchParams(search);
+
+  const countriesInfo: any = useRequest(() =>
+    api.requestResource('api/dior/countries')
+  );
+
+  const countriesSelect = countriesInfo?.data?.data?.map((e: any) => ({
+    key: e.name,
+    label: e.name,
+  }));
 
   const headers = [
     { label: 'Name', key: 'name' },
@@ -82,132 +99,147 @@ export default function BrandDetailsPage() {
 
   const onClickAddButton = () => {
     // alert('onClickAddButton')
-    setModalType('add-form')
-    setOpenModal(true)
-  }
+    setModalType('add-form');
+    setOpenModal(true);
+  };
 
   const onClickEditButton = (product: any) => {
-    console.log(product)
-    setId(product.id)
-    setCountry(product.country)
-    setCode(product.code)
-    setName(product.name)
-    setEmail(product.email)
-    setPassword(product.password)
-    setModalType('add-form')
-    setOpenModal(true)
-  }
+    console.log(product);
+    setId(product.id);
+    setCountry(product.country);
+    setCode(product.code);
+    setName(product.name);
+    setEmail(product.email);
+    setPassword(product.password);
+    setModalType('add-form');
+    setOpenModal(true);
+  };
 
   const onClickUploadButton = () => {
-    setModalType('upload-form')
-    setOpenModal(true)
-  }
+    setModalType('upload-form');
+    setOpenModal(true);
+  };
 
   const onClickExportButton = () => {
-    setExportLoading(true)
-    let url = `https://v2-app.chowis.com/api/dior/company_branches/export?`
-    if(query.get('filter_by')){url += `filter_by=${query.get('filter_by')}`}
-    if(query.get('search')){url += `&search=${query.get('search')}`}
+    setExportLoading(true);
+    let url = `https://v2-app.chowis.com/api/dior/company_branches/export?`;
+    if (query.get('filter_by')) {
+      url += `filter_by=${query.get('filter_by')}`;
+    }
+    if (query.get('search')) {
+      url += `&search=${query.get('search')}`;
+    }
     axios({
       method: 'GET',
       url: url,
       headers: {
         'X-CHOWIS-CONSULTANT-TOKEN': token,
       },
-    })
-    .then((res:any) => {
-      console.log(res)
-      if(res.status === 200){
-        setDataInCSV(res.data)
-        if(csvFile && csvFile.current){
+    }).then((res: any) => {
+      console.log(res);
+      if (res.status === 200) {
+        setDataInCSV(res.data);
+        if (csvFile && csvFile.current) {
           // @ts-ignore: Object is possibly 'null'.
-          csvFile.current.click()
+          csvFile.current.click();
         }
       }
-      setExportLoading(false)
-    })
-  }
+      setExportLoading(false);
+    });
+  };
 
   const deleteMultiplePos = () => {
-    console.log(selectedRowIds)
+    console.log(selectedRowIds);
     const posData = {
-      ids: selectedRowIds
-    }
-    let message = "Are you sure want to delete below POS ? \n\n"
-    let rowInfo = selectedRow.map((e:any) => `${e.country}-${e.code}-${e.name}\n`)
-    console.log(rowInfo.join(''))
+      ids: selectedRowIds,
+    };
+    let message = 'Are you sure want to delete below POS ? \n\n';
+    let rowInfo = selectedRow.map(
+      (e: any) => `${e.country}-${e.code}-${e.name}\n`
+    );
+    console.log(rowInfo.join(''));
     if (window.confirm(`${message}${rowInfo.join('')}`)) {
       axios({
         method: 'DELETE',
-        url: 'https://v2-app.chowis.com/api/dior/company_branches/delete_multiple',
+        url:
+          'https://v2-app.chowis.com/api/dior/company_branches/delete_multiple',
         data: posData,
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
         },
-      })
-      .then((res) => {
-        console.log(res)
-        if(res.status === 200){
+      }).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
           // reload
-          setReloadNow(true)
-          setOpenModal(false)
+          setReloadNow(true);
+          setOpenModal(false);
         }
-      })
+      });
     }
-  }
+  };
 
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword)
+    setShowPassword(!showPassword);
   };
 
   const handleClickShowPasswordModal = () => {
-    setShowPasswordModal(!showPasswordModal)
-  }
+    setShowPasswordModal(!showPasswordModal);
+  };
 
-  const toolbarButtons =
+  const toolbarButtons = (
     <Grid item>
       <Grid container spacing={2}>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{marginRight: '10px'}}
-            onClick={() => {onClickAddButton()}}
-          >
-            Add
-          </Button>
-          <Button
-            variant="contained"
-            onClick={()=> {deleteMultiplePos()}}
-            color="primary"
-            style={{marginRight: '10px'}}
-          >
-            Delete
-            
-          </Button>
-          <Button
-            variant="contained"
-            onClick={()=> {onClickUploadButton()}}
-            style={{marginRight: '10px'}}
-            color="primary">
-            Upload
-          </Button>
-          <Button
-            variant="contained"
-            onClick={()=> {onClickExportButton()}}
-            disabled={exportLoading}
-            color="primary">
-            {exportLoading ? 'Loading ...' : 'Export'}
-          </Button>
-          <a
-            href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
-            download="pos_list.csv"
-            ref={csvFile}
-            style={{display: 'none'}}
-          >
-            download
-          </a>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginRight: '10px' }}
+          onClick={() => {
+            onClickAddButton();
+          }}
+        >
+          Add
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            deleteMultiplePos();
+          }}
+          color="primary"
+          style={{ marginRight: '10px' }}
+        >
+          Delete
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            onClickUploadButton();
+          }}
+          style={{ marginRight: '10px' }}
+          color="primary"
+        >
+          Upload
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            onClickExportButton();
+          }}
+          disabled={exportLoading}
+          color="primary"
+        >
+          {exportLoading ? 'Loading ...' : 'Export'}
+        </Button>
+        <a
+          href={`data:text/csv;charset=utf-8,${escape(dataInCSV)}`}
+          download="pos_list.csv"
+          ref={csvFile}
+          style={{ display: 'none' }}
+        >
+          download
+        </a>
       </Grid>
     </Grid>
+  );
 
   const savePos = () => {
     const posData = {
@@ -215,11 +247,11 @@ export default function BrandDetailsPage() {
       code: code,
       name: name,
       email: email,
-      password: password
-    }
-    let url = 'https://v2-app.chowis.com/api/dior/company_branches'
-    if(id){
-      url = `https://v2-app.chowis.com/api/dior/company_branches/${id}`
+      password: password,
+    };
+    let url = 'https://v2-app.chowis.com/api/dior/company_branches';
+    if (id) {
+      url = `https://v2-app.chowis.com/api/dior/company_branches/${id}`;
       axios({
         method: 'PUT',
         url: url,
@@ -227,17 +259,16 @@ export default function BrandDetailsPage() {
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
         },
-      })
-      .then((res) => {
-        console.log(res)
-        if(res.status === 200){
+      }).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
           // reload
-          setReloadNow(true)
-          setOpenModal(false)
+          setReloadNow(true);
+          setOpenModal(false);
         }
-      })
-    }else{
-      url = 'https://v2-app.chowis.com/api/dior/company_branches'
+      });
+    } else {
+      url = 'https://v2-app.chowis.com/api/dior/company_branches';
       axios({
         method: 'POST',
         url: url,
@@ -245,35 +276,36 @@ export default function BrandDetailsPage() {
         headers: {
           'X-CHOWIS-CONSULTANT-TOKEN': token,
         },
-      })
-      .then((res) => {
-        console.log(res)
-        if(res.status === 200){
+      }).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
           // reload
-          setReloadNow(true)
-          setOpenModal(false)
+          setReloadNow(true);
+          setOpenModal(false);
         }
-      })
+      });
     }
-
-
-  }
+  };
 
   const renderAddForm = () => {
-    return(
+    return (
       <Box className="modal-box">
         <div className="modal-header">ADD NEW POS</div>
-        <div style={{
-          width: '100%',
-          height: '100%',
-          position: 'absolute'
-        }}>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+          }}
+        >
           <IconButton
             style={{
               top: '-2em',
-              right: '-17em'
+              right: '-17em',
             }}
-            onClick={()=>{setOpenModal(false)}}
+            onClick={() => {
+              setOpenModal(false);
+            }}
           >
             <Close />
           </IconButton>
@@ -285,18 +317,17 @@ export default function BrandDetailsPage() {
           select
           fullWidth
           value={country}
-          style={{marginTop: '20px'}}
+          style={{ marginTop: '20px' }}
           onChange={(e) => {
-            setCountry(e.target.value)
+            setCountry(e.target.value);
           }}
           InputLabelProps={{ shrink: true }}
         >
-          <MenuItem key={1} value={'France'}>
-            France
-          </MenuItem>
-          <MenuItem key={1} value={'Japan'}>
-            Japan
-          </MenuItem>
+          {countriesSelect?.map(({ label, key }: any) => (
+            <MenuItem key={key} value={key}>
+              {label}
+            </MenuItem>
+          ))}
         </TextField>
         <TextField
           label={'POS Code'}
@@ -304,9 +335,9 @@ export default function BrandDetailsPage() {
           size="small"
           fullWidth
           value={code}
-          style={{marginTop: '20px'}}
+          style={{ marginTop: '20px' }}
           onChange={(e) => {
-            setCode(e.target.value)
+            setCode(e.target.value);
           }}
           InputLabelProps={{ shrink: true }}
         />
@@ -316,9 +347,9 @@ export default function BrandDetailsPage() {
           size="small"
           fullWidth
           value={name}
-          style={{marginTop: '20px'}}
+          style={{ marginTop: '20px' }}
           onChange={(e) => {
-            setName(e.target.value)
+            setName(e.target.value);
           }}
           InputLabelProps={{ shrink: true }}
         />
@@ -328,23 +359,28 @@ export default function BrandDetailsPage() {
           size="small"
           fullWidth
           value={email}
-          style={{marginTop: '20px'}}
+          style={{ marginTop: '20px' }}
           onChange={(e) => {
-            setEmail(e.target.value)
+            setEmail(e.target.value);
           }}
           InputLabelProps={{ shrink: true }}
         />
-       <FormControl variant="outlined" style={{marginTop: '20px', marginBottom: '20px', width: '100%'}}>
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <FormControl
+          variant="outlined"
+          style={{ marginTop: '20px', marginBottom: '20px', width: '100%' }}
+        >
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
           <OutlinedInput
-            className='MuiOutlinedInput-sizeSmall'
+            className="MuiOutlinedInput-sizeSmall"
             id="outlined-adornment-password"
             type={showPasswordModal ? 'text' : 'password'}
             value={password}
             onChange={(e) => {
-              setPassword(e.target.value)
+              setPassword(e.target.value);
             }}
-            style={{height: '2.7rem'}}
+            style={{ height: '2.7rem' }}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -373,56 +409,66 @@ export default function BrandDetailsPage() {
           }}
           InputLabelProps={{ shrink: true }}
         /> */}
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
             variant="contained"
             color="primary"
-            style={{marginRight: '10px', width: '192px'}}
-            onClick={()=>{setOpenModal(false)}}
+            style={{ marginRight: '10px', width: '192px' }}
+            onClick={() => {
+              setOpenModal(false);
+            }}
           >
             Cancel
           </Button>
           <Button
             variant="contained"
             color="primary"
-            style={{marginRight: '10px', width: '192px'}}
-            onClick={() => {savePos()}}
+            style={{ marginRight: '10px', width: '192px' }}
+            onClick={() => {
+              savePos();
+            }}
           >
             Save
           </Button>
           <Button
             variant="contained"
             color="primary"
-            style={{width: '192px'}}
+            style={{ width: '192px' }}
             onClick={() => {}}
           >
             Save & New
           </Button>
         </div>
       </Box>
-    )
-  }
+    );
+  };
 
   return (
     <Layout title={t('sidebar.brand_details')}>
       <Modal
         open={openModal}
-        onClose={()=>{setOpenModal(false)}}
+        onClose={() => {
+          setOpenModal(false);
+        }}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
         <>
           {modalType === 'add-form' && renderAddForm()}
-          {modalType === 'upload-form' && 
-            <UploadForm 
-              token={token} 
+          {modalType === 'upload-form' && (
+            <UploadForm
+              token={token}
               onClose={() => setOpenModal(false)}
-              saveUploadUrl='https://v2-app.chowis.com/api/dior/company_branches/import'
-              exampleFileUrl=''
-              modelName='POS'
+              saveUploadUrl="https://v2-app.chowis.com/api/dior/company_branches/import"
+              exampleFileUrl=""
+              modelName="POS"
             />
-          }
+          )}
         </>
       </Modal>
       <Grid container direction="column" spacing={2} wrap="nowrap">
@@ -441,48 +487,56 @@ export default function BrandDetailsPage() {
               { label: t('brand_details.name'), key: 'name' },
               { label: t('brand_details.email'), key: 'email' },
               { label: t('brand_details.total_devices'), key: 'total_devices' },
-              { label: t('brand_details.password'), key: 'password',
-              content: (props) =>
-                <div>
-                  {showPassword ? props.password : '********'}
-                  <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  // onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </div>
+              {
+                label: t('brand_details.password'),
+                key: 'password',
+                content: (props) => (
+                  <div>
+                    {showPassword ? props.password : '********'}
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      // onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </div>
+                ),
               },
-              { label: t('brand_details.last_consultation_date'), key: 'last_consultation_date' },
-              { label: 'Action', key: 'id',
-              content: (props) =>
-                <div className="">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{marginRight: '10px'}}
-                    onClick={() => {onClickEditButton(props)}}
-                  >
-                    Edit
-                  </Button>
-                </div>
-              }
+              {
+                label: t('brand_details.last_consultation_date'),
+                key: 'last_consultation_date',
+              },
+              {
+                label: 'Action',
+                key: 'id',
+                content: (props) => (
+                  <div className="">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{ marginRight: '10px' }}
+                      onClick={() => {
+                        onClickEditButton(props);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                ),
+              },
             ]}
             toolbar={{
               search: true,
               filter: false,
               pagination: true,
               export: true,
-              filter_select: true
+              filter_select: true,
             }}
-            filter_label='Filter by Country'
+            filter_label="Filter by Country"
             toolbarButtons={toolbarButtons}
-            filters={[
-              { label: 'France', key: 'france' },
-              { label: 'Japan', key: 'japan' },
-            ]} 
+            filters={countriesSelect}
           />
         </Grid>
       </Grid>
