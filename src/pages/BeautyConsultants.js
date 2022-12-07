@@ -141,6 +141,17 @@ export default function BrandDetailsPage() {
     });
   };
 
+  const countriesInfo = useRequest(() =>
+    api.requestResource('api/dior/countries')
+  );
+
+  const countriesSelect = countriesInfo?.data?.data?.map((e) => ({
+    key: e?.name,
+    label: e?.name,
+  }));
+
+  console.log(countriesSelect);
+
   const toolbarButtons = (
     <Grid item>
       <Grid container spacing={2}>
@@ -259,12 +270,11 @@ export default function BrandDetailsPage() {
           }}
           InputLabelProps={{ shrink: true }}
         >
-          <MenuItem key={1} value={'France'}>
-            France
-          </MenuItem>
-          <MenuItem key={1} value={'Japan'}>
-            Japan
-          </MenuItem>
+          {countriesSelect?.map(({ label, key }) => (
+            <MenuItem key={key} value={key}>
+              {label}
+            </MenuItem>
+          ))}
         </TextField>
         <TextField
           label={'POS Code'}
