@@ -1,0 +1,62 @@
+import { sampleCon } from './excel'
+import { Button } from '@mui/material'
+import { Add } from './components/add'
+import { Table } from 'components/table'
+import { Search } from 'components/search'
+import { Upload } from 'components/upload'
+import { Delete } from './components/delete'
+import { DataRow, useMarket } from './useMarket'
+import { ExportExcel } from 'components/export-excel'
+import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
+import { Wrap, Header, LeftSide, RightSide, Container } from './style'
+
+const MarketManagement = () => {
+	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
+		useDataSelectedTable<DataRow>()
+	const { data, columns, isLoading, isFetching, handleClear, searchValue, handleSearchChange } =
+		useMarket()
+
+	return (
+		<Container>
+			<Wrap>
+				<Header>
+					<LeftSide>
+						<Search value={searchValue} onChange={handleSearchChange} />
+						<Button onClick={handleClear}>Reset</Button>
+					</LeftSide>
+					<RightSide>
+						<Add />
+						<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
+						<Upload
+							file={sampleCon}
+							type='countries'
+							keyQuery='all-countries'
+							title='Upload a list of Country'
+							label='Please select Excel Country list to upload'
+						/>
+						<ExportExcel
+							loading={isLoading}
+							excelTitle='export-market'
+							data={dataSelected.map(v => ({
+								'Market Code': v.code,
+								'Market Name': v.name,
+								'Default Recommendation': v.default_recommendation,
+							}))}
+						/>
+					</RightSide>
+				</Header>
+				<Table<DataRow>
+					keyField='id'
+					data={data.data}
+					columns={columns}
+					withOutPagination
+					isLoading={isLoading}
+					isFetching={isFetching}
+					handleChangeSelect={handleChangeSelect}
+				/>
+			</Wrap>
+		</Container>
+	)
+}
+
+export default MarketManagement

@@ -1,0 +1,1 @@
+export { Expandtable } from './table'

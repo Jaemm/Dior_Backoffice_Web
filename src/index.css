@@ -1,0 +1,165 @@
+@font-face {
+	font-style: normal;
+	font-weight: normal;
+	font-display: swap;
+	font-family: 'Segoe UI Regular';
+	src: local('Segoe UI Regular'), url('../public/fonts/segoe.woff') format('woff');
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	list-style-type: none;
+	font-family: 'Segoe UI Regular' !important;
+}
+
+a {
+	text-decoration: none;
+}
+
+#root {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	overflow: hidden;
+	align-items: center;
+	justify-content: center;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	-webkit-box-shadow: 0 0 0 30px white inset !important;
+	box-shadow: 0 0 0 30px white inset !important;
+	background-color: white;
+}
+
+:root {
+	--gray: #5a5a5a;
+	--gray10: #bbbbbb;
+	--gray20: #f2f2f2;
+	--gray30: #d9d9d9;
+	--gray40: #6b6b6b;
+	--gray50: #818181;
+	--gray60: #ced0de;
+	--gray70: #8d8d8d;
+	--gray80: #707070;
+	--gray90: #e9e9e9;
+	--gray100: #e6e6e6;
+	--gray110: #f0f0f0;
+	--black: #282c4a;
+	--black10: #131313;
+	--black20: #161616;
+	--blur: #0055ff;
+	--red: #ff0000;
+	--sidebar-linear: linear-gradient(90deg, #ffffff -29.43%, #cbcbcb 100%);
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: var(--gray);
+	border: 1px solid var(--gray);
+}
+
+input[type='checkbox'] {
+	accent-color: var(--gray) !important;
+}
+
+label {
+	font-size: 16px !important;
+	font-weight: 550 !important;
+	color: var(--gray) !important;
+	white-space: nowrap !important;
+}
+
+.MuiSelect-icon {
+	top: auto !important;
+}
+
+.MuiButtonBase-root:disabled {
+	cursor: not-allowed !important;
+	pointer-events: auto !important;
+}
+
+.custom-table {
+	padding: 0 10px !important;
+	border-radius: 0 !important;
+}
+
+.rdt_TableHead .rdt_TableHeadRow {
+	height: 50px;
+	padding: 5px 0;
+	font-size: 16px;
+	font-weight: 400;
+	color: var(--gray);
+	margin-bottom: 10px;
+	border-radius: 15px;
+	background: var(--gray30);
+	box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+.rdt_TableHead .rdt_TableHeadRow .rdt_TableCol:not(:last-child, :first-child) {
+	border-right: 2px solid var(--gray40);
+}
+
+.rdt_TableBody .rdt_TableRow {
+	height: 50px;
+	margin-bottom: 8px;
+	background: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.__rdt_custom_sort_icon__ {
+	display: flex;
+	align-items: center;
+}
+
+.__rdt_custom_sort_icon__ svg {
+	margin-left: 5px;
+	opacity: 1 !important;
+	width: 14px !important;
+	height: 20px !important;
+	transform: none !important;
+}
+
+.rdt_Pagination {
+	border: none !important;
+	border-radius: 20px;
+}
+
+.rdt_Pagination span,
+select {
+	font-weight: 400;
+	font-size: 18px;
+	color: var(--gray);
+}
+
+.rdt_Pagination [aria-disabled='false'] svg {
+	fill: var(--gray);
+}
+
+.rmdp-range {
+	background-color: var(--gray) !important;
+}
+
+.rmdp-today span {
+	background-color: var(--gray) !important;
+}
+
+.rmdp-day:hover span {
+	background-color: var(--gray10) !important;
+}
+
+.rmdp-week-day {
+	color: var(--gray) !important;
+}
+
+.rmdp-arrow {
+	border-color: var(--gray) !important;
+}
+
+.rmdp-arrow-container:hover {
+	background-color: var(--gray10) !important;
+}

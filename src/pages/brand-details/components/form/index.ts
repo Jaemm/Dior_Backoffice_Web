@@ -1,0 +1,1 @@
+export { FormBrandDetails } from './form'

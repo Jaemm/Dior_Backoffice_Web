@@ -1,0 +1,1 @@
+export { ResultTable } from './table'

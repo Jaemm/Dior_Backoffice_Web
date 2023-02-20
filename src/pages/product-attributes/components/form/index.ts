@@ -1,0 +1,1 @@
+export { FormProductAttributes } from './form'
