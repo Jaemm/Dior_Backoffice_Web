@@ -28,5 +28,6 @@ export const WrapError = styled.div`
 export const WrapTabs = styled.div`
 	width: 100%;
 	display: flex;
+	min-width: 400px;
 	flex-direction: column;
 `
