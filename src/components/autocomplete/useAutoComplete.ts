@@ -33,22 +33,20 @@ export const useAutoComplete = (products: any, routine: string) => {
 		{
 			select: data => {
 				const set = new Set()
-				data.data.data.forEach((v: any) => set.add(v.code))
-				const uniCode = Array.from(set)
-				const newData = data.data.data
-					.map((v: any) => ({
-						code: v.code,
-						id: v.id,
-						image_url: v.image_url,
-						name: v.name,
-					}))
-					.filter((f: any) => !uniCode.includes(f.code))
+				data.data.data.forEach((v: any) => set.add(v))
+				const newData = Array.from(set).map((v: any) => ({
+					code: v.code,
+					id: v.id,
+					image_url: v.image_url,
+					name: v.name,
+				}))
 
 				const newPro = products
 					.filter((p: any) => !newData.find((v: any) => v.code === p.code))
 					.filter(({ category, ...a }: any) => (category === routine ? a : false))
 
 				const options = [...newData, ...newPro]
+
 				return { ...data.data, options }
 			},
 			onError: (err: any) => {

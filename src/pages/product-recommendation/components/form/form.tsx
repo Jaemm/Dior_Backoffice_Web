@@ -9,13 +9,14 @@ import { ReactComponent as IconExit } from 'assets/icons/exit.svg'
 import { Button, Dialog, IconButton, Tab, Tabs } from '@mui/material'
 
 interface IForm {
+	total: number
 	type: 'add' | 'edit'
 	buttonTitle: string
 	values?: IValue
 	ButtonModal: ({ onClick }: { onClick: () => void }) => JSX.Element
 }
 
-export const Form = ({ type, values, ButtonModal, buttonTitle }: IForm) => {
+export const Form = ({ type, total, values, ButtonModal, buttonTitle }: IForm) => {
 	const {
 		make,
 		skin,
@@ -30,9 +31,10 @@ export const Form = ({ type, values, ButtonModal, buttonTitle }: IForm) => {
 		isLoading,
 		handleClose,
 		handleChange,
+		isLoadingGroups,
 		handleChangeSkin,
 		handleChangeMake,
-	} = useProForm(values, type)
+	} = useProForm(values, type, total)
 
 	return (
 		<>
@@ -88,6 +90,7 @@ export const Form = ({ type, values, ButtonModal, buttonTitle }: IForm) => {
 									values={skin}
 									setValues={setSkin}
 									group={groups.skin}
+									isLoading={isLoadingGroups}
 									onChange={handleChangeSkin}
 								/>
 								<Button disabled={isLoading} type='submit' fullWidth>
@@ -99,6 +102,7 @@ export const Form = ({ type, values, ButtonModal, buttonTitle }: IForm) => {
 									values={make}
 									group={groups.make}
 									setValues={setMake}
+									isLoading={isLoadingGroups}
 									onChange={handleChangeMake}
 								/>
 								<Button disabled={isLoading} type='submit' fullWidth>

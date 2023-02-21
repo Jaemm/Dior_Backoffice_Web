@@ -21,7 +21,7 @@ export const Wrapper = styled.div`
 	position: relative;
 	align-items: center;
 	grid-template-columns: 0.3fr 0.7fr 50px;
-	h6 {
+	.title {
 		font-weight: 500;
 		font-size: 24px;
 		color: var(--gray);

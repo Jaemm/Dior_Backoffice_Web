@@ -38,6 +38,7 @@ const ProductRecommendation = () => {
 						<Form
 							type='add'
 							buttonTitle='Save'
+							total={data.total_size}
 							ButtonModal={({ onClick }) => <Button onClick={onClick}>New Group</Button>}
 						/>
 						<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />

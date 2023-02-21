@@ -15,6 +15,7 @@ export const schema: SchemaOf<FormTypes> = object().shape({
 			is: 1,
 			then: string().nullable().required('recommendation is a required field'),
 		}),
+	preserum: number().notRequired(),
 	lotion: number().notRequired(),
 	serum: number().notRequired(),
 	cream: number().notRequired(),

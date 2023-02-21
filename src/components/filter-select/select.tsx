@@ -1,6 +1,6 @@
+import { WrapDown, Container, Placeholder } from './style'
 import { ReactComponent as IconDown } from 'assets/icons/down.svg'
 import { MenuItem, Select as MuiSelect, SelectChangeEvent } from '@mui/material'
-import { WrapDown, Container, Placeholder } from './style'
 
 interface SelectTypes {
 	label: string
@@ -27,6 +27,7 @@ export const FilterSelect = ({
 				labelId='filter'
 				onChange={onChange}
 				disabled={isLoading}
+				MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
 				IconComponent={props => {
 					return (
 						<WrapDown {...props}>

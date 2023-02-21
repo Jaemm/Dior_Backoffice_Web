@@ -5,10 +5,15 @@ import { notifyError } from 'components/notify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SyntheticEvent, useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { addRecommendations, editRecommendations, productGroups } from 'api/product-recommendations'
+import {
+	addRecommendations,
+	editRecommendations,
+	productRecommendations,
+} from 'api/product-recommendations'
 
 export interface FormTypes {
 	name: string
+	preserum?: number
 	lotion?: number
 	serum?: number
 	cream?: number
@@ -52,10 +57,11 @@ export const defaultValues = {
 	products_selected: [],
 }
 
-export const useProForm = (values?: IValue, type?: string) => {
+export const useProForm = (values?: IValue, type?: string, total?: number) => {
 	const queryClient = useQueryClient()
 	const [value, setValue] = useState(0)
 	const [skin, setSkin] = useState({
+		preserum: {},
 		lotion: {},
 		serum: {},
 		cream: {},
@@ -72,6 +78,7 @@ export const useProForm = (values?: IValue, type?: string) => {
 	})
 
 	const {
+		isLoading: isLoadingGroups,
 		data: groups = {
 			skin: {
 				options: [],
@@ -82,7 +89,7 @@ export const useProForm = (values?: IValue, type?: string) => {
 				products: [],
 			},
 		},
-	} = useQuery(['product-groups'], productGroups, {
+	} = useQuery(['product-groups', total], () => productRecommendations({ per: total, page: 1 }), {
 		select: data => {
 			const setSkin = new Set()
 			const setMake = new Set()
@@ -96,13 +103,13 @@ export const useProForm = (values?: IValue, type?: string) => {
 					image_url: p.image_url,
 					category: p.category,
 				}))
-
 			const optionSkin = data.data.data
 				.filter((v: any) => v.products[0]?.routine === 'Skincare')
 				.map((v: any) => {
 					v.products.map((m: any) => setSkin.add(m.id))
 					return { ...v, label: v?.name, value: v.id }
 				})
+
 			const optionMake = data.data.data
 				.filter((v: any) => v.products[0]?.routine === 'Makeup')
 				.map((v: any) => {
@@ -128,6 +135,7 @@ export const useProForm = (values?: IValue, type?: string) => {
 			notifyError(err.response.data.error)
 		},
 		keepPreviousData: true,
+		enabled: total !== 0,
 	})
 
 	const handleSuccess = async () => {
@@ -176,7 +184,17 @@ export const useProForm = (values?: IValue, type?: string) => {
 						data.make2,
 						data.make3,
 				  ]
-				: [data.lotion, data.serum, data.cream, data.eye, data.uv, undefined, undefined, undefined]
+				: [
+						data.preserum,
+						data.lotion,
+						data.serum,
+						data.cream,
+						data.eye,
+						data.uv,
+						undefined,
+						undefined,
+						undefined,
+				  ]
 
 		if (type === 'edit') {
 			editProduct.mutate({
@@ -227,12 +245,19 @@ export const useProForm = (values?: IValue, type?: string) => {
 			})
 			setValue(1)
 		} else {
+			const preserums = values?.products.find((v: any) => v?.category === 'Pre-serums')
 			const lotions = values?.products.find((v: any) => v?.category === 'Lotions')
 			const serums = values?.products.find((v: any) => v?.category === 'Serums')
 			const creams = values?.products.find((v: any) => v?.category === 'Creams')
 			const eye = values?.products.find((v: any) => v?.category === 'Eye Care')
 			const uv = values?.products.find((v: any) => v?.category === 'UV Protection')
 			setSkin({
+				preserum: {
+					id: preserums?.id,
+					code: preserums?.code,
+					name: preserums?.name,
+					image_url: preserums?.image_url,
+				},
 				lotion: {
 					id: lotions?.id,
 					code: lotions?.code,
@@ -268,6 +293,7 @@ export const useProForm = (values?: IValue, type?: string) => {
 				name: values?.name!,
 				skin: values?.id,
 				tabValue: 0,
+				preserum: preserums?.id,
 				lotion: lotions?.id,
 				serum: serums?.id,
 				cream: creams?.id,
@@ -311,6 +337,7 @@ export const useProForm = (values?: IValue, type?: string) => {
 		isLoading,
 		handleClose,
 		handleChange,
+		isLoadingGroups,
 		handleChangeSkin,
 		handleChangeMake,
 	}

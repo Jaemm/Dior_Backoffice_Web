@@ -5,7 +5,6 @@ import { notifyError } from 'components/notify'
 import { useDebounce } from 'hooks/useDebounce'
 import { useQuery } from '@tanstack/react-query'
 import { Delete } from './components/single-delete'
-import { usePermission } from 'hooks/usePermission'
 import { TableColumn } from 'react-data-table-component'
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg'
 import { productRecommendations } from 'api/product-recommendations'
@@ -39,7 +38,6 @@ interface IParams {
 }
 
 export const useRecommendation = () => {
-	const { user } = usePermission()
 	const [page, setPage] = useState(1)
 	const [limit, setLimit] = useState(10)
 	const [searchValue, setSearchValue] = useState('')
@@ -134,6 +132,7 @@ export const useRecommendation = () => {
 							type='edit'
 							values={row}
 							buttonTitle='Update'
+							total={data.total_size}
 							ButtonModal={({ onClick }) => (
 								<button onClick={onClick} className='edit'>
 									<IconEdit />

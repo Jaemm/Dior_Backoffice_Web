@@ -2,7 +2,6 @@ import { Button } from '@mui/material'
 import { Input } from 'components/input'
 import { Table } from 'components/table'
 import { Select } from 'components/select'
-import { useWatch } from 'react-hook-form'
 import { Spinner } from 'components/spinner'
 import { useCategory } from 'hooks/useCategory'
 import { optionRoutine } from 'constants/routine'
@@ -12,7 +11,7 @@ import { DataRowProductCatalog } from 'types/product-catalog'
 import { ReactComponent as IconUploadImage } from 'assets/icons/upload-image.svg'
 import { Form, Container, LabelUpload, WrapNewButton, WrapButtonsSubmit } from './style'
 
-export const Variation = (values: DataRowProductCatalog) => {
+export const Variation = (values: Partial<DataRowProductCatalog>) => {
 	const { optionsCategory, categoryIsLoading } = useCategory()
 	const { optionsCollection, collectionIsLoading } = useCollection()
 	const {
@@ -23,15 +22,16 @@ export const Variation = (values: DataRowProductCatalog) => {
 		onSubmit,
 		isLoading,
 		handleAdd,
+		imageUrl,
 		handleCancel,
 		handleUpload,
+		editVariation,
 		uploadingImageIsLoading,
 	} = useVariation(values)
-	const image_url = useWatch({ name: 'image_url', control: form.control })
 
 	return (
 		<>
-			{open ? (
+			{open || editVariation.open ? (
 				<Form onSubmit={form.handleSubmit(onSubmit)}>
 					<div className='first'>
 						<Input
@@ -101,13 +101,13 @@ export const Variation = (values: DataRowProductCatalog) => {
 									<Spinner center />
 								</div>
 							)}
-							{image_url === '' ? (
+							{imageUrl === '' ? (
 								<>
 									<IconUploadImage />
 								</>
 							) : (
 								<>
-									<img src={image_url} width='100%' height='100%' alt='image.png' />
+									<img src={imageUrl} width='100%' height='100%' alt='image.png' />
 								</>
 							)}
 							<input
@@ -141,7 +141,7 @@ export const Variation = (values: DataRowProductCatalog) => {
 							isLoading={false}
 							isFetching={false}
 							isSelectableRows={false}
-							data={values.product_variants}
+							data={values?.product_variants ? values.product_variants : []}
 						/>
 					</Container>
 				</>

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Image } from './image'
 import { useAutoComplete } from './useAutoComplete'
 import { Wrapper, IconCheck, IconCancel, Container, WrapCancel } from './style'
@@ -10,7 +11,6 @@ import {
 	CircularProgress,
 	InputAdornment,
 } from '@mui/material'
-import { memo } from 'react'
 
 interface IInput {
 	value: any
@@ -27,7 +27,7 @@ export const AutoCompleteInput = memo(
 
 		return (
 			<Wrapper>
-				<h6>{type}</h6>
+				<div className='title'>{type}</div>
 				<Autocomplete
 					freeSolo
 					id={name}
@@ -35,10 +35,10 @@ export const AutoCompleteInput = memo(
 					disableClearable
 					options={isLoading || isFetching ? [] : data.options}
 					loading={isLoading || isFetching}
-					onChange={(event, newValue) => {
+					onChange={(_, newValue) => {
 						onChange(name, newValue)
 					}}
-					onInputChange={(event, newInputValue) => {
+					onInputChange={(_, newInputValue) => {
 						setSearchValue(newInputValue)
 					}}
 					inputMode='search'

@@ -22,8 +22,20 @@ interface ICatalogForm {
 
 export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm) => {
 	const { isAdmin } = usePermission()
-	const { open, form, value, toggle, isLoading, onSubmit, handleChange, handleNext, handleClose } =
-		useCatForm(values, type)
+	const {
+		open,
+		form,
+		value,
+		toggle,
+		onSubmit,
+		isLoading,
+		handleNext,
+		handleClose,
+		valueEditVar,
+		handleChange,
+		editVariation,
+		handleChangeEditVar,
+	} = useCatForm(values, type)
 
 	const errors = Object.values(form.formState.errors).map((v: any) => v.message)
 	const isVariation = type === 'edit' && values?.routine === 'Makeup'
@@ -54,39 +66,68 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 						<IconExit />
 					</IconButton>
 					<WrapError>
-						{errors.length > 0 && value !== 0 && 'Please fill all required fields!'}
+						{errors?.length > 0 && value !== 0 && 'Please fill all required fields!'}
 					</WrapError>
 					<WrapTabs>
-						<Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
-							{isAdmin && <Tab label='Information' {...a11yProps(0)} />}
-							<Tab label='Countries' {...a11yProps(1)} />
-							<Tab label='Translation' {...a11yProps(2)} />
-							{isVariation && <Tab label='Variation' {...a11yProps(3)} />}
-						</Tabs>
-						<FormProvider {...form}>
-							<form onSubmit={form.handleSubmit(onSubmit)}>
-								{isAdmin && (
-									<TabPanel value={value} index={0}>
-										<Information onNext={handleNext} onClose={handleClose} />
+						{editVariation.open ? (
+							<>
+								<Tabs
+									value={valueEditVar}
+									onChange={handleChangeEditVar}
+									aria-label='basic tabs example'
+								>
+									<Tab
+										label={
+											<div>
+												<div>Country</div>
+												<div>Variations</div>
+											</div>
+										}
+										{...a11yProps(0)}
+									/>
+									<Tab label='Variation' {...a11yProps(1)} />
+								</Tabs>
+								<TabPanel value={valueEditVar} index={0}>
+									<div>need api</div>
+								</TabPanel>
+								<TabPanel value={valueEditVar} index={1}>
+									<Variation {...values} />
+								</TabPanel>
+							</>
+						) : (
+							<>
+								<Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+									{isAdmin && <Tab label='Information' {...a11yProps(0)} />}
+									<Tab label='Countries' {...a11yProps(1)} />
+									<Tab label='Translation' {...a11yProps(2)} />
+									{isVariation && <Tab label='Variation' {...a11yProps(3)} />}
+								</Tabs>
+								<FormProvider {...form}>
+									<form onSubmit={form.handleSubmit(onSubmit)}>
+										{isAdmin && (
+											<TabPanel value={value} index={0}>
+												<Information onNext={handleNext} onClose={handleClose} />
+											</TabPanel>
+										)}
+										<TabPanel value={value} index={isAdmin ? 1 : 0}>
+											<Counties type={type} onNext={handleNext} />
+										</TabPanel>
+										<TabPanel value={value} index={isAdmin ? 2 : 1}>
+											<Translation
+												type={type}
+												onNext={handleNext}
+												title={buttonTitle}
+												isLoading={isLoading}
+											/>
+										</TabPanel>
+									</form>
+								</FormProvider>
+								{isVariation && (
+									<TabPanel value={value} index={3}>
+										<Variation {...values} />
 									</TabPanel>
 								)}
-								<TabPanel value={value} index={isAdmin ? 1 : 0}>
-									<Counties type={type} onNext={handleNext} />
-								</TabPanel>
-								<TabPanel value={value} index={isAdmin ? 2 : 1}>
-									<Translation
-										type={type}
-										onNext={handleNext}
-										title={buttonTitle}
-										isLoading={isLoading}
-									/>
-								</TabPanel>
-							</form>
-						</FormProvider>
-						{isVariation && (
-							<TabPanel value={value} index={3}>
-								<Variation {...values} />
-							</TabPanel>
+							</>
 						)}
 					</WrapTabs>
 				</Container>

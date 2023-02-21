@@ -1,3 +1,4 @@
+import { Spinner } from 'components/spinner'
 import { WrapDown, WrapList, Placeholder } from './style'
 import { AutoCompleteInput } from 'components/autocomplete'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -12,9 +13,10 @@ interface ISkin {
 		products: any[]
 	}
 	onChange: any
+	isLoading: boolean
 }
 
-export const Skin = ({ values, group, setValues, onChange }: ISkin) => {
+export const Skin = ({ values, group, setValues, onChange, isLoading }: ISkin) => {
 	const form = useFormContext()
 
 	return (
@@ -31,24 +33,32 @@ export const Skin = ({ values, group, setValues, onChange }: ISkin) => {
 							fullWidth
 							displayEmpty
 							labelId='skin'
+							disabled={isLoading}
+							MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
 							IconComponent={props => (
-								<WrapDown {...props}>
-									<IconDown />
-								</WrapDown>
+								<WrapDown {...props}>{isLoading ? <Spinner /> : <IconDown />}</WrapDown>
 							)}
 							onChange={e => {
 								const product = group.options.find(v => v.value === e.target.value)
+								const preserums = product?.products.find((v: any) => v?.category === 'Pre-serums')
 								const lotions = product?.products.find((v: any) => v?.category === 'Lotions')
 								const serums = product?.products.find((v: any) => v?.category === 'Serums')
 								const creams = product?.products.find((v: any) => v?.category === 'Creams')
 								const eye = product?.products.find((v: any) => v?.category === 'Eye Care')
 								const uv = product?.products.find((v: any) => v?.category === 'UV Protection')
+								form.setValue('preserum', preserums?.id)
 								form.setValue('lotion', lotions?.id)
 								form.setValue('serum', serums?.id)
 								form.setValue('cream', creams?.id)
 								form.setValue('eye', eye?.id)
 								form.setValue('uv', uv?.id)
 								const values = {
+									preserum: {
+										id: preserums?.id,
+										code: preserums?.code,
+										name: preserums?.name,
+										image_url: preserums?.image_url,
+									},
 									lotion: {
 										id: lotions?.id,
 										code: lotions?.code,
@@ -104,6 +114,14 @@ export const Skin = ({ values, group, setValues, onChange }: ISkin) => {
 				</FormHelperText>
 			</div>
 			<WrapList>
+				<AutoCompleteInput
+					name='preserum'
+					type='Pre-serums'
+					routine='Pre-serums'
+					value={values.preserum}
+					onChange={onChange}
+					products={group.products}
+				/>
 				<AutoCompleteInput
 					name='lotion'
 					type='Lotion'

@@ -8,8 +8,6 @@ export const productRecommendations = <T>(params: T) =>
 export const recProductions = <T>(params: T) =>
 	request('api/pmx/product_recommendations', { params })
 
-export const productGroups = () => request('api/dior/product_recommendation_groups')
-
 export const addRecommendations = <T>(data: T) =>
 	request.post('api/dior/product_recommendation_groups', { ...data, locations: [] })
 

@@ -1,3 +1,14 @@
+export interface FormTypesVarition {
+	category: string
+	code: string
+	collection: string
+	image_url?: string
+	link?: string
+	name: string
+	routine: string
+	id?: number
+}
+
 export type DataRowProductCatalog = {
 	category: string
 	code: string

@@ -5,6 +5,7 @@ import { useToggle } from 'hooks/useToggle'
 import { notifyError } from 'components/notify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { DataRowProductCatalog } from 'types/product-catalog'
+import { useProductCatalogStore } from 'store/product-catalog'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postProductCatalog, pustProductCatalog } from 'api/product-catalog'
 
@@ -38,6 +39,11 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 	const queryClient = useQueryClient()
 	const [value, setValue] = useState(0)
 	const [open, toggle, setToggle] = useToggle()
+	const [valueEditVar, setValueEditVar] = useState(0)
+	const { editVariation, setEditVariation } = useProductCatalogStore(state => ({
+		editVariation: state.editVariation,
+		setEditVariation: state.setEditVariation,
+	}))
 
 	const form = useForm<FormTypes>({
 		resolver: yupResolver(schema),
@@ -74,14 +80,18 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 		},
 	)
 
-	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+	const handleChange = (_: React.SyntheticEvent, newValue: number) => {
 		setValue(newValue)
 	}
 
+	const handleChangeEditVar = (_: React.SyntheticEvent, newValue: number) => {
+		setValueEditVar(newValue)
+	}
 	const handleClose = () => {
 		setToggle(false)
 		form.reset(defaultValues)
 		setValue(0)
+		setEditVariation({ open: false, values: {} })
 	}
 
 	const handleNext = (n: number) => setValue(n)
@@ -96,5 +106,18 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 
 	const isLoading = addPost.isLoading || editPost.isLoading
 
-	return { open, form, value, toggle, isLoading, onSubmit, handleChange, handleNext, handleClose }
+	return {
+		open,
+		form,
+		value,
+		toggle,
+		onSubmit,
+		isLoading,
+		handleNext,
+		handleClose,
+		valueEditVar,
+		handleChange,
+		editVariation,
+		handleChangeEditVar,
+	}
 }

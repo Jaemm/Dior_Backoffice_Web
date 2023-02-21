@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import { FormTypes } from './useVariation'
 import { number, object, SchemaOf, string } from 'yup'
 

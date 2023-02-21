@@ -1,59 +1,65 @@
 import { WrapButtons } from './style'
 import { schema } from './form.schema'
 import { deleteData } from 'api/delete'
-import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useToggle } from 'hooks/useToggle'
+import { useEffect, useMemo, useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TableColumn } from 'react-data-table-component'
 import { DataRowProductCatalog } from 'types/product-catalog'
 import { notifyError, notifySuccess } from 'components/notify'
+import { useProductCatalogStore } from 'store/product-catalog'
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ReactComponent as IconDelete } from 'assets/icons/delete.svg'
 import { postProductCatalog, pustProductCatalog, uploadImage, uploadUrl } from 'api/product-catalog'
 
 export interface FormTypes {
-	category: string
+	id?: number
 	code: string
+	name: string
+	link?: string
+	routine: string
+	category: string
 	collection: string
 	image_url?: string
-	link?: string
-	name: string
-	routine: string
-	id?: number
 }
 
 export type DataRow = {
-	category: string
-	code: string
-	collection: string
-	description: string
 	id: number
-	image_url: string
+	code: string
 	link: string
 	name: string
-	product_recommendation_id: number
-	product_type: string
-	routine: string
 	shades: string
+	routine: string
+	category: string
+	image_url: string
+	collection: string
+	description: string
+	product_type: string
+	product_recommendation_id: number
 }
 
 export const defaultValues = {
+	link: '',
 	code: '',
 	name: '',
-	link: '',
-	category: '',
-	collection: '',
 	routine: '',
+	category: '',
 	image_url: '',
+	collection: '',
 }
 
-export const useVariation = (values: DataRowProductCatalog) => {
+export const useVariation = (values: Partial<DataRowProductCatalog>) => {
+	const [imageUrl, setImageUrl] = useState<string | undefined>('')
+	const [type, setType] = useState('')
 	const queryClient = useQueryClient()
 	const [image, setImage] = useState('')
 	const [open, toggle, setToggle] = useToggle()
-	const [type, setType] = useState('')
+	const { editVariation, setEditVariation } = useProductCatalogStore(state => ({
+		editVariation: state.editVariation,
+		setEditVariation: state.setEditVariation,
+	}))
 
 	const form = useForm<FormTypes>({
 		resolver: yupResolver(schema),
@@ -61,10 +67,19 @@ export const useVariation = (values: DataRowProductCatalog) => {
 		defaultValues,
 	})
 
+	useEffect(() => {
+		if (editVariation.open) {
+			setType('edit')
+			form.reset(editVariation.values)
+			setImageUrl(editVariation.values?.image_url)
+		}
+	}, [])
+
 	const handleSuccess = async () => {
 		await queryClient.invalidateQueries(['product-catalog-list'])
 		await setToggle(false)
 		await form.reset(defaultValues)
+		await setImageUrl('')
 	}
 
 	const putUploadUrl = useMutation(uploadUrl)
@@ -76,6 +91,7 @@ export const useVariation = (values: DataRowProductCatalog) => {
 				{
 					onSuccess: () => {
 						form.setValue('image_url', data.data?.public_url)
+						setImageUrl(data.data?.public_url)
 					},
 				},
 			)
@@ -127,27 +143,39 @@ export const useVariation = (values: DataRowProductCatalog) => {
 		setType('edit')
 		form.reset(row)
 		setToggle(true)
+		setImageUrl(row?.image_url)
+		setEditVariation({ open: true, values: row })
 	}
 
 	const handleAdd = () => {
 		setType('add')
 		setToggle(true)
+		setImageUrl('')
 		form.reset(defaultValues)
 	}
 
 	const handleCancel = () => {
 		setToggle(false)
 		form.reset(defaultValues)
+		setEditVariation({ open: false, values: {} })
 	}
 
 	const onSubmit = (data: FormTypes) => {
 		if (type === 'edit') {
-			editPost.mutate({
-				...data,
-				product_recommendation_id: values.id,
-				product_translations: values.product_translations,
-				countries: values.countries,
-			})
+			editPost.mutate(
+				{
+					...data,
+					product_recommendation_id: values.id,
+					product_translations: values.product_translations,
+					countries: values.countries,
+				},
+				{
+					onSuccess: () => {
+						setEditVariation({ open: false, values: {} })
+						setImageUrl('')
+					},
+				},
+			)
 		} else {
 			addPost.mutate({
 				...data,
@@ -213,8 +241,10 @@ export const useVariation = (values: DataRowProductCatalog) => {
 		onSubmit,
 		isLoading,
 		handleAdd,
+		imageUrl,
 		handleCancel,
 		handleUpload,
+		editVariation,
 		uploadingImageIsLoading,
 	}
 }

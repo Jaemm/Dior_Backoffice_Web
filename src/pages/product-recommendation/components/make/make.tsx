@@ -1,8 +1,9 @@
+import { Spinner } from 'components/spinner'
+import { WrapList, WrapDown, Placeholder } from './style'
+import { AutoCompleteInput } from 'components/autocomplete'
+import { Controller, useFormContext } from 'react-hook-form'
 import { FormHelperText, MenuItem, Select } from '@mui/material'
 import { ReactComponent as IconDown } from 'assets/icons/down.svg'
-import { WrapList, WrapDown, Placeholder } from './style'
-import { Controller, useFormContext } from 'react-hook-form'
-import { AutoCompleteInput } from 'components/autocomplete'
 
 interface IMake {
 	values: any
@@ -12,9 +13,10 @@ interface IMake {
 		products: any[]
 	}
 	onChange: any
+	isLoading: boolean
 }
 
-export const Make = ({ values, group, setValues, onChange }: IMake) => {
+export const Make = ({ values, group, setValues, onChange, isLoading }: IMake) => {
 	const form = useFormContext()
 	return (
 		<div>
@@ -30,10 +32,9 @@ export const Make = ({ values, group, setValues, onChange }: IMake) => {
 							fullWidth
 							displayEmpty
 							labelId='make'
+							disabled={isLoading}
 							IconComponent={props => (
-								<WrapDown {...props}>
-									<IconDown />
-								</WrapDown>
+								<WrapDown {...props}>{isLoading ? <Spinner /> : <IconDown />}</WrapDown>
 							)}
 							onChange={e => {
 								const product = group.options.find((v: any) => v.value === e.target.value)
