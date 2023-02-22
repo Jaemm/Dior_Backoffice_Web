@@ -38,6 +38,7 @@ export type DataRow = {
 	description: string
 	product_type: string
 	product_recommendation_id: number
+	countries: string[]
 }
 
 export const defaultValues = {

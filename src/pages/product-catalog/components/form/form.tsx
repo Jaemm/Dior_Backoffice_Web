@@ -12,6 +12,7 @@ import { Container, WrapError, WrapTabs } from './style'
 import { a11yProps, TabPanel } from 'components/tab-panel'
 import { DataRowProductCatalog } from 'types/product-catalog'
 import { ReactComponent as IconExit } from 'assets/icons/exit.svg'
+import { VariationCountries } from '../variation-countries'
 
 interface ICatalogForm {
 	type: 'add' | 'edit'
@@ -88,7 +89,7 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 									<Tab label='Variation' {...a11yProps(1)} />
 								</Tabs>
 								<TabPanel value={valueEditVar} index={0}>
-									<div>need api</div>
+									<VariationCountries />
 								</TabPanel>
 								<TabPanel value={valueEditVar} index={1}>
 									<Variation {...values} />

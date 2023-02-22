@@ -7,6 +7,7 @@ export interface FormTypesVarition {
 	name: string
 	routine: string
 	id?: number
+	countries: string[]
 }
 
 export type DataRowProductCatalog = {
@@ -34,6 +35,7 @@ export type DataRowProductCatalog = {
 		product_type: string
 		routine: string
 		shades: string
+		countries: string[]
 	}[]
 	routine: string
 	shades: string
