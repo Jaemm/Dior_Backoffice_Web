@@ -18,3 +18,11 @@ export const WrapList = styled.div`
 	grid-template-columns: 1fr 1fr;
 	margin-bottom: 20px;
 `
+
+export const WrapSpinner = styled.div`
+	width: 100%;
+	display: flex;
+	min-height: 300px;
+	align-items: center;
+	justify-content: center;
+`

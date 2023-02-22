@@ -57,10 +57,14 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 	const queryClient = useQueryClient()
 	const [image, setImage] = useState('')
 	const [open, toggle, setToggle] = useToggle()
-	const { editVariation, setEditVariation } = useProductCatalogStore(state => ({
-		editVariation: state.editVariation,
-		setEditVariation: state.setEditVariation,
-	}))
+	const { countries, setCountries, editVariation, setEditVariation } = useProductCatalogStore(
+		state => ({
+			countries: state.countries,
+			setCountries: state.setCountries,
+			editVariation: state.editVariation,
+			setEditVariation: state.setEditVariation,
+		}),
+	)
 
 	const form = useForm<FormTypes>({
 		resolver: yupResolver(schema),
@@ -159,21 +163,27 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 		setToggle(false)
 		form.reset(defaultValues)
 		setEditVariation({ open: false, values: {} })
+		setCountries([])
 	}
 
 	const onSubmit = (data: FormTypes) => {
+		const newCountries = countries
+			.filter(v => v.label !== 'All')
+			.filter(({ value }) => value)
+			.map(({ label }) => label)
 		if (type === 'edit') {
 			editPost.mutate(
 				{
 					...data,
+					countries: newCountries,
 					product_recommendation_id: values.id,
 					product_translations: values.product_translations,
-					countries: values.countries,
 				},
 				{
 					onSuccess: () => {
 						setEditVariation({ open: false, values: {} })
 						setImageUrl('')
+						setCountries([])
 					},
 				},
 			)

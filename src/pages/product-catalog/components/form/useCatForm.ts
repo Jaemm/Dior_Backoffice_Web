@@ -40,7 +40,8 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 	const [value, setValue] = useState(0)
 	const [open, toggle, setToggle] = useToggle()
 	const [valueEditVar, setValueEditVar] = useState(0)
-	const { editVariation, setEditVariation } = useProductCatalogStore(state => ({
+	const { editVariation, setCountries, setEditVariation } = useProductCatalogStore(state => ({
+		setCountries: state.setCountries,
 		editVariation: state.editVariation,
 		setEditVariation: state.setEditVariation,
 	}))
@@ -94,7 +95,10 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 		setEditVariation({ open: false, values: {} })
 	}
 
-	const handleBackVar = () => setEditVariation({ open: false, values: {} })
+	const handleBackVar = () => {
+		setCountries([])
+		setEditVariation({ open: false, values: {} })
+	}
 
 	const handleNext = (n: number) => setValue(n)
 
