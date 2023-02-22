@@ -1,17 +1,28 @@
 import { Input } from 'components/input'
 import { Controller } from 'react-hook-form'
-import { useAdd, optionsRecommendation } from './useAdd'
 import { ReactComponent as IconExit } from 'assets/icons/exit.svg'
 import { ReactComponent as IconDown } from 'assets/icons/down.svg'
+import { useMarketForm, optionsRecommendation, IValue } from './useMarketForm'
 import { WrapDown, Container, WrapButtons, Placeholder, WrapRecommendation } from './style'
 import { Button, Dialog, FormHelperText, IconButton, MenuItem, Select } from '@mui/material'
 
-export const Add = () => {
-	const { open, form, resAdd, toggle, onSubmit, handleClose } = useAdd()
+interface IMarket {
+	title: string
+	values?: IValue
+	type: 'add' | 'edit'
+	buttonTitle: string
+	ButtonModal: ({ onClick }: { onClick: () => void }) => JSX.Element
+}
+
+export const FormMarket = ({ title, type, values, buttonTitle, ButtonModal }: IMarket) => {
+	const { open, form, resAdd, toggle, resUpdate, onSubmit, handleClose } = useMarketForm(
+		values,
+		type,
+	)
 
 	return (
 		<>
-			<Button onClick={toggle}>Add</Button>
+			<ButtonModal onClick={toggle} />
 			<Dialog
 				open={open}
 				scroll='body'
@@ -33,7 +44,7 @@ export const Add = () => {
 					<IconButton onClick={handleClose} className='exit' aria-label='exit'>
 						<IconExit />
 					</IconButton>
-					<h3>Add a new country</h3>
+					<h3>{title}</h3>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
 						<Input
 							id='code'
@@ -93,8 +104,8 @@ export const Add = () => {
 							<Button variant='outlined' onClick={handleClose}>
 								Cancel
 							</Button>
-							<Button disabled={resAdd.isLoading} type='submit'>
-								Save
+							<Button disabled={resAdd.isLoading || resUpdate.isLoading} type='submit'>
+								{buttonTitle}
 							</Button>
 						</WrapButtons>
 					</form>

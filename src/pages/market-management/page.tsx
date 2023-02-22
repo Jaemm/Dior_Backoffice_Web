@@ -1,10 +1,10 @@
 import { sampleCon } from './excel'
 import { Button } from '@mui/material'
-import { Add } from './components/add'
 import { Table } from 'components/table'
 import { Search } from 'components/search'
 import { Upload } from 'components/upload'
 import { Delete } from './components/delete'
+import { FormMarket } from './components/form'
 import { DataRow, useMarket } from './useMarket'
 import { ExportExcel } from 'components/export-excel'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
@@ -25,7 +25,12 @@ const MarketManagement = () => {
 						<Button onClick={handleClear}>Reset</Button>
 					</LeftSide>
 					<RightSide>
-						<Add />
+						<FormMarket
+							type='add'
+							buttonTitle='Save'
+							title='Add a new country'
+							ButtonModal={({ onClick }) => <Button onClick={onClick}>Add</Button>}
+						/>
 						<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
 						<Upload
 							file={sampleCon}

@@ -1,9 +1,12 @@
+import { WrapEdit } from './style'
 import { useMemo, useState } from 'react'
 import { getCountries } from 'api/countries'
+import { FormMarket } from './components/form'
 import { notifyError } from 'components/notify'
 import { useDebounce } from 'hooks/useDebounce'
 import { useQuery } from '@tanstack/react-query'
 import { TableColumn } from 'react-data-table-component'
+import { ReactComponent as IconEdit } from 'assets/icons/edit.svg'
 
 export type DataRow = {
 	code: string
@@ -62,6 +65,30 @@ export const useMarket = () => {
 				selector: row => row.default_recommendation,
 				sortable: true,
 				center: true,
+			},
+			{
+				name: 'Edit',
+				selector: row => row.id,
+				center: true,
+				cell: row => (
+					<FormMarket
+						type='edit'
+						values={row}
+						buttonTitle='Update'
+						title='Update country'
+						ButtonModal={({ onClick }) => (
+							<WrapEdit onClick={onClick}>
+								<IconEdit />
+							</WrapEdit>
+						)}
+					/>
+				),
+				style: {
+					padding: 0,
+					borderRadius: '0 10px 10px 0',
+					background: 'linear-gradient(180deg, #303030 0%, #747474 100%)',
+				},
+				width: '60px',
 			},
 		],
 		[],

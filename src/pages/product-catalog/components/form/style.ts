@@ -31,3 +31,9 @@ export const WrapTabs = styled.div`
 	min-width: 400px;
 	flex-direction: column;
 `
+
+export const WrapBack = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+`

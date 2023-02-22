@@ -6,9 +6,9 @@ import { useCatForm } from './useCatForm'
 import { Information } from '../information'
 import { Translation } from '../translation'
 import { FormProvider } from 'react-hook-form'
-import { Dialog, IconButton } from '@mui/material'
+import { Button, Dialog, IconButton } from '@mui/material'
 import { usePermission } from 'hooks/usePermission'
-import { Container, WrapError, WrapTabs } from './style'
+import { Container, WrapError, WrapTabs, WrapBack } from './style'
 import { a11yProps, TabPanel } from 'components/tab-panel'
 import { DataRowProductCatalog } from 'types/product-catalog'
 import { ReactComponent as IconExit } from 'assets/icons/exit.svg'
@@ -34,6 +34,7 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 		handleClose,
 		valueEditVar,
 		handleChange,
+		handleBackVar,
 		editVariation,
 		handleChangeEditVar,
 	} = useCatForm(values, type)
@@ -66,6 +67,17 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 					<IconButton onClick={handleClose} className='exit' aria-label='exit'>
 						<IconExit />
 					</IconButton>
+					<WrapBack>
+						{editVariation.open && (
+							<Button
+								style={{ width: 'fit-content', height: '40px' }}
+								variant='outlined'
+								onClick={handleBackVar}
+							>
+								Back to product
+							</Button>
+						)}
+					</WrapBack>
 					<WrapError>
 						{errors?.length > 0 && value !== 0 && 'Please fill all required fields!'}
 					</WrapError>

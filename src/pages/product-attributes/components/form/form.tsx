@@ -46,7 +46,6 @@ export const FormProductAttributes = ({
 	return (
 		<>
 			<ButtonModal onClick={toggle} />
-
 			<Dialog
 				open={open}
 				scroll='body'

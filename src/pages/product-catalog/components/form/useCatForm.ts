@@ -94,6 +94,8 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 		setEditVariation({ open: false, values: {} })
 	}
 
+	const handleBackVar = () => setEditVariation({ open: false, values: {} })
+
 	const handleNext = (n: number) => setValue(n)
 
 	const onSubmit = (data: FormTypes) => {
@@ -117,6 +119,7 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 		handleClose,
 		valueEditVar,
 		handleChange,
+		handleBackVar,
 		editVariation,
 		handleChangeEditVar,
 	}

@@ -40,3 +40,12 @@ export const RightSide = styled.div`
 	justify-content: flex-end;
 	grid-template-columns: auto auto auto auto;
 `
+
+export const WrapEdit = styled.div`
+	width: 100%;
+	height: 100%;
+	display: flex;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+`

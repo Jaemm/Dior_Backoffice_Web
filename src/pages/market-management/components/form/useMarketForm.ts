@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
 import { schema } from './form.schema'
 import { useForm } from 'react-hook-form'
 import { useToggle } from 'hooks/useToggle'
-import { postCountries } from 'api/countries'
+import { postCountries, putCountries } from 'api/countries'
 import { notifyError } from 'components/notify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -18,13 +19,21 @@ export const defaultValues = {
 	default_recommendation: '',
 }
 
+export type IValue = {
+	code: string
+	default_recommendation: string
+	id: number
+	name: string
+	url_and_port: string
+}
+
 export const optionsRecommendation = [
 	{ label: 'Recommendation Europe', value: 'Recommendation Europe' },
 	{ label: 'Recommendation Asia', value: 'Recommendation Asia' },
 	{ label: 'Recommendation Japan', value: 'Recommendation Japan' },
 ]
 
-export const useAdd = () => {
+export const useMarketForm = (values?: IValue, type?: string) => {
 	const queryClient = useQueryClient()
 	const [open, toggle, setToggle] = useToggle()
 
@@ -33,6 +42,16 @@ export const useAdd = () => {
 		mode: 'onChange',
 		defaultValues,
 	})
+
+	useEffect(() => {
+		if (type === 'edit') {
+			form.reset({
+				code: values?.code,
+				name: values?.name,
+				default_recommendation: values?.default_recommendation,
+			})
+		}
+	}, [open])
 
 	const handleSuccess = async () => {
 		await queryClient.invalidateQueries(['all-countries'])
@@ -52,9 +71,20 @@ export const useAdd = () => {
 		},
 	})
 
+	const resUpdate = useMutation((data: FormTypes) => putCountries<FormTypes>(data, values?.id), {
+		onSuccess: handleSuccess,
+		onError: (err: any) => {
+			notifyError(err.message)
+		},
+	})
+
 	const onSubmit = (data: FormTypes) => {
-		resAdd.mutate(data)
+		if (type === 'edit') {
+			resUpdate.mutate(data)
+		} else {
+			resAdd.mutate(data)
+		}
 	}
 
-	return { open, form, resAdd, toggle, setToggle, onSubmit, handleClose }
+	return { open, form, resAdd, toggle, resUpdate, onSubmit, handleClose }
 }
