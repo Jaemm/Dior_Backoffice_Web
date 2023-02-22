@@ -1,13 +1,13 @@
-import { useCountries } from './useCountries'
 import { Spinner } from 'components/spinner'
+import { useCountries } from './useCountries'
+import { Checkbox, FormControlLabel } from '@mui/material'
 import { WrapList, Container, WrapSpinner } from './style'
-import { Button, Checkbox, FormControlLabel } from '@mui/material'
 
 export const VariationCountries = () => {
-	const { countries, isLoading, setCountries } = useCountries()
+	const { countries, isLoading, isFetching, setCountries } = useCountries()
 	return (
 		<Container>
-			{isLoading ? (
+			{isLoading || isFetching ? (
 				<WrapSpinner>
 					<Spinner center />
 				</WrapSpinner>

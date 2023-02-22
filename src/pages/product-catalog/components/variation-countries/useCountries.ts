@@ -10,31 +10,27 @@ export const useCountries = () => {
 		editVariation: state.editVariation,
 	}))
 
-	const { isLoading } = useQuery(
-		['all-countries-variation', editVariation.values?.id],
-		getCountries,
-		{
-			select: data => {
-				const options = data.data.data.map((v: any) => ({ label: v.name, value: v.name }))
-				return { ...data.data, data: options }
-			},
-			onSuccess: data => {
-				const all = data.data.every((c: any) => editVariation.values?.countries?.includes(c.label))
-				const newCountries = [{ label: 'All', value: '' }, ...data.data].map((v: any) => ({
-					...v,
-					value:
-						v.label === 'All'
-							? all
-							: !!editVariation.values?.countries?.find((a: any) => a === v.label),
-				}))
-				setCountries(newCountries)
-			},
-			onError: (err: any) => {
-				notifyError(err.response.data.error)
-			},
-			keepPreviousData: true,
+	const { isLoading, isFetching } = useQuery(['all-countries'], getCountries, {
+		select: data => {
+			const options = data.data.data.map((v: any) => ({ label: v.name, value: v.name }))
+			return { ...data.data, data: options }
 		},
-	)
+		onSuccess: data => {
+			const all = data.data.every((c: any) => editVariation.values?.countries?.includes(c.label))
+			const newCountries = [{ label: 'All', value: '' }, ...data.data].map((v: any) => ({
+				...v,
+				value:
+					v.label === 'All'
+						? all
+						: !!editVariation.values?.countries?.find((a: any) => a === v.label),
+			}))
+			setCountries(newCountries)
+		},
+		onError: (err: any) => {
+			notifyError(err.response.data.error)
+		},
+		keepPreviousData: true,
+	})
 
-	return { countries, isLoading, editVariation, setCountries }
+	return { countries, isLoading, isFetching, setCountries }
 }
