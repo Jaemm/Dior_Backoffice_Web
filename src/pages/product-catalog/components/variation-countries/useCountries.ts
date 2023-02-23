@@ -17,13 +17,21 @@ export const useCountries = () => {
 		},
 		onSuccess: data => {
 			const all = data.data.every((c: any) => editVariation.values?.countries?.includes(c.label))
-			const newCountries = [{ label: 'All', value: '' }, ...data.data].map((v: any) => ({
-				...v,
-				value:
-					v.label === 'All'
-						? all
-						: !!editVariation.values?.countries?.find((a: any) => a === v.label),
-			}))
+			const newCountries = [{ label: 'All', value: '' }, ...data.data]
+				.map((v: any) => ({
+					...v,
+					value:
+						v.label === 'All'
+							? all
+							: !!editVariation.values?.countries?.find((a: any) => a === v.label),
+				}))
+				.map(g => ({
+					label: g.label,
+					value: countries.find(s => s.label === g.label)?.value
+						? countries.find(s => s.label === g.label)?.value
+						: g.value,
+				}))
+
 			setCountries(newCountries)
 		},
 		onError: (err: any) => {

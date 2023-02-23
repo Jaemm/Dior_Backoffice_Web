@@ -36,6 +36,7 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 		handleChange,
 		handleBackVar,
 		editVariation,
+		handleNextVar,
 		handleChangeEditVar,
 	} = useCatForm(values, type)
 
@@ -101,7 +102,7 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 									<Tab label='Variation' {...a11yProps(1)} />
 								</Tabs>
 								<TabPanel value={valueEditVar} index={0}>
-									<VariationCountries />
+									<VariationCountries onNext={handleNextVar} />
 								</TabPanel>
 								<TabPanel value={valueEditVar} index={1}>
 									<Variation {...values} />

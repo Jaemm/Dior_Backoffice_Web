@@ -1,12 +1,13 @@
 import { Spinner } from 'components/spinner'
 import { useCountries } from './useCountries'
-import { Checkbox, FormControlLabel } from '@mui/material'
+import { Box, Button, Checkbox, FormControlLabel } from '@mui/material'
 import { WrapList, Container, WrapSpinner } from './style'
 
-export const VariationCountries = () => {
+export const VariationCountries = ({ onNext }: { onNext: (n: number) => void }) => {
 	const { countries, isLoading, isFetching, setCountries } = useCountries()
 	return (
 		<Container>
+			<p>This variation is available for the below countries</p>
 			{isLoading || isFetching ? (
 				<WrapSpinner>
 					<Spinner center />
@@ -45,6 +46,9 @@ export const VariationCountries = () => {
 					))}
 				</WrapList>
 			)}
+			<Box style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+				<Button onClick={() => onNext(1)}>Next</Button>
+			</Box>
 		</Container>
 	)
 }

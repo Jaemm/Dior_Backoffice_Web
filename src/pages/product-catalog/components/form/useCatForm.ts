@@ -62,6 +62,7 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 		await queryClient.invalidateQueries(['product-catalog-list'])
 		await setToggle(false)
 		await form.reset(defaultValues)
+		await setCountries([])
 	}
 
 	const addPost = useMutation((data: FormTypes) => postProductCatalog<FormTypes>(data), {
@@ -89,6 +90,7 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 		setValueEditVar(newValue)
 	}
 	const handleClose = () => {
+		setCountries([])
 		setToggle(false)
 		form.reset(defaultValues)
 		setValue(0)
@@ -101,6 +103,7 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 	}
 
 	const handleNext = (n: number) => setValue(n)
+	const handleNextVar = (n: number) => setValueEditVar(n)
 
 	const onSubmit = (data: FormTypes) => {
 		if (type === 'edit') {
@@ -125,6 +128,7 @@ export const useCatForm = (values?: DataRowProductCatalog, type?: string) => {
 		handleChange,
 		handleBackVar,
 		editVariation,
+		handleNextVar,
 		handleChangeEditVar,
 	}
 }
