@@ -16,14 +16,14 @@ interface IInput {
 	value: any
 	type: string
 	name: string
-	products: any[]
 	onChange: any
 	routine: string
+	loading: boolean
 }
 
 export const AutoCompleteInput = memo(
-	({ name, type, value, products, onChange, routine }: IInput) => {
-		const { data, isLoading, isFetching, setSearchValue } = useAutoComplete(products, routine)
+	({ name, type, value, loading, onChange, routine }: IInput) => {
+		const { data, isLoading, isFetching, setSearchValue } = useAutoComplete(routine)
 
 		return (
 			<Wrapper>
@@ -33,8 +33,8 @@ export const AutoCompleteInput = memo(
 					id={name}
 					value={value}
 					disableClearable
-					options={isLoading || isFetching ? [] : data.options}
-					loading={isLoading || isFetching}
+					options={isLoading || isFetching || loading ? [] : data.options}
+					loading={isLoading || isFetching || loading}
 					onChange={(_, newValue) => {
 						onChange(name, newValue)
 					}}
@@ -71,7 +71,7 @@ export const AutoCompleteInput = memo(
 									...params.InputProps,
 									endAdornment: (
 										<InputAdornment position='end'>
-											{isLoading || isFetching ? (
+											{isLoading || isFetching || loading ? (
 												<CircularProgress size='20px' sx={{ marginRight: '5px' }} />
 											) : (
 												data.options.find((v: any) => v?.id === value?.id) && (

@@ -11,7 +11,7 @@ interface IParams {
 	filter_by: string
 }
 
-export const useAutoComplete = (products: any, routine: string) => {
+export const useAutoComplete = (routine: string) => {
 	const [searchValue, setSearchValue] = useState('')
 	const search = useDebounce(searchValue, 500)
 
@@ -41,11 +41,7 @@ export const useAutoComplete = (products: any, routine: string) => {
 					name: v.name,
 				}))
 
-				const newPro = products
-					.filter((p: any) => !newData.find((v: any) => v.code === p.code))
-					.filter(({ category, ...a }: any) => (category === routine ? a : false))
-
-				const options = [...newData, ...newPro]
+				const options = [...newData]
 
 				return { ...data.data, options }
 			},

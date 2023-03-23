@@ -1,3 +1,4 @@
+import { useMake } from './useMake'
 import { Spinner } from 'components/spinner'
 import { WrapList, WrapDown, Placeholder } from './style'
 import { AutoCompleteInput } from 'components/autocomplete'
@@ -8,16 +9,13 @@ import { ReactComponent as IconDown } from 'assets/icons/down.svg'
 interface IMake {
 	values: any
 	setValues: any
-	group: {
-		options: any[]
-		products: any[]
-	}
 	onChange: any
-	isLoading: boolean
 }
 
-export const Make = ({ values, group, setValues, onChange, isLoading }: IMake) => {
+export const Make = ({ values, setValues, onChange }: IMake) => {
 	const form = useFormContext()
+	const { data, mutate, isLoading, isLoadingMutate } = useMake()
+
 	return (
 		<div>
 			<div>
@@ -32,52 +30,59 @@ export const Make = ({ values, group, setValues, onChange, isLoading }: IMake) =
 							fullWidth
 							displayEmpty
 							labelId='make'
-							disabled={isLoading}
+							disabled={isLoading || isLoadingMutate}
 							IconComponent={props => (
-								<WrapDown {...props}>{isLoading ? <Spinner /> : <IconDown />}</WrapDown>
+								<WrapDown {...props}>
+									{isLoading || isLoadingMutate ? <Spinner /> : <IconDown />}
+								</WrapDown>
 							)}
+							MenuProps={{ PaperProps: { sx: { maxHeight: 300 } } }}
 							onChange={e => {
-								const product = group.options.find((v: any) => v.value === e.target.value)
-								const fluids = product?.products.find((v: any) => v?.category === 'Fluids')
-								const concealer = product?.products.find((v: any) => v?.category === 'Concealer')
-								const powders = product?.products.find((v: any) => v?.category === 'Powders')
-								form.setValue('make1', fluids?.id)
-								form.setValue('make2', concealer?.id)
-								form.setValue('make3', powders?.id)
-								const values = {
-									make1: {
-										id: fluids?.id,
-										code: fluids?.code,
-										name: fluids?.name,
-										image_url: fluids?.image_url,
+								mutate(e.target.value, {
+									onSuccess: data => {
+										const products = data.data.products
+										const fluids = products.find((v: any) => v?.category === 'Fluids')
+										const concealer = products.find((v: any) => v?.category === 'Concealer')
+										const powders = products.find((v: any) => v?.category === 'Powders')
+										form.setValue('make1', fluids?.id)
+										form.setValue('make2', concealer?.id)
+										form.setValue('make3', powders?.id)
+										const values = {
+											make1: {
+												id: fluids?.id,
+												code: fluids?.code,
+												name: fluids?.name,
+												image_url: fluids?.image_url,
+											},
+											make2: {
+												id: concealer?.id,
+												code: concealer?.code,
+												name: concealer?.name,
+												image_url: concealer?.image_url,
+											},
+											make3: {
+												id: powders?.id,
+												code: powders?.code,
+												name: powders?.name,
+												image_url: powders?.image_url,
+											},
+										}
+										setValues(values)
+										onChange(e)
 									},
-									make2: {
-										id: concealer?.id,
-										code: concealer?.code,
-										name: concealer?.name,
-										image_url: concealer?.image_url,
-									},
-									make3: {
-										id: powders?.id,
-										code: powders?.code,
-										name: powders?.name,
-										image_url: powders?.image_url,
-									},
-								}
-								setValues(values)
-								onChange(e)
+								})
 							}}
 							renderValue={value => {
 								return value === null || value === undefined ? (
 									<Placeholder>Select Recommendation</Placeholder>
 								) : (
-									group.options.find(v => Number(v.value) === Number(value))?.label
+									data.find((v: any) => Number(v.id) === Number(value))?.name
 								)
 							}}
 						>
-							{group.options.map(({ value, label }) => (
-								<MenuItem key={value} value={value}>
-									{label}
+							{data.map(({ id, name }: any) => (
+								<MenuItem key={id} value={id}>
+									{name}
 								</MenuItem>
 							))}
 						</Select>
@@ -94,7 +99,7 @@ export const Make = ({ values, group, setValues, onChange, isLoading }: IMake) =
 					type='Make-up 1'
 					value={values.make1}
 					onChange={onChange}
-					products={group.products}
+					loading={isLoadingMutate}
 				/>
 				<AutoCompleteInput
 					name='make2'
@@ -102,7 +107,7 @@ export const Make = ({ values, group, setValues, onChange, isLoading }: IMake) =
 					type='Make-up 2'
 					value={values.make2}
 					onChange={onChange}
-					products={group.products}
+					loading={isLoadingMutate}
 				/>
 				<AutoCompleteInput
 					name='make3'
@@ -110,7 +115,7 @@ export const Make = ({ values, group, setValues, onChange, isLoading }: IMake) =
 					type='Make-up 3'
 					value={values.make3}
 					onChange={onChange}
-					products={group.products}
+					loading={isLoadingMutate}
 				/>
 			</WrapList>
 		</div>

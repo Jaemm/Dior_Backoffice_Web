@@ -4,12 +4,8 @@ import { useToggle } from 'hooks/useToggle'
 import { notifyError } from 'components/notify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SyntheticEvent, useEffect, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-	addRecommendations,
-	editRecommendations,
-	productRecommendations,
-} from 'api/product-recommendations'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { addRecommendations, editRecommendations } from 'api/product-recommendations'
 
 export interface FormTypes {
 	name: string
@@ -75,67 +71,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 		resolver: yupResolver(schema),
 		mode: 'onChange',
 		defaultValues,
-	})
-
-	const {
-		isLoading: isLoadingGroups,
-		data: groups = {
-			skin: {
-				options: [],
-				products: [],
-			},
-			make: {
-				options: [],
-				products: [],
-			},
-		},
-	} = useQuery(['product-groups', total], () => productRecommendations({ per: total, page: 1 }), {
-		select: data => {
-			const setSkin = new Set()
-			const setMake = new Set()
-			const products = data.data.data
-				.map((v: any) => v.products)
-				.flat(2)
-				.map((p: any) => ({
-					id: p.id,
-					name: p.name,
-					code: p.code,
-					image_url: p.image_url,
-					category: p.category,
-				}))
-			const optionSkin = data.data.data
-				.filter((v: any) => v.products[0]?.routine === 'Skincare')
-				.map((v: any) => {
-					v.products.map((m: any) => setSkin.add(m.id))
-					return { ...v, label: v?.name, value: v.id }
-				})
-
-			const optionMake = data.data.data
-				.filter((v: any) => v.products[0]?.routine === 'Makeup')
-				.map((v: any) => {
-					v.products.map((m: any) => setMake.add(m.id))
-					return { ...v, label: v?.name, value: v.id }
-				})
-
-			const productsofSkin = Array.from(setSkin, v => products.find((p: any) => v === p.id))
-			const productsofMake = Array.from(setMake, v => products.find((p: any) => v === p.id))
-
-			const skin = {
-				options: optionSkin,
-				products: productsofSkin,
-			}
-			const make = {
-				options: optionMake,
-				products: productsofMake,
-			}
-
-			return { ...data.data, skin, make }
-		},
-		onError: (err: any) => {
-			notifyError(err.response.data.error)
-		},
-		keepPreviousData: true,
-		enabled: total !== 0,
 	})
 
 	const handleSuccess = async () => {
@@ -330,14 +265,12 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 		form,
 		value,
 		toggle,
-		groups,
 		setMake,
 		setSkin,
 		onSubmit,
 		isLoading,
 		handleClose,
 		handleChange,
-		isLoadingGroups,
 		handleChangeSkin,
 		handleChangeMake,
 	}
