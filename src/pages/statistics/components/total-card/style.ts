@@ -1,46 +1,36 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-	width: 250px;
-	height: 135px;
-	min-width: 250px;
-	min-height: 135px;
+	width: 100%;
 	display: flex;
+	min-height: 170px;
 	background: #ffffff;
-	border-radius: 10px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+	align-items: center;
+	border-radius: 12.678px;
+	justify-content: center;
+	box-shadow: 0px 0px 12.678px rgba(0, 0, 0, 0.2);
 `
 
 export const Content = styled.div`
+	width: 100%;
 	height: 100%;
 	flex-grow: 1;
 	display: flex;
-	padding-left: 30px;
+	align-items: center;
 	flex-direction: column;
 	justify-content: center;
 	h2 {
-		font-size: 40px;
+		color: #161616;
+		font-size: 50px;
 		font-weight: 400;
-		line-height: 49px;
-		color: var(--black20);
+		line-height: 73px;
+		margin-bottom: 8px;
 	}
 	span {
-		font-size: 14px;
-		font-weight: 300;
-		line-height: 17px;
-		color: var(--gray70);
+		color: #8d8d8d;
+		font-size: 20px;
+		font-weight: 200;
+		line-height: 29px;
+		text-align: center;
 	}
-`
-
-export const Button = styled.button`
-	width: 35px;
-	height: 100%;
-	border: none;
-	display: flex;
-	cursor: pointer;
-	align-items: center;
-	border-radius: 10px;
-	justify-content: center;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-	background: linear-gradient(180deg, #303030 0%, #747474 100%);
 `

@@ -1,18 +1,12 @@
-import { useNavigate } from 'react-router-dom'
-import { Button, Content, Container } from './style'
-import { ReactComponent as IconArrowPointing } from 'assets/icons/arrow-pointing.svg'
+import { Content, Container } from './style'
 
 interface ICard {
-	link: string
 	type: string
 	title: string
 	value: string | number
 }
 
-export const ToralCard = ({ type, title, value, link }: ICard) => {
-	const navigate = useNavigate()
-	const handleNavigate = () => navigate(link)
-
+export const ToralCard = ({ type, title, value }: ICard) => {
 	return (
 		<Container>
 			<Content>
@@ -20,9 +14,6 @@ export const ToralCard = ({ type, title, value, link }: ICard) => {
 				<span>{title}</span>
 				<span>({type})</span>
 			</Content>
-			<Button onClick={handleNavigate}>
-				<IconArrowPointing />
-			</Button>
 		</Container>
 	)
 }
