@@ -7,7 +7,7 @@ export const TotalList = () => {
 	const { data, isLoading } = useList()
 	return (
 		<Container>
-			{!isLoading ? (
+			{isLoading ? (
 				<ListSkeleton />
 			) : (
 				<>
