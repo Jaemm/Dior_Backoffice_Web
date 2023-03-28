@@ -32,7 +32,7 @@ const PRODUCT_RECOMMENDATION = {
 	main: true,
 	title: 'Product Recommendation',
 	path: 'product-recommendation',
-	permissions: [PERMISSIONS.SUPER_ADMIN, PERMISSIONS.ADMIN],
+	permissions: [PERMISSIONS.SUPER_ADMIN],
 }
 
 const STATISTICS = {

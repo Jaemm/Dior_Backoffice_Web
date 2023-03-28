@@ -15,7 +15,7 @@ import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
 
 const BrandDetails = () => {
-	const { user } = usePermission()
+	const { user, isAdmin } = usePermission()
 	const { countries, isLoading: countryIsLoading } = useCountries()
 	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
 		useDataSelectedTable<DataRow>()
@@ -52,13 +52,17 @@ const BrandDetails = () => {
 						)}
 					</LeftSide>
 					<RightSide>
-						<FormBrandDetails
-							type='add'
-							buttonTitle='Save'
-							title='ADD A NEW POS'
-							ButtonModal={({ onClick }) => <Button onClick={onClick}>Add</Button>}
-						/>
-						<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
+						{isAdmin && (
+							<>
+								<FormBrandDetails
+									type='add'
+									buttonTitle='Save'
+									title='ADD A NEW POS'
+									ButtonModal={({ onClick }) => <Button onClick={onClick}>Add</Button>}
+								/>
+								<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
+							</>
+						)}
 						<Upload
 							file={samplePos}
 							type='company_branches'
