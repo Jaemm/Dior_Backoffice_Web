@@ -120,7 +120,8 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 				<AutoCompleteInput
 					name='preserum'
 					type='Pre-serums'
-					routine='Pre-serums'
+					routine='Skincare'
+					filter_by='Pre-serums'
 					value={values.preserum}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -128,7 +129,8 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 				<AutoCompleteInput
 					name='lotion'
 					type='Lotion'
-					routine='Lotions'
+					routine='Skincare'
+					filter_by='Lotions'
 					value={values.lotion}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -136,7 +138,8 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 				<AutoCompleteInput
 					name='serum'
 					type='Serum'
-					routine='Serums'
+					routine='Skincare'
+					filter_by='Serums'
 					value={values.serum}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -144,7 +147,8 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 				<AutoCompleteInput
 					name='cream'
 					type='Cream'
-					routine='Creams'
+					routine='Skincare'
+					filter_by='Creams'
 					value={values.cream}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -152,7 +156,8 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 				<AutoCompleteInput
 					name='eye'
 					type='Eye'
-					routine='Eye Care'
+					routine='Skincare'
+					filter_by='Eye Care'
 					value={values.eye}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -160,10 +165,11 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 				<AutoCompleteInput
 					name='uv'
 					type='UV'
-					routine='UV Protection'
+					filter_by='UV Protection'
 					value={values.uv}
 					onChange={onChange}
 					loading={isLoadingMutate}
+					routine='Skincare'
 				/>
 			</WrapList>
 		</div>

@@ -8,10 +8,11 @@ interface IParams {
 	limit: number
 	search: string
 	page: number
-	filter_by: string
+	filter_by?: string
+	routine: string
 }
 
-export const useAutoComplete = (routine: string) => {
+export const useAutoComplete = (routine: string, filter_by?: string) => {
 	const [searchValue, setSearchValue] = useState('')
 	const search = useDebounce(searchValue, 500)
 
@@ -22,13 +23,14 @@ export const useAutoComplete = (routine: string) => {
 		isLoading,
 		isFetching,
 	} = useQuery(
-		[`product-catalog-list-${routine}`, search],
+		[`product-catalog-list-${routine}-${filter_by}`, search],
 		() =>
 			getProductCatalog<IParams>({
 				limit: 10,
 				page: 1,
 				search,
-				filter_by: routine,
+				filter_by,
+				routine,
 			}),
 		{
 			select: data => {

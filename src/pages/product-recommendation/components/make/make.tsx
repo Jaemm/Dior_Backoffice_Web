@@ -95,7 +95,7 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 			<WrapList>
 				<AutoCompleteInput
 					name='make1'
-					routine='Fluids'
+					routine='Makeup'
 					type='Make-up 1'
 					value={values.make1}
 					onChange={onChange}
@@ -103,7 +103,7 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 				/>
 				<AutoCompleteInput
 					name='make2'
-					routine='Concealer'
+					routine='Makeup'
 					type='Make-up 2'
 					value={values.make2}
 					onChange={onChange}
@@ -111,7 +111,7 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 				/>
 				<AutoCompleteInput
 					name='make3'
-					routine='Powders'
+					routine='Makeup'
 					type='Make-up 3'
 					value={values.make3}
 					onChange={onChange}
