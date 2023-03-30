@@ -41,18 +41,18 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 								mutate(e.target.value, {
 									onSuccess: data => {
 										const products = data.data.products
-										const fluids = products.find((v: any) => v?.category === 'Fluids')
+										const cushions = products.find((v: any) => v?.category === 'Cushions')
 										const concealer = products.find((v: any) => v?.category === 'Concealer')
 										const powders = products.find((v: any) => v?.category === 'Powders')
-										form.setValue('make1', fluids?.id)
+										form.setValue('make1', cushions?.id)
 										form.setValue('make2', concealer?.id)
 										form.setValue('make3', powders?.id)
 										const values = {
 											make1: {
-												id: fluids?.id,
-												code: fluids?.code,
-												name: fluids?.name,
-												image_url: fluids?.image_url,
+												id: cushions?.id,
+												code: cushions?.code,
+												name: cushions?.name,
+												image_url: cushions?.image_url,
 											},
 											make2: {
 												id: concealer?.id,

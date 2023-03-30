@@ -53,18 +53,22 @@ export const defaultValues = {
 	products_selected: [],
 }
 
+const defaultSkin = {
+	preserum: {},
+	lotion: {},
+	serum: {},
+	cream: {},
+	eye: {},
+	uv: {},
+}
+
+const defaultMake = { make1: {}, make2: {}, make3: {} }
+
 export const useProForm = (values?: IValue, type?: string, total?: number) => {
 	const queryClient = useQueryClient()
 	const [value, setValue] = useState(0)
-	const [skin, setSkin] = useState({
-		preserum: {},
-		lotion: {},
-		serum: {},
-		cream: {},
-		eye: {},
-		uv: {},
-	})
-	const [make, setMake] = useState({ make1: {}, make2: {}, make3: {} })
+	const [skin, setSkin] = useState(defaultSkin)
+	const [make, setMake] = useState(defaultMake)
 	const [open, toggle, setToggle] = useToggle()
 
 	const form = useForm<FormTypes>({
@@ -146,16 +150,16 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const handleEdit = () => {
 		if (values?.routine === 'Makeup') {
-			const fluids = values?.products.find((v: any) => v?.category === 'Fluids')
+			const cushions = values?.products.find((v: any) => v?.category === 'Cushions')
 			const concealer = values?.products.find((v: any) => v?.category === 'Concealer')
 			const powders = values?.products.find((v: any) => v?.category === 'Powders')
 
 			setMake({
 				make1: {
-					id: fluids?.id,
-					code: fluids?.code,
-					name: fluids?.name,
-					image_url: fluids?.image_url,
+					id: cushions?.id,
+					code: cushions?.code,
+					name: cushions?.name,
+					image_url: cushions?.image_url,
 				},
 				make2: {
 					id: concealer?.id,
@@ -174,7 +178,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 				name: values?.name!,
 				make: values?.id,
 				tabValue: 1,
-				make1: fluids?.id,
+				make1: cushions?.id,
 				make2: concealer?.id,
 				make3: powders?.id,
 			})
@@ -248,6 +252,8 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 		setToggle(false)
 		form.reset(defaultValues)
 		setValue(0)
+		setMake(defaultMake)
+		setSkin(defaultSkin)
 	}
 
 	useEffect(() => {
