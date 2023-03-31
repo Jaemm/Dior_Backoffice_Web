@@ -3,7 +3,9 @@ import { ReactComponent as Check } from 'assets/icons/check.svg'
 import { ReactComponent as Cancel } from 'assets/icons/cancel.svg'
 
 export const Container = styled.div`
+	width: 100%;
 	display: flex;
+	flex-grow: 1;
 	flex-direction: column;
 
 	.MuiInputBase-input {
@@ -25,6 +27,7 @@ export const Wrapper = styled.div`
 		font-weight: 500;
 		font-size: 24px;
 		color: var(--gray);
+		white-space: nowrap;
 	}
 `
 

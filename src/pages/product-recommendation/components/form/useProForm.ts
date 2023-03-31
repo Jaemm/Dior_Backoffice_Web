@@ -77,10 +77,17 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 		defaultValues,
 	})
 
+	const handleClose = () => {
+		setToggle(false)
+		form.reset(defaultValues)
+		setValue(0)
+		setMake(defaultMake)
+		setSkin(defaultSkin)
+	}
+
 	const handleSuccess = async () => {
 		await queryClient.invalidateQueries(['product-recommendations'])
-		await setToggle(false)
-		await form.reset(defaultValues)
+		await handleClose()
 	}
 
 	const handleChangeSkin = (name: any, value: any) => {
@@ -112,7 +119,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const onSubmit = (data: FormTypes) => {
 		const products_selected =
-			values?.routine === 'Makeup'
+			data.tabValue === 1
 				? [
 						undefined,
 						undefined,
@@ -134,7 +141,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 						undefined,
 						undefined,
 				  ]
-
 		if (type === 'edit') {
 			editProduct.mutate({
 				name: data.name,
@@ -246,14 +252,11 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 	const handleChange = (event: SyntheticEvent, newValue: number) => {
 		setValue(newValue)
 		form.reset({ tabValue: newValue, products_selected: [], name: form.getValues('name') })
-	}
-
-	const handleClose = () => {
-		setToggle(false)
-		form.reset(defaultValues)
-		setValue(0)
-		setMake(defaultMake)
-		setSkin(defaultSkin)
+		if (newValue === 0) {
+			setMake(defaultMake)
+		} else {
+			setSkin(defaultSkin)
+		}
 	}
 
 	useEffect(() => {
