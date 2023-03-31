@@ -153,7 +153,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 			const make1 = values?.products[0]
 			const make2 = values?.products[1]
 			const make3 = values?.products[2]
-			console.log(values?.products, 'values?.products')
+
 			setMake({
 				make1: {
 					id: make1?.id,
