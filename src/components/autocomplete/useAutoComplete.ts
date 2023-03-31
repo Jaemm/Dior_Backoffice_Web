@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query'
 import { getProductCatalog } from 'api/product-catalog'
 
 interface IParams {
-	limit: number
 	search: string
 	page: number
 	filter_by?: string
@@ -26,7 +25,6 @@ export const useAutoComplete = (routine: string, filter_by?: string) => {
 		[`product-catalog-list-${routine}-${filter_by}`, search],
 		() =>
 			getProductCatalog<IParams>({
-				limit: 10,
 				page: 1,
 				search,
 				filter_by,
