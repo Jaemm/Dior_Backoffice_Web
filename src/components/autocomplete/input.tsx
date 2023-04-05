@@ -24,7 +24,7 @@ interface IInput {
 
 export const AutoCompleteInput = memo(
 	({ name, type, value, loading, onChange, routine, filter_by }: IInput) => {
-		const { data, setData, isLoading, searchValue, setSearchValue } = useAutoComplete(
+		const { data, setData, isLoading, isFetching, searchValue, setSearchValue } = useAutoComplete(
 			routine,
 			filter_by,
 		)
@@ -37,8 +37,8 @@ export const AutoCompleteInput = memo(
 					id={name}
 					value={value}
 					disableClearable
-					loading={isLoading || loading}
-					options={isLoading || loading ? [] : data.data}
+					loading={isLoading || loading || isFetching}
+					options={isLoading || loading || isFetching ? [] : data.data}
 					onChange={(_, newValue) => {
 						onChange(name, newValue)
 					}}
@@ -93,7 +93,7 @@ export const AutoCompleteInput = memo(
 									...params.InputProps,
 									endAdornment: (
 										<InputAdornment position='end'>
-											{isLoading || loading ? (
+											{isLoading || loading || isFetching ? (
 												<CircularProgress size='20px' sx={{ marginRight: '5px' }} />
 											) : (
 												data.options.find((v: any) => v?.id === value?.id) && (

@@ -13,7 +13,7 @@ export const useAutoComplete = (routine: string, filter_by?: string) => {
 	const [searchValue, setSearchValue] = useState('')
 	const [data, setData] = useState({ data: [], options: [] })
 
-	const { isLoading } = useQuery(
+	const { isLoading, isFetching } = useQuery(
 		[`product-catalog-list-${routine}-${filter_by}`],
 		() =>
 			getProductCatalog<IParams>({
@@ -46,5 +46,5 @@ export const useAutoComplete = (routine: string, filter_by?: string) => {
 		},
 	)
 
-	return { data, setData, isLoading, searchValue, setSearchValue }
+	return { data, setData, isLoading, isFetching, searchValue, setSearchValue }
 }
