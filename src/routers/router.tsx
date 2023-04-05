@@ -12,7 +12,6 @@ const BeautyHistory = lazy(() => import('pages/beauty-history'))
 const BeautyHistoryDetail = lazy(() => import('pages/beauty-history-detail'))
 const MarketManagement = lazy(() => import('pages/market-management'))
 const Statistics = lazy(() => import('pages/statistics'))
-const StatisticsDetails = lazy(() => import('pages/statistics-details'))
 const ProductAttributes = lazy(() => import('pages/product-attributes'))
 const ProductCatalog = lazy(() => import('pages/product-catalog'))
 const ProductRecommendation = lazy(() => import('pages/product-recommendation'))
@@ -81,10 +80,6 @@ export const router = createBrowserRouter([
 					{
 						index: true,
 						element: <Statistics />,
-					},
-					{
-						path: ':typeOfStatistics',
-						element: <StatisticsDetails />,
 					},
 				],
 			},
