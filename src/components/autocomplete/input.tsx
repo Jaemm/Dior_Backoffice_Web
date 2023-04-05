@@ -24,7 +24,10 @@ interface IInput {
 
 export const AutoCompleteInput = memo(
 	({ name, type, value, loading, onChange, routine, filter_by }: IInput) => {
-		const { data, isLoading, isFetching, setSearchValue } = useAutoComplete(routine, filter_by)
+		const { data, setData, isLoading, searchValue, setSearchValue } = useAutoComplete(
+			routine,
+			filter_by,
+		)
 
 		return (
 			<Wrapper>
@@ -34,13 +37,31 @@ export const AutoCompleteInput = memo(
 					id={name}
 					value={value}
 					disableClearable
-					options={isLoading || isFetching || loading ? [] : data.options}
-					loading={isLoading || isFetching || loading}
+					loading={isLoading || loading}
+					options={isLoading || loading ? [] : data.data}
 					onChange={(_, newValue) => {
 						onChange(name, newValue)
 					}}
 					onInputChange={(_, newInputValue) => {
 						setSearchValue(newInputValue)
+						if (newInputValue.length === 0) {
+							onChange(name, undefined)
+							setData(prev => ({ ...prev, options: prev.data }))
+						} else {
+							const newOptions = data.data.filter(
+								({ name, code }: any) =>
+									name.toLowerCase().includes(newInputValue.toLowerCase()) ||
+									code.toLowerCase().includes(newInputValue.toLowerCase()),
+							)
+							setData(prev => ({ ...prev, options: newOptions }))
+						}
+					}}
+					filterOptions={(options, { inputValue }) => {
+						return options.filter(
+							(item: any) =>
+								item.name.toUpperCase().includes(inputValue.toUpperCase()) ||
+								item.code.toUpperCase().includes(inputValue.toUpperCase()),
+						)
 					}}
 					inputMode='search'
 					getOptionLabel={(option: any) => option?.name || ''}
@@ -72,7 +93,7 @@ export const AutoCompleteInput = memo(
 									...params.InputProps,
 									endAdornment: (
 										<InputAdornment position='end'>
-											{isLoading || isFetching || loading ? (
+											{isLoading || loading ? (
 												<CircularProgress size='20px' sx={{ marginRight: '5px' }} />
 											) : (
 												data.options.find((v: any) => v?.id === value?.id) && (
@@ -89,7 +110,7 @@ export const AutoCompleteInput = memo(
 						</Container>
 					)}
 				/>
-				{data.options.find((v: any) => v?.id === value?.id) && (
+				{searchValue.length > 0 && (
 					<WrapCancel>
 						<IconButton
 							style={{ marginTop: 25, width: 'fit-content' }}

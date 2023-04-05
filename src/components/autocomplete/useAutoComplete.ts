@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { notifyError } from 'components/notify'
-import { useDebounce } from 'hooks/useDebounce'
 import { useQuery } from '@tanstack/react-query'
 import { getProductCatalog } from 'api/product-catalog'
 
 interface IParams {
-	search: string
 	page: number
 	filter_by?: string
 	routine: string
@@ -13,20 +11,13 @@ interface IParams {
 
 export const useAutoComplete = (routine: string, filter_by?: string) => {
 	const [searchValue, setSearchValue] = useState('')
-	const search = useDebounce(searchValue, 500)
+	const [data, setData] = useState({ data: [], options: [] })
 
-	const {
-		data = {
-			options: [],
-		},
-		isLoading,
-		isFetching,
-	} = useQuery(
-		[`product-catalog-list-${routine}-${filter_by}`, search],
+	const { isLoading } = useQuery(
+		[`product-catalog-list-${routine}-${filter_by}`],
 		() =>
 			getProductCatalog<IParams>({
 				page: 1,
-				search,
 				filter_by,
 				routine,
 			}),
@@ -45,11 +36,15 @@ export const useAutoComplete = (routine: string, filter_by?: string) => {
 
 				return { ...data.data, options }
 			},
+			onSuccess: data => {
+				setData({ data: data.options, options: data.options })
+			},
 			onError: (err: any) => {
 				notifyError(err.response.data.error)
 			},
 			keepPreviousData: true,
 		},
 	)
-	return { data, isLoading, isFetching, setSearchValue }
+
+	return { data, setData, isLoading, searchValue, setSearchValue }
 }
