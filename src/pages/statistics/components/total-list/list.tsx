@@ -12,7 +12,7 @@ export const TotalList = () => {
 			) : (
 				<>
 					<ToralCard type='GLOBAL' title='Consultations' value={data.total_consultations} />
-					<ToralCard type='Average' title='Consultation Time' value={data.consultation_time} />
+					<ToralCard type='GLOBAL' title='Registered Client' value={data.total_clients} />
 					<ToralCard type='GLOBAL' title='All Devices' value={data.total_devices} />
 					<ToralCard type='GLOBAL' title='Number of stores' value={data.total_branches} />
 				</>

@@ -1,21 +1,10 @@
 import { PAGES } from 'constants/page'
 import { PERMISSIONS } from 'constants/permissions'
-import { statisticsType } from 'constants/statistics-type'
 import { useLocation, useParams } from 'react-router-dom'
 
 export const useBread = () => {
 	const { pathname } = useLocation()
-	const { typeOfStatistics, beautyDetails, beautyHistory, beautyHistoryDetail } = useParams()
-
-	const STATISTICS_DETAIL = {
-		main: false,
-		title:
-			typeOfStatistics !== undefined
-				? statisticsType[typeOfStatistics as keyof typeof statisticsType]
-				: '',
-		path: typeOfStatistics,
-		permissions: [PERMISSIONS.SUPER_ADMIN, PERMISSIONS.ADMIN, PERMISSIONS.BRAND_MANAGER],
-	}
+	const { beautyDetails, beautyHistory, beautyHistoryDetail } = useParams()
 
 	const BEAUTY_DETAILS = {
 		main: false,
@@ -48,7 +37,6 @@ export const useBread = () => {
 		PAGES.MARKET_MANAGMENT,
 		PAGES.USER_MANAGMENT,
 		PAGES.PRODUCT_ATTRIBUTES,
-		STATISTICS_DETAIL,
 		BEAUTY_DETAILS,
 		BEAUTY_HISTORY,
 		BEAUTY_HISTORY_DETAILS,
