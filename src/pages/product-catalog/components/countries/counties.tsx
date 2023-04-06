@@ -12,7 +12,7 @@ interface ICon {
 
 export const Counties = ({ type, onNext }: ICon) => {
 	const form = useFormContext()
-	const { user } = usePermission()
+	const { user, isAdmin } = usePermission()
 	const { isLoading, isFetching, allCountries, setAllCountries } = useCountries()
 
 	return (
@@ -26,10 +26,16 @@ export const Counties = ({ type, onNext }: ICon) => {
 				<WrapList>
 					{allCountries
 						?.filter(country => {
-							if (user.consultant_country === null || type === 'add') {
+							if (type === 'add') {
 								return country
-							} else {
+							}
+							if (user.consultant_country) {
 								return user.consultant_country.includes(country.label)
+							} else {
+								if (user.countries.length > 0) {
+									return user.countries.includes(country.label)
+								}
+								return country
 							}
 						})
 						?.map((item: any) => (
@@ -81,10 +87,12 @@ export const Counties = ({ type, onNext }: ICon) => {
 				</WrapList>
 			)}
 			<div className='wrapbutton'>
-				<Button variant='outlined' onClick={() => onNext(0)}>
-					Previous
-				</Button>
-				<Button onClick={() => onNext(2)}>Next</Button>
+				{isAdmin && (
+					<Button variant='outlined' onClick={() => onNext(0)}>
+						Previous
+					</Button>
+				)}
+				<Button onClick={() => onNext(isAdmin ? 2 : 1)}>Next</Button>
 			</div>
 		</Container>
 	)

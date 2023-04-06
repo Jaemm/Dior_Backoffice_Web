@@ -14,7 +14,7 @@ interface ITran {
 
 export const Translation = ({ type, onNext, title, isLoading: formLoading }: ITran) => {
 	const form = useFormContext()
-	const { user } = usePermission()
+	const { user, isAdmin } = usePermission()
 	const { isLoading, isFetching, allTranslation, setAllTranslation } = useTranslation()
 
 	return (
@@ -28,10 +28,16 @@ export const Translation = ({ type, onNext, title, isLoading: formLoading }: ITr
 				<WrapList>
 					{allTranslation
 						?.filter(language => {
-							if (user.consultant_country === null || type === 'add') {
+							if (type === 'add') {
 								return language
-							} else {
+							}
+							if (user.consultant_country) {
 								return user.consultant_country.includes(language.language)
+							} else {
+								if (user.countries.length > 0) {
+									return user.countries.includes(language.language)
+								}
+								return language
 							}
 						})
 						.map((v: any) => (
@@ -69,7 +75,7 @@ export const Translation = ({ type, onNext, title, isLoading: formLoading }: ITr
 				</WrapList>
 			)}
 			<WrapButton>
-				<Button variant='outlined' onClick={() => onNext(1)}>
+				<Button variant='outlined' onClick={() => onNext(isAdmin ? 1 : 0)}>
 					Previous
 				</Button>
 				<Button disabled={formLoading} type='submit'>

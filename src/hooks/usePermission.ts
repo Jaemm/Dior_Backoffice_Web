@@ -29,5 +29,7 @@ export const usePermission = () => {
 		user?.user_type === PERMISSIONS.BRAND_MANAGER || user?.user_type === PERMISSIONS.ADMIN
 	)
 
-	return { user, isAdmin }
+	const isSimpleAdmin = user?.user_type === PERMISSIONS.ADMIN
+
+	return { user, isAdmin, isSimpleAdmin }
 }

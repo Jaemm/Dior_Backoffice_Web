@@ -47,6 +47,7 @@ export const CountrySelect = ({
 									<IconDown />
 								</WrapDown>
 							)}
+							MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
 						>
 							{options.map(v => (
 								<MenuItem key={v.value} value={v.value}>
