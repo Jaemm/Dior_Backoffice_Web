@@ -25,7 +25,7 @@ export const schema: SchemaOf<FormTypes> = object().shape({
 	primer: number().notRequired(),
 	fluids: number().notRequired(),
 	cushions: number().notRequired(),
-	concealers: number().notRequired(),
+	concealer: number().notRequired(),
 	powders: number().notRequired(),
 	spray: number().notRequired(),
 	tabValue: number().required(),

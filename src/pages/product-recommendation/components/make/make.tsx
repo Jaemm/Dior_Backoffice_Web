@@ -45,7 +45,7 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 										const primer = products.find((v: any) => v?.category === 'Primer')
 										const fluids = products.find((v: any) => v?.category === 'Fluids')
 										const cushions = products.find((v: any) => v?.category === 'Cushions')
-										const concealers = products.find((v: any) => v?.category === 'Concealers')
+										const concealer = products.find((v: any) => v?.category === 'Concealer')
 										const powders = products.find((v: any) => v?.category === 'Powders')
 										const spray = products.find((v: any) => v?.category === 'Setting Spray')
 
@@ -53,7 +53,7 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 										form.setValue('primer', primer?.id)
 										form.setValue('fluids', fluids?.id)
 										form.setValue('cushions', cushions?.id)
-										form.setValue('concealers', concealers?.id)
+										form.setValue('concealer', concealer?.id)
 										form.setValue('powders', powders?.id)
 										form.setValue('spray', spray?.id)
 										const values = {
@@ -81,11 +81,11 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 												name: cushions?.name,
 												image_url: cushions?.image_url,
 											},
-											concealers: {
-												id: concealers?.id,
-												code: concealers?.code,
-												name: concealers?.name,
-												image_url: concealers?.image_url,
+											concealer: {
+												id: concealer?.id,
+												code: concealer?.code,
+												name: concealer?.name,
+												image_url: concealer?.image_url,
 											},
 											powders: {
 												id: powders?.id,
@@ -163,11 +163,11 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 					loading={isLoadingMutate}
 				/>
 				<AutoCompleteInput
-					name='concealers'
+					name='concealer'
 					routine='Makeup'
-					type='Concealers'
-					filter_by='Concealers'
-					value={values.concealers}
+					type='Concealer'
+					filter_by='Concealer'
+					value={values.concealer}
 					onChange={onChange}
 					loading={isLoadingMutate}
 				/>

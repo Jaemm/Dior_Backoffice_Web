@@ -19,7 +19,7 @@ export interface FormTypes {
 	primer?: number
 	fluids?: number
 	cushions?: number
-	concealers?: number
+	concealer?: number
 	powders?: number
 	spray?: number
 	tabValue?: number
@@ -71,7 +71,7 @@ const defaultMake = {
 	primer: {},
 	fluids: {},
 	cushions: {},
-	concealers: {},
+	concealer: {},
 	powders: {},
 	spray: {},
 }
@@ -142,7 +142,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 						data.primer,
 						data.fluids,
 						data.cushions,
-						data.concealers,
+						data.concealer,
 						data.powders,
 						data.spray,
 				  ]
@@ -176,7 +176,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 			const primer = values?.products.find((v: any) => v?.category === 'Primer')
 			const fluids = values?.products.find((v: any) => v?.category === 'Fluids')
 			const cushions = values?.products.find((v: any) => v?.category === 'Cushions')
-			const concealers = values?.products.find((v: any) => v?.category === 'Concealers')
+			const concealer = values?.products.find((v: any) => v?.category === 'Concealer')
 			const powders = values?.products.find((v: any) => v?.category === 'Powders')
 			const spray = values?.products.find((v: any) => v?.category === 'Setting Spray')
 
@@ -205,11 +205,11 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 					name: cushions?.name,
 					image_url: cushions?.image_url,
 				},
-				concealers: {
-					id: concealers?.id,
-					code: concealers?.code,
-					name: concealers?.name,
-					image_url: concealers?.image_url,
+				concealer: {
+					id: concealer?.id,
+					code: concealer?.code,
+					name: concealer?.name,
+					image_url: concealer?.image_url,
 				},
 				powders: {
 					id: powders?.id,
@@ -232,7 +232,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 				primer: primer?.id,
 				fluids: fluids?.id,
 				cushions: cushions?.id,
-				concealers: concealers?.id,
+				concealer: concealer?.id,
 				powders: powders?.id,
 				spray: spray?.id,
 			})
