@@ -53,6 +53,7 @@ export const Form = ({ type, total, values, ButtonModal, buttonTitle }: IForm) =
 						boxShadow: '0px 0px 20px 5px rgba(0, 0, 0, 0.3)',
 					},
 				}}
+				maxWidth='md'
 			>
 				<Container>
 					<IconButton onClick={handleClose} className='exit' aria-label='exit'>

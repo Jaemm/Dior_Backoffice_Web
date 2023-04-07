@@ -18,7 +18,7 @@ interface IInput {
 	name: string
 	onChange: any
 	loading: boolean
-	filter_by?: string
+	filter_by: string
 	routine: 'Makeup' | 'Skincare'
 }
 

@@ -41,30 +41,63 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 								mutate(e.target.value, {
 									onSuccess: data => {
 										const products = data.data.products
-										const make1 = products[0]
-										const make2 = products[1]
-										const make3 = products[2]
-										form.setValue('make1', make1?.id)
-										form.setValue('make2', make2?.id)
-										form.setValue('make3', make3?.id)
+										const creams = products.find((v: any) => v?.category === 'Creams')
+										const primer = products.find((v: any) => v?.category === 'Primer')
+										const fluids = products.find((v: any) => v?.category === 'Fluids')
+										const cushions = products.find((v: any) => v?.category === 'Cushions')
+										const concealers = products.find((v: any) => v?.category === 'Concealers')
+										const powders = products.find((v: any) => v?.category === 'Powders')
+										const spray = products.find((v: any) => v?.category === 'Setting Spray')
+
+										form.setValue('creams', creams?.id)
+										form.setValue('primer', primer?.id)
+										form.setValue('fluids', fluids?.id)
+										form.setValue('cushions', cushions?.id)
+										form.setValue('concealers', concealers?.id)
+										form.setValue('powders', powders?.id)
+										form.setValue('spray', spray?.id)
 										const values = {
-											make1: {
-												id: make1?.id,
-												code: make1?.code,
-												name: make1?.name,
-												image_url: make1?.image_url,
+											creams: {
+												id: creams?.id,
+												code: creams?.code,
+												name: creams?.name,
+												image_url: creams?.image_url,
 											},
-											make2: {
-												id: make2?.id,
-												code: make2?.code,
-												name: make2?.name,
-												image_url: make2?.image_url,
+											primer: {
+												id: primer?.id,
+												code: primer?.code,
+												name: primer?.name,
+												image_url: primer?.image_url,
 											},
-											make3: {
-												id: make3?.id,
-												code: make3?.code,
-												name: make3?.name,
-												image_url: make3?.image_url,
+											fluids: {
+												id: fluids?.id,
+												code: fluids?.code,
+												name: fluids?.name,
+												image_url: fluids?.image_url,
+											},
+											cushions: {
+												id: cushions?.id,
+												code: cushions?.code,
+												name: cushions?.name,
+												image_url: cushions?.image_url,
+											},
+											concealers: {
+												id: concealers?.id,
+												code: concealers?.code,
+												name: concealers?.name,
+												image_url: concealers?.image_url,
+											},
+											powders: {
+												id: powders?.id,
+												code: powders?.code,
+												name: powders?.name,
+												image_url: powders?.image_url,
+											},
+											spray: {
+												id: spray?.id,
+												code: spray?.code,
+												name: spray?.name,
+												image_url: spray?.image_url,
 											},
 										}
 										setValues(values)
@@ -94,26 +127,65 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 			</div>
 			<WrapList>
 				<AutoCompleteInput
-					name='make1'
+					name='creams'
 					routine='Makeup'
-					type='Make-up 1'
-					value={values.make1}
+					type='Creams'
+					filter_by='Creams'
+					value={values.creams}
 					onChange={onChange}
 					loading={isLoadingMutate}
 				/>
 				<AutoCompleteInput
-					name='make2'
+					name='primer'
 					routine='Makeup'
-					type='Make-up 2'
-					value={values.make2}
+					type='Primer'
+					filter_by='Primer'
+					value={values.primer}
 					onChange={onChange}
 					loading={isLoadingMutate}
 				/>
 				<AutoCompleteInput
-					name='make3'
+					name='fluids'
 					routine='Makeup'
-					type='Make-up 3'
-					value={values.make3}
+					type='Fluids'
+					filter_by='Fluids'
+					value={values.fluids}
+					onChange={onChange}
+					loading={isLoadingMutate}
+				/>
+				<AutoCompleteInput
+					name='cushions'
+					routine='Makeup'
+					type='Cushions'
+					filter_by='Cushions'
+					value={values.cushions}
+					onChange={onChange}
+					loading={isLoadingMutate}
+				/>
+				<AutoCompleteInput
+					name='concealers'
+					routine='Makeup'
+					type='Concealers'
+					filter_by='Concealers'
+					value={values.concealers}
+					onChange={onChange}
+					loading={isLoadingMutate}
+				/>
+				<AutoCompleteInput
+					name='powders'
+					routine='Makeup'
+					type='Powders'
+					filter_by='Powders'
+					value={values.powders}
+					onChange={onChange}
+					loading={isLoadingMutate}
+				/>
+				<AutoCompleteInput
+					name='spray'
+					routine='Makeup'
+					type='Setting Spray'
+					filter_by='Setting Spray'
+					value={values.spray}
 					onChange={onChange}
 					loading={isLoadingMutate}
 				/>

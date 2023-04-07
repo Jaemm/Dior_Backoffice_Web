@@ -5,11 +5,11 @@ import { getProductCatalog } from 'api/product-catalog'
 
 interface IParams {
 	page: number
-	filter_by?: string
+	filter_by: string
 	routine: string
 }
 
-export const useAutoComplete = (routine: string, filter_by?: string) => {
+export const useAutoComplete = (routine: string, filter_by: string) => {
 	const [searchValue, setSearchValue] = useState('')
 	const [data, setData] = useState({ data: [], options: [] })
 
@@ -45,6 +45,8 @@ export const useAutoComplete = (routine: string, filter_by?: string) => {
 			keepPreviousData: true,
 		},
 	)
+
+	console.log(data)
 
 	return { data, setData, isLoading, isFetching, searchValue, setSearchValue }
 }
