@@ -15,7 +15,6 @@ export interface FormTypes {
 	cream?: number
 	eye?: number
 	uv?: number
-	creams?: number
 	primer?: number
 	fluids?: number
 	cushions?: number
@@ -67,7 +66,6 @@ const defaultSkin = {
 }
 
 const defaultMake = {
-	creams: {},
 	primer: {},
 	fluids: {},
 	cushions: {},
@@ -138,7 +136,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 						undefined,
 						undefined,
 						undefined,
-						data.creams,
 						data.primer,
 						data.fluids,
 						data.cushions,
@@ -172,7 +169,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const handleEdit = () => {
 		if (values?.routine === 'Makeup') {
-			const creams = values?.products.find((v: any) => v?.category === 'Creams')
 			const primer = values?.products.find((v: any) => v?.category === 'Primer')
 			const fluids = values?.products.find((v: any) => v?.category === 'Fluids')
 			const cushions = values?.products.find((v: any) => v?.category === 'Cushions')
@@ -181,12 +177,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 			const spray = values?.products.find((v: any) => v?.category === 'Setting Spray')
 
 			setMake({
-				creams: {
-					id: creams?.id,
-					code: creams?.code,
-					name: creams?.name,
-					image_url: creams?.image_url,
-				},
 				primer: {
 					id: primer?.id,
 					code: primer?.code,
@@ -228,7 +218,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 				name: values?.name!,
 				make: values?.id,
 				tabValue: 1,
-				creams: creams?.id,
 				primer: primer?.id,
 				fluids: fluids?.id,
 				cushions: cushions?.id,

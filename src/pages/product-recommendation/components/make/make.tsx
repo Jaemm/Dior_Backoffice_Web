@@ -41,7 +41,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 								mutate(e.target.value, {
 									onSuccess: data => {
 										const products = data.data.products
-										const creams = products.find((v: any) => v?.category === 'Creams')
 										const primer = products.find((v: any) => v?.category === 'Primer')
 										const fluids = products.find((v: any) => v?.category === 'Fluids')
 										const cushions = products.find((v: any) => v?.category === 'Cushions')
@@ -49,7 +48,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 										const powders = products.find((v: any) => v?.category === 'Powders')
 										const spray = products.find((v: any) => v?.category === 'Setting Spray')
 
-										form.setValue('creams', creams?.id)
 										form.setValue('primer', primer?.id)
 										form.setValue('fluids', fluids?.id)
 										form.setValue('cushions', cushions?.id)
@@ -57,12 +55,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 										form.setValue('powders', powders?.id)
 										form.setValue('spray', spray?.id)
 										const values = {
-											creams: {
-												id: creams?.id,
-												code: creams?.code,
-												name: creams?.name,
-												image_url: creams?.image_url,
-											},
 											primer: {
 												id: primer?.id,
 												code: primer?.code,
@@ -126,15 +118,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 				</FormHelperText>
 			</div>
 			<WrapList>
-				<AutoCompleteInput
-					name='creams'
-					routine='Makeup'
-					type='Creams'
-					filter_by='Creams'
-					value={values.creams}
-					onChange={onChange}
-					loading={isLoadingMutate}
-				/>
 				<AutoCompleteInput
 					name='primer'
 					routine='Makeup'
