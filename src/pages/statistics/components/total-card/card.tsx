@@ -1,3 +1,4 @@
+import { usePermission } from 'hooks/usePermission'
 import { Content, Container } from './style'
 
 interface ICard {
@@ -7,12 +8,13 @@ interface ICard {
 }
 
 export const ToralCard = ({ type, title, value }: ICard) => {
+	const { isAdmin } = usePermission()
 	return (
 		<Container>
 			<Content>
 				<h2>{value}</h2>
 				<span>{title}</span>
-				<span>({type})</span>
+				{isAdmin && <span>({type})</span>}
 			</Content>
 		</Container>
 	)
