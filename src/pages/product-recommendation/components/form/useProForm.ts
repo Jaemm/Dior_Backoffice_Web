@@ -15,12 +15,9 @@ export interface FormTypes {
 	cream?: number
 	eye?: number
 	uv?: number
-	primer?: number
-	fluids?: number
-	cushions?: number
-	concealer?: number
-	powders?: number
-	spray?: number
+	make1?: number
+	make2?: number
+	make3?: number
 	tabValue?: number
 	skin?: string | null
 	make?: string | null
@@ -65,14 +62,7 @@ const defaultSkin = {
 	uv: {},
 }
 
-const defaultMake = {
-	primer: {},
-	fluids: {},
-	cushions: {},
-	concealer: {},
-	powders: {},
-	spray: {},
-}
+const defaultMake = { make1: {}, make2: {}, make3: {} }
 
 export const useProForm = (values?: IValue, type?: string, total?: number) => {
 	const queryClient = useQueryClient()
@@ -136,12 +126,9 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 						undefined,
 						undefined,
 						undefined,
-						data.primer,
-						data.fluids,
-						data.cushions,
-						data.concealer,
-						data.powders,
-						data.spray,
+						data.make1,
+						data.make2,
+						data.make3,
 				  ]
 				: [
 						data.preserum,
@@ -169,61 +156,37 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const handleEdit = () => {
 		if (values?.routine === 'Makeup') {
-			const primer = values?.products.find((v: any) => v?.category === 'Primer')
 			const fluids = values?.products.find((v: any) => v?.category === 'Fluids')
-			const cushions = values?.products.find((v: any) => v?.category === 'Cushions')
 			const concealer = values?.products.find((v: any) => v?.category === 'Concealer')
 			const powders = values?.products.find((v: any) => v?.category === 'Powders')
-			const spray = values?.products.find((v: any) => v?.category === 'Setting Spray')
 
 			setMake({
-				primer: {
-					id: primer?.id,
-					code: primer?.code,
-					name: primer?.name,
-					image_url: primer?.image_url,
-				},
-				fluids: {
+				make1: {
 					id: fluids?.id,
 					code: fluids?.code,
 					name: fluids?.name,
 					image_url: fluids?.image_url,
 				},
-				cushions: {
-					id: cushions?.id,
-					code: cushions?.code,
-					name: cushions?.name,
-					image_url: cushions?.image_url,
-				},
-				concealer: {
+				make2: {
 					id: concealer?.id,
 					code: concealer?.code,
 					name: concealer?.name,
 					image_url: concealer?.image_url,
 				},
-				powders: {
+				make3: {
 					id: powders?.id,
 					code: powders?.code,
 					name: powders?.name,
 					image_url: powders?.image_url,
-				},
-				spray: {
-					id: spray?.id,
-					code: spray?.code,
-					name: spray?.name,
-					image_url: spray?.image_url,
 				},
 			})
 			form.reset({
 				name: values?.name!,
 				make: values?.id,
 				tabValue: 1,
-				primer: primer?.id,
-				fluids: fluids?.id,
-				cushions: cushions?.id,
-				concealer: concealer?.id,
-				powders: powders?.id,
-				spray: spray?.id,
+				make1: fluids?.id,
+				make2: concealer?.id,
+				make3: powders?.id,
 			})
 			setValue(1)
 		} else {

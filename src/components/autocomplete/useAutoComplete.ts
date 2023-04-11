@@ -46,7 +46,5 @@ export const useAutoComplete = (routine: string, filter_by: string) => {
 		},
 	)
 
-	console.log(data)
-
 	return { data, setData, isLoading, isFetching, searchValue, setSearchValue }
 }

@@ -88,7 +88,7 @@ export const AutoCompleteInput = memo(
 								{...params}
 								fullWidth
 								variant='filled'
-								placeholder='Enter product name'
+								placeholder='Enter product name/code'
 								InputProps={{
 									...params.InputProps,
 									endAdornment: (
