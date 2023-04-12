@@ -4,12 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { getProductCatalog } from 'api/product-catalog'
 
 interface IParams {
-	page: number
-	filter_by: string
 	routine: string
+	filter_by?: string
 }
 
-export const useAutoComplete = (routine: string, filter_by: string) => {
+export const useAutoComplete = ({ routine, filter_by }: IParams) => {
 	const [searchValue, setSearchValue] = useState('')
 	const [data, setData] = useState({ data: [], options: [] })
 
@@ -17,7 +16,6 @@ export const useAutoComplete = (routine: string, filter_by: string) => {
 		[`product-catalog-list-${routine}-${filter_by}`],
 		() =>
 			getProductCatalog<IParams>({
-				page: 1,
 				filter_by,
 				routine,
 			}),

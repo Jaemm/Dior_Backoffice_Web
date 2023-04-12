@@ -42,31 +42,31 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 									onSuccess: data => {
 										const products = data.data.products
 
-										const fluids = products.find((v: any) => v?.category === 'Fluids')
-										const concealer = products.find((v: any) => v?.category === 'Concealer')
-										const powders = products.find((v: any) => v?.category === 'Powders')
-										form.setValue('make1', fluids?.id)
-										form.setValue('make2', concealer?.id)
-										form.setValue('make3', powders?.id)
+										const make1 = products[0]
+										const make2 = products[1]
+										const make3 = products[2]
+										form.setValue('make1', make1?.id)
+										form.setValue('make2', make2?.id)
+										form.setValue('make3', make3?.id)
 
 										const values = {
 											make1: {
-												id: fluids?.id,
-												code: fluids?.code,
-												name: fluids?.name,
-												image_url: fluids?.image_url,
+												id: make1?.id,
+												code: make1?.code,
+												name: make1?.name,
+												image_url: make1?.image_url,
 											},
 											make2: {
-												id: concealer?.id,
-												code: concealer?.code,
-												name: concealer?.name,
-												image_url: concealer?.image_url,
+												id: make2?.id,
+												code: make2?.code,
+												name: make2?.name,
+												image_url: make2?.image_url,
 											},
 											make3: {
-												id: powders?.id,
-												code: powders?.code,
-												name: powders?.name,
-												image_url: powders?.image_url,
+												id: make3?.id,
+												code: make3?.code,
+												name: make3?.name,
+												image_url: make3?.image_url,
 											},
 										}
 										setValues(values)
@@ -101,7 +101,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 					type='Make-up 1'
 					value={values.make1}
 					onChange={onChange}
-					filter_by='Fluids'
 					loading={isLoadingMutate}
 				/>
 				<AutoCompleteInput
@@ -110,7 +109,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 					type='Make-up 2'
 					value={values.make2}
 					onChange={onChange}
-					filter_by='Concealer'
 					loading={isLoadingMutate}
 				/>
 				<AutoCompleteInput
@@ -118,7 +116,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 					routine='Makeup'
 					type='Make-up 3'
 					value={values.make3}
-					filter_by='Powders'
 					onChange={onChange}
 					loading={isLoadingMutate}
 				/>

@@ -156,37 +156,37 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const handleEdit = () => {
 		if (values?.routine === 'Makeup') {
-			const fluids = values?.products.find((v: any) => v?.category === 'Fluids')
-			const concealer = values?.products.find((v: any) => v?.category === 'Concealer')
-			const powders = values?.products.find((v: any) => v?.category === 'Powders')
+			const make1 = values?.products[0]
+			const make2 = values?.products[1]
+			const make3 = values?.products[2]
 
 			setMake({
 				make1: {
-					id: fluids?.id,
-					code: fluids?.code,
-					name: fluids?.name,
-					image_url: fluids?.image_url,
+					id: make1?.id,
+					code: make1?.code,
+					name: make1?.name,
+					image_url: make1?.image_url,
 				},
 				make2: {
-					id: concealer?.id,
-					code: concealer?.code,
-					name: concealer?.name,
-					image_url: concealer?.image_url,
+					id: make2?.id,
+					code: make2?.code,
+					name: make2?.name,
+					image_url: make2?.image_url,
 				},
 				make3: {
-					id: powders?.id,
-					code: powders?.code,
-					name: powders?.name,
-					image_url: powders?.image_url,
+					id: make3?.id,
+					code: make3?.code,
+					name: make3?.name,
+					image_url: make3?.image_url,
 				},
 			})
 			form.reset({
 				name: values?.name!,
 				make: values?.id,
 				tabValue: 1,
-				make1: fluids?.id,
-				make2: concealer?.id,
-				make3: powders?.id,
+				make1: make1?.id,
+				make2: make2?.id,
+				make3: make3?.id,
 			})
 			setValue(1)
 		} else {

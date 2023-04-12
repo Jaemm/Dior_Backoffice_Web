@@ -18,16 +18,16 @@ interface IInput {
 	name: string
 	onChange: any
 	loading: boolean
-	filter_by: string
+	filter_by?: string
 	routine: 'Makeup' | 'Skincare'
 }
 
 export const AutoCompleteInput = memo(
 	({ name, type, value, loading, onChange, routine, filter_by }: IInput) => {
-		const { data, setData, isLoading, isFetching, searchValue, setSearchValue } = useAutoComplete(
+		const { data, setData, isLoading, isFetching, searchValue, setSearchValue } = useAutoComplete({
 			routine,
 			filter_by,
-		)
+		})
 
 		return (
 			<Wrapper>
