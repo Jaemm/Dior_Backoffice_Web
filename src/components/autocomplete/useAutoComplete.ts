@@ -23,17 +23,12 @@ export const useAutoComplete = (routine: string, filter_by: string) => {
 			}),
 		{
 			select: data => {
-				const set = new Set()
-				data.data.data.forEach((v: any) => set.add(v))
-				const newData = Array.from(set).map((v: any) => ({
+				const options = data.data.data.map((v: any) => ({
 					code: v.code,
 					id: v.id,
 					image_url: v.image_url,
 					name: v.name,
 				}))
-
-				const options = [...newData]
-
 				return { ...data.data, options }
 			},
 			onSuccess: data => {

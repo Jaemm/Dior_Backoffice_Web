@@ -96,7 +96,7 @@ export const AutoCompleteInput = memo(
 											{isLoading || loading || isFetching ? (
 												<CircularProgress size='20px' sx={{ marginRight: '5px' }} />
 											) : (
-												data.options.find((v: any) => value?.name?.includes(v.name)) && (
+												data.data.find((v: any) => value?.name?.includes(v.name)) && (
 													<IconButton size='small'>
 														<IconCheck />
 													</IconButton>
