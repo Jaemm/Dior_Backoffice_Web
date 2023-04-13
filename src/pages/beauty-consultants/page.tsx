@@ -15,7 +15,7 @@ import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
 
 const BeautyConsultants = () => {
-	const { user, isAdmin } = usePermission()
+	const { user, isAdminNotBrand } = usePermission()
 	const { countries, isLoading: countryIsLoading } = useCountries()
 	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
 		useDataSelectedTable<DataRow>()
@@ -65,7 +65,7 @@ const BeautyConsultants = () => {
 						<Button onClick={handleClear}>Reset</Button>
 					</LeftSide>
 					<RightSide>
-						{isAdmin && (
+						{isAdminNotBrand && (
 							<>
 								<Add optionsPos={optionPosData.onlyOptionPos} />
 								<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />

@@ -15,7 +15,7 @@ import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
 
 const BrandDetails = () => {
-	const { user, isAdmin } = usePermission()
+	const { user, isAdminNotBrand } = usePermission()
 	const { countries, isLoading: countryIsLoading } = useCountries()
 	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
 		useDataSelectedTable<DataRow>()
@@ -51,7 +51,7 @@ const BrandDetails = () => {
 						)}
 					</LeftSide>
 					<RightSide>
-						{isAdmin && (
+						{isAdminNotBrand && (
 							<>
 								<FormBrandDetails
 									type='add'
