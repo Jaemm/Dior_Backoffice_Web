@@ -40,8 +40,7 @@ const BrandDetails = () => {
 				<Header>
 					<LeftSide>
 						<Search value={searchValue} onChange={handleSearchChange} />
-						{(user?.user_type === PERMISSIONS.SUPER_ADMIN ||
-							user?.user_type === PERMISSIONS.ADMIN) && (
+						{user?.user_type === PERMISSIONS.SUPER_ADMIN && (
 							<FilterSelect
 								value={country}
 								options={countries}
