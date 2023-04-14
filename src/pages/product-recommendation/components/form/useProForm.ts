@@ -4,12 +4,8 @@ import { useToggle } from 'hooks/useToggle'
 import { notifyError } from 'components/notify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SyntheticEvent, useEffect, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-	addRecommendations,
-	editRecommendations,
-	productRecommendations,
-} from 'api/product-recommendations'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { addRecommendations, editRecommendations } from 'api/product-recommendations'
 
 export interface FormTypes {
 	name: string
@@ -57,18 +53,22 @@ export const defaultValues = {
 	products_selected: [],
 }
 
+const defaultSkin = {
+	preserum: {},
+	lotion: {},
+	serum: {},
+	cream: {},
+	eye: {},
+	uv: {},
+}
+
+const defaultMake = { make1: {}, make2: {}, make3: {} }
+
 export const useProForm = (values?: IValue, type?: string, total?: number) => {
 	const queryClient = useQueryClient()
 	const [value, setValue] = useState(0)
-	const [skin, setSkin] = useState({
-		preserum: {},
-		lotion: {},
-		serum: {},
-		cream: {},
-		eye: {},
-		uv: {},
-	})
-	const [make, setMake] = useState({ make1: {}, make2: {}, make3: {} })
+	const [skin, setSkin] = useState(defaultSkin)
+	const [make, setMake] = useState(defaultMake)
 	const [open, toggle, setToggle] = useToggle()
 
 	const form = useForm<FormTypes>({
@@ -77,71 +77,17 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 		defaultValues,
 	})
 
-	const {
-		isLoading: isLoadingGroups,
-		data: groups = {
-			skin: {
-				options: [],
-				products: [],
-			},
-			make: {
-				options: [],
-				products: [],
-			},
-		},
-	} = useQuery(['product-groups', total], () => productRecommendations({ per: total, page: 1 }), {
-		select: data => {
-			const setSkin = new Set()
-			const setMake = new Set()
-			const products = data.data.data
-				.map((v: any) => v.products)
-				.flat(2)
-				.map((p: any) => ({
-					id: p.id,
-					name: p.name,
-					code: p.code,
-					image_url: p.image_url,
-					category: p.category,
-				}))
-			const optionSkin = data.data.data
-				.filter((v: any) => v.products[0]?.routine === 'Skincare')
-				.map((v: any) => {
-					v.products.map((m: any) => setSkin.add(m.id))
-					return { ...v, label: v?.name, value: v.id }
-				})
-
-			const optionMake = data.data.data
-				.filter((v: any) => v.products[0]?.routine === 'Makeup')
-				.map((v: any) => {
-					v.products.map((m: any) => setMake.add(m.id))
-					return { ...v, label: v?.name, value: v.id }
-				})
-
-			const productsofSkin = Array.from(setSkin, v => products.find((p: any) => v === p.id))
-			const productsofMake = Array.from(setMake, v => products.find((p: any) => v === p.id))
-
-			const skin = {
-				options: optionSkin,
-				products: productsofSkin,
-			}
-			const make = {
-				options: optionMake,
-				products: productsofMake,
-			}
-
-			return { ...data.data, skin, make }
-		},
-		onError: (err: any) => {
-			notifyError(err.response.data.error)
-		},
-		keepPreviousData: true,
-		enabled: total !== 0,
-	})
+	const handleClose = () => {
+		setToggle(false)
+		form.reset(defaultValues)
+		setValue(0)
+		setMake(defaultMake)
+		setSkin(defaultSkin)
+	}
 
 	const handleSuccess = async () => {
 		await queryClient.invalidateQueries(['product-recommendations'])
-		await setToggle(false)
-		await form.reset(defaultValues)
+		await handleClose()
 	}
 
 	const handleChangeSkin = (name: any, value: any) => {
@@ -173,7 +119,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const onSubmit = (data: FormTypes) => {
 		const products_selected =
-			values?.routine === 'Makeup'
+			data.tabValue === 1
 				? [
 						undefined,
 						undefined,
@@ -195,7 +141,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 						undefined,
 						undefined,
 				  ]
-
 		if (type === 'edit') {
 			editProduct.mutate({
 				name: data.name,
@@ -211,37 +156,37 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const handleEdit = () => {
 		if (values?.routine === 'Makeup') {
-			const fluids = values?.products.find((v: any) => v?.category === 'Fluids')
-			const concealer = values?.products.find((v: any) => v?.category === 'Concealer')
-			const powders = values?.products.find((v: any) => v?.category === 'Powders')
+			const make1 = values?.products[0]
+			const make2 = values?.products[1]
+			const make3 = values?.products[2]
 
 			setMake({
 				make1: {
-					id: fluids?.id,
-					code: fluids?.code,
-					name: fluids?.name,
-					image_url: fluids?.image_url,
+					id: make1?.id,
+					code: make1?.code,
+					name: make1?.name,
+					image_url: make1?.image_url,
 				},
 				make2: {
-					id: concealer?.id,
-					code: concealer?.code,
-					name: concealer?.name,
-					image_url: concealer?.image_url,
+					id: make2?.id,
+					code: make2?.code,
+					name: make2?.name,
+					image_url: make2?.image_url,
 				},
 				make3: {
-					id: powders?.id,
-					code: powders?.code,
-					name: powders?.name,
-					image_url: powders?.image_url,
+					id: make3?.id,
+					code: make3?.code,
+					name: make3?.name,
+					image_url: make3?.image_url,
 				},
 			})
 			form.reset({
 				name: values?.name!,
 				make: values?.id,
 				tabValue: 1,
-				make1: fluids?.id,
-				make2: concealer?.id,
-				make3: powders?.id,
+				make1: make1?.id,
+				make2: make2?.id,
+				make3: make3?.id,
 			})
 			setValue(1)
 		} else {
@@ -307,12 +252,11 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 	const handleChange = (event: SyntheticEvent, newValue: number) => {
 		setValue(newValue)
 		form.reset({ tabValue: newValue, products_selected: [], name: form.getValues('name') })
-	}
-
-	const handleClose = () => {
-		setToggle(false)
-		form.reset(defaultValues)
-		setValue(0)
+		if (newValue === 0) {
+			setMake(defaultMake)
+		} else {
+			setSkin(defaultSkin)
+		}
 	}
 
 	useEffect(() => {
@@ -330,14 +274,12 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 		form,
 		value,
 		toggle,
-		groups,
 		setMake,
 		setSkin,
 		onSubmit,
 		isLoading,
 		handleClose,
 		handleChange,
-		isLoadingGroups,
 		handleChangeSkin,
 		handleChangeMake,
 	}

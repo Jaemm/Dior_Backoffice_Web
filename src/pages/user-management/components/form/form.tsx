@@ -100,7 +100,7 @@ export const Form = ({ type, title, values, buttonTitle, ButtonModal }: IForm) =
 							label='Password'
 							autoComplete='off'
 							control={form.control}
-							placeholder='Enter email here'
+							placeholder='Enter password here'
 							error={!!form.formState.errors.password}
 							message={form.formState.errors.password?.message}
 						/>

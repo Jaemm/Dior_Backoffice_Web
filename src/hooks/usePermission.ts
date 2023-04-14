@@ -25,7 +25,13 @@ export const usePermission = () => {
 		})
 	}, [pathname])
 
-	const isAdmin = user?.user_type !== PERMISSIONS.BRAND_MANAGER
+	const isAdmin = !(
+		user?.user_type === PERMISSIONS.BRAND_MANAGER || user?.user_type === PERMISSIONS.ADMIN
+	)
 
-	return { user, isAdmin }
+	const isSimpleAdmin = user?.user_type === PERMISSIONS.ADMIN
+
+	const isAdminNotBrand = !(user?.user_type === PERMISSIONS.BRAND_MANAGER)
+
+	return { user, isAdmin, isSimpleAdmin, isAdminNotBrand }
 }

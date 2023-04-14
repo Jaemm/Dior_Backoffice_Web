@@ -3,7 +3,6 @@ import styled from 'styled-components'
 export const WrapList = styled.div`
 	width: 100%;
 	overflow-y: auto;
-	max-height: 300px;
 	padding: 7px 10px;
 	border-radius: 6px;
 	border: 1px solid var(--gray);

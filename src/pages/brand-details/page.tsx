@@ -15,7 +15,7 @@ import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
 
 const BrandDetails = () => {
-	const { user } = usePermission()
+	const { user, isAdminNotBrand } = usePermission()
 	const { countries, isLoading: countryIsLoading } = useCountries()
 	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
 		useDataSelectedTable<DataRow>()
@@ -40,8 +40,7 @@ const BrandDetails = () => {
 				<Header>
 					<LeftSide>
 						<Search value={searchValue} onChange={handleSearchChange} />
-						{(user?.user_type === PERMISSIONS.SUPER_ADMIN ||
-							user?.user_type === PERMISSIONS.ADMIN) && (
+						{user?.user_type === PERMISSIONS.SUPER_ADMIN && (
 							<FilterSelect
 								value={country}
 								options={countries}
@@ -52,13 +51,17 @@ const BrandDetails = () => {
 						)}
 					</LeftSide>
 					<RightSide>
-						<FormBrandDetails
-							type='add'
-							buttonTitle='Save'
-							title='ADD A NEW POS'
-							ButtonModal={({ onClick }) => <Button onClick={onClick}>Add</Button>}
-						/>
-						<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
+						{isAdminNotBrand && (
+							<>
+								<FormBrandDetails
+									type='add'
+									buttonTitle='Save'
+									title='ADD A NEW POS'
+									ButtonModal={({ onClick }) => <Button onClick={onClick}>Add</Button>}
+								/>
+								<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
+							</>
+						)}
 						<Upload
 							file={samplePos}
 							type='company_branches'

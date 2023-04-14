@@ -24,14 +24,12 @@ export const Form = ({ type, total, values, ButtonModal, buttonTitle }: IForm) =
 		form,
 		value,
 		toggle,
-		groups,
 		setMake,
 		setSkin,
 		onSubmit,
 		isLoading,
 		handleClose,
 		handleChange,
-		isLoadingGroups,
 		handleChangeSkin,
 		handleChangeMake,
 	} = useProForm(values, type, total)
@@ -55,6 +53,7 @@ export const Form = ({ type, total, values, ButtonModal, buttonTitle }: IForm) =
 						boxShadow: '0px 0px 20px 5px rgba(0, 0, 0, 0.3)',
 					},
 				}}
+				maxWidth='md'
 			>
 				<Container>
 					<IconButton onClick={handleClose} className='exit' aria-label='exit'>
@@ -86,25 +85,13 @@ export const Form = ({ type, total, values, ButtonModal, buttonTitle }: IForm) =
 								/>
 							</Tabs>
 							<TabPanel value={value} index={0}>
-								<Skin
-									values={skin}
-									setValues={setSkin}
-									group={groups.skin}
-									isLoading={isLoadingGroups}
-									onChange={handleChangeSkin}
-								/>
+								<Skin values={skin} setValues={setSkin} onChange={handleChangeSkin} />
 								<Button disabled={isLoading} type='submit' fullWidth>
 									{buttonTitle}
 								</Button>
 							</TabPanel>
 							<TabPanel value={value} index={1}>
-								<Make
-									values={make}
-									group={groups.make}
-									setValues={setMake}
-									isLoading={isLoadingGroups}
-									onChange={handleChangeMake}
-								/>
+								<Make values={make} setValues={setMake} onChange={handleChangeMake} />
 								<Button disabled={isLoading} type='submit' fullWidth>
 									{buttonTitle}
 								</Button>

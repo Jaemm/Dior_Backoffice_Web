@@ -2,7 +2,7 @@ import { request } from 'api/request'
 import { FormTypes, FormForgetTypes } from 'types/login'
 
 export const loginUser = (data: FormTypes) =>
-	request.post('api/partnerdb/consultants/login', data, {
+	request.post('api/partnerdb/consultants/dior_login', data, {
 		headers: {
 			'X-CHOWIS-LOCALE': 'ko',
 		},

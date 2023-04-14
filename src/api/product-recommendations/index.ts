@@ -5,6 +5,14 @@ export const productRecommendations = <T>(params: T) =>
 		params,
 	})
 
+export const getProductFormRecommendations = <T>(params: T) =>
+	request('api/dior/product_recommendation_groups/list', {
+		params,
+	})
+
+export const getProductFormRecommendation = (id: string) =>
+	request(`api/dior/product_recommendation_groups/${id}/get_products`)
+
 export const recProductions = <T>(params: T) =>
 	request('api/pmx/product_recommendations', { params })
 

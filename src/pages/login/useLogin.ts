@@ -51,6 +51,7 @@ export const useLogin = () => {
 				name: data.data.name,
 				user_id: data.data.id,
 				token: data.data.token,
+				countries: data.data.countries,
 				user_type: data.data.consultant_position.name,
 			})
 			if (form.getValues('remember')) {

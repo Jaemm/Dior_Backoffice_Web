@@ -16,14 +16,18 @@ interface IInput {
 	value: any
 	type: string
 	name: string
-	products: any[]
 	onChange: any
-	routine: string
+	loading: boolean
+	filter_by?: string
+	routine: 'Makeup' | 'Skincare'
 }
 
 export const AutoCompleteInput = memo(
-	({ name, type, value, products, onChange, routine }: IInput) => {
-		const { data, isLoading, isFetching, setSearchValue } = useAutoComplete(products, routine)
+	({ name, type, value, loading, onChange, routine, filter_by }: IInput) => {
+		const { data, setData, isLoading, isFetching, searchValue, setSearchValue } = useAutoComplete({
+			routine,
+			filter_by,
+		})
 
 		return (
 			<Wrapper>
@@ -33,13 +37,31 @@ export const AutoCompleteInput = memo(
 					id={name}
 					value={value}
 					disableClearable
-					options={isLoading || isFetching ? [] : data.options}
-					loading={isLoading || isFetching}
+					loading={isLoading || loading || isFetching}
+					options={isLoading || loading || isFetching ? [] : data.data}
 					onChange={(_, newValue) => {
 						onChange(name, newValue)
 					}}
 					onInputChange={(_, newInputValue) => {
 						setSearchValue(newInputValue)
+						if (newInputValue.length === 0) {
+							onChange(name, undefined)
+							setData(prev => ({ ...prev, options: prev.data }))
+						} else {
+							const newOptions = data.data.filter(
+								({ name, code }: any) =>
+									name.toLowerCase().includes(newInputValue.toLowerCase()) ||
+									code.toLowerCase().includes(newInputValue.toLowerCase()),
+							)
+							setData(prev => ({ ...prev, options: newOptions }))
+						}
+					}}
+					filterOptions={(options, { inputValue }) => {
+						return options.filter(
+							(item: any) =>
+								item.name.toUpperCase().includes(inputValue.toUpperCase()) ||
+								item.code.toUpperCase().includes(inputValue.toUpperCase()),
+						)
 					}}
 					inputMode='search'
 					getOptionLabel={(option: any) => option?.name || ''}
@@ -66,15 +88,15 @@ export const AutoCompleteInput = memo(
 								{...params}
 								fullWidth
 								variant='filled'
-								placeholder='Enter product name'
+								placeholder='Enter product name/code'
 								InputProps={{
 									...params.InputProps,
 									endAdornment: (
 										<InputAdornment position='end'>
-											{isLoading || isFetching ? (
+											{isLoading || loading || isFetching ? (
 												<CircularProgress size='20px' sx={{ marginRight: '5px' }} />
 											) : (
-												data.options.find((v: any) => v?.id === value?.id) && (
+												data.data.find((v: any) => value?.name?.includes(v.name)) && (
 													<IconButton size='small'>
 														<IconCheck />
 													</IconButton>
@@ -88,7 +110,7 @@ export const AutoCompleteInput = memo(
 						</Container>
 					)}
 				/>
-				{data.options.find((v: any) => v?.id === value?.id) && (
+				{searchValue.length > 0 && (
 					<WrapCancel>
 						<IconButton
 							style={{ marginTop: 25, width: 'fit-content' }}
