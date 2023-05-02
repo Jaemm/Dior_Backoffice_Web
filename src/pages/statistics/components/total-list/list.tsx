@@ -11,10 +11,10 @@ export const TotalList = () => {
 				<ListSkeleton />
 			) : (
 				<>
-					<ToralCard type='GLOBAL' title='Consultations' value={data.total_consultations} />
-					<ToralCard type='GLOBAL' title='Registered Client' value={data.total_clients} />
-					<ToralCard type='GLOBAL' title='All Devices' value={data.total_devices} />
-					<ToralCard type='GLOBAL' title='Number of stores' value={data.total_branches} />
+					<ToralCard type='consultations' value={data.total_consultations} />
+					<ToralCard type='clients' value={data.total_clients} />
+					<ToralCard type='devices' value={data.total_devices} />
+					<ToralCard type='stores' value={data.total_branches} />
 				</>
 			)}
 		</Container>
