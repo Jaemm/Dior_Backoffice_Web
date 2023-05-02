@@ -12,7 +12,7 @@ interface ICard {
 export const ToralCard = ({ type, value }: ICard) => {
 	const { user, isAdmin } = usePermission()
 
-	if (user?.user_type !== PERMISSIONS.SUPER_ADMIN) {
+	if (user?.user_type !== PERMISSIONS.SUPER_ADMIN || type === 'devices') {
 		return (
 			<Container>
 				<Content>
