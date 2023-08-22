@@ -21,6 +21,7 @@ export type DataRow = {
 		collection: string
 		description: string
 		id: number
+		principal: boolean
 		image_url: string
 		link: string
 		name: string
@@ -29,6 +30,7 @@ export type DataRow = {
 	}[]
 	right: string
 	status: string
+	principal_product: number
 }
 
 interface IParams {

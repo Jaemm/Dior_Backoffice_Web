@@ -26,4 +26,5 @@ export const schema: SchemaOf<FormTypes> = object().shape({
 	make3: number().notRequired(),
 	tabValue: number().required(),
 	products_selected: array().notRequired(),
+	principal_product: number().required(),
 })

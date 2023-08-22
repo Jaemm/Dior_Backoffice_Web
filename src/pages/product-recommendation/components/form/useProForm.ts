@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { SyntheticEvent, useEffect, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { addRecommendations, editRecommendations } from 'api/product-recommendations'
-
 export interface FormTypes {
 	name: string
 	preserum?: number
@@ -22,6 +21,7 @@ export interface FormTypes {
 	skin?: string | null
 	make?: string | null
 	products_selected?: any[]
+	principal_product: number
 }
 
 export interface IValue {
@@ -37,11 +37,13 @@ export interface IValue {
 		description: string
 		id: number
 		image_url: string
+		is_principal?: boolean
 		link: string
 		name: string
 		product_type: string
 		routine: string
 	}[]
+	principal_product: number
 	right: string
 }
 
@@ -51,6 +53,7 @@ export const defaultValues = {
 	make: null,
 	tabValue: 0,
 	products_selected: [],
+	principal_product: undefined,
 }
 
 const defaultSkin = {
@@ -70,7 +73,6 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 	const [skin, setSkin] = useState(defaultSkin)
 	const [make, setMake] = useState(defaultMake)
 	const [open, toggle, setToggle] = useToggle()
-
 	const form = useForm<FormTypes>({
 		resolver: yupResolver(schema),
 		mode: 'onChange',
@@ -89,15 +91,15 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 		await queryClient.invalidateQueries(['product-recommendations'])
 		await handleClose()
 	}
-
 	const handleChangeSkin = (name: any, value: any) => {
 		form.setValue(name, value?.id)
 		setSkin({ ...skin, [name]: value })
 	}
 
 	const handleChangeMake = (name: any, value: any) => {
+		
 		form.setValue(name, value?.id)
-		setMake({ ...make, [name]: value })
+		setMake({ ...make, [name]: value})
 	}
 
 	const addProduct = useMutation((data: FormTypes) => addRecommendations<FormTypes>(data), {
@@ -116,6 +118,7 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 			},
 		},
 	)
+	
 
 	const onSubmit = (data: FormTypes) => {
 		const products_selected =
@@ -141,19 +144,21 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 						undefined,
 						undefined,
 				  ]
+
 		if (type === 'edit') {
 			editProduct.mutate({
 				name: data.name,
 				products_selected,
+				principal_product: data.principal_product,
 			})
 		} else {
 			addProduct.mutate({
 				name: data.name,
 				products_selected,
+				principal_product: data.principal_product,
 			})
 		}
 	}
-
 	const handleEdit = () => {
 		if (values?.routine === 'Makeup') {
 			const make1 = values?.products[0]
@@ -166,18 +171,21 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 					code: make1?.code,
 					name: make1?.name,
 					image_url: make1?.image_url,
+					principal: make1?.is_principal
 				},
 				make2: {
 					id: make2?.id,
 					code: make2?.code,
 					name: make2?.name,
 					image_url: make2?.image_url,
+					principal: make2?.is_principal
 				},
 				make3: {
 					id: make3?.id,
 					code: make3?.code,
 					name: make3?.name,
 					image_url: make3?.image_url,
+					principal: make3?.is_principal
 				},
 			})
 			form.reset({
@@ -251,7 +259,11 @@ export const useProForm = (values?: IValue, type?: string, total?: number) => {
 
 	const handleChange = (event: SyntheticEvent, newValue: number) => {
 		setValue(newValue)
-		form.reset({ tabValue: newValue, products_selected: [], name: form.getValues('name') })
+		form.reset({
+			tabValue: newValue,
+			products_selected: [],
+			name: form.getValues('name'),
+		})
 		if (newValue === 0) {
 			setMake(defaultMake)
 		} else {

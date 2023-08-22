@@ -34,6 +34,10 @@ export const useMake = () => {
 	)
 
 	const { mutate, isLoading: isLoadingMutate } = useMutation(getProductFormRecommendation)
-
-	return { data: data?.data?.data, mutate, isLoading, isLoadingMutate }
+	return {
+		data: data?.data?.data,
+		mutate,
+		isLoading,
+		isLoadingMutate,
+	}
 }

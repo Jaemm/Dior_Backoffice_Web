@@ -3,7 +3,7 @@ import { ReactComponent as Check } from 'assets/icons/check.svg'
 import { ReactComponent as Cancel } from 'assets/icons/cancel.svg'
 
 export const Container = styled.div`
-	width: 100%;
+	width: 90%;
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
@@ -45,5 +45,11 @@ export const IconCancel = styled(Cancel)`
 export const WrapCancel = styled.div`
 	top: 10px;
 	right: 10px;
+	position: absolute;
+`
+export const WrapRadio = styled.div`
+	top: 21.5px;
+	right: 38px;
+	transform: scale(1.1); 
 	position: absolute;
 `

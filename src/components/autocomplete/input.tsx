@@ -20,10 +20,11 @@ interface IInput {
 	loading: boolean
 	filter_by?: string
 	routine: 'Makeup' | 'Skincare'
+	children?: React.ReactNode
 }
 
 export const AutoCompleteInput = memo(
-	({ name, type, value, loading, onChange, routine, filter_by }: IInput) => {
+	({ name, type, value, loading, onChange, routine, filter_by, children }: IInput) => {
 		const { data, setData, isLoading, isFetching, searchValue, setSearchValue } = useAutoComplete({
 			routine,
 			filter_by,
@@ -110,7 +111,10 @@ export const AutoCompleteInput = memo(
 						</Container>
 					)}
 				/>
+				
 				{searchValue.length > 0 && (
+				<>
+				{children}
 					<WrapCancel>
 						<IconButton
 							style={{ marginTop: 25, width: 'fit-content' }}
@@ -119,6 +123,7 @@ export const AutoCompleteInput = memo(
 							<IconCancel />
 						</IconButton>
 					</WrapCancel>
+				</>
 				)}
 			</Wrapper>
 		)

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Image } from './components/image'
 import { CatForm } from './components/form'
 import { notifyError } from 'components/notify'
@@ -12,13 +12,13 @@ import { TableColumn } from 'react-data-table-component'
 import { DataRowProductCatalog } from 'types/product-catalog'
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg'
 import { WrapLink, WrapButton, WrapButtons, WrapImageError } from './style'
-
 interface IParams {
 	filter_by?: string
 	filter_by_2?: string
 	limit: number
 	page: number
 	search: string
+	request_origin: string
 }
 
 export const useCatalog = () => {
@@ -29,7 +29,7 @@ export const useCatalog = () => {
 	const search = useDebounce(searchValue, 500)
 	const [category, setCategory] = useState<string>('')
 	const [collection, setCollection] = useState<string>('')
-
+	
 	const {
 		data = {
 			data: [],
@@ -46,6 +46,7 @@ export const useCatalog = () => {
 				search,
 				filter_by: category,
 				filter_by_2: collection,
+				request_origin: 'dior_bo'
 			}),
 		{
 			select: data => {
