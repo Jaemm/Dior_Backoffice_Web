@@ -137,7 +137,7 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 									</form>
 								</FormProvider>
 								{isVariation && (
-									<TabPanel value={value} index={3}>
+									<TabPanel value={value} index={isAdmin ? 3 : 2}>
 										<Variation {...values} />
 									</TabPanel>
 								)}

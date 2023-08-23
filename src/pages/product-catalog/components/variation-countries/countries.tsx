@@ -2,9 +2,11 @@ import { Spinner } from 'components/spinner'
 import { useCountries } from './useCountries'
 import { Box, Button, Checkbox, FormControlLabel } from '@mui/material'
 import { WrapList, Container, WrapSpinner } from './style'
+import { usePermission } from 'hooks/usePermission'
 
 export const VariationCountries = ({ onNext }: { onNext: (n: number) => void }) => {
 	const { countries, isLoading, isFetching, setCountries } = useCountries()
+	const { user, isAdmin } = usePermission()
 	return (
 		<Container>
 			<p>This variation is available for the below countries</p>
@@ -14,7 +16,16 @@ export const VariationCountries = ({ onNext }: { onNext: (n: number) => void }) 
 				</WrapSpinner>
 			) : (
 				<WrapList>
-					{countries?.map(({ label, value }) => (
+					{countries
+							?.filter(country => {
+								if(isAdmin){
+									return country
+								}
+								else {
+									return user.countries.includes(country.label)
+								}
+						    })
+					.map(({ label, value }) => (
 						<FormControlLabel
 							key={label}
 							control={
