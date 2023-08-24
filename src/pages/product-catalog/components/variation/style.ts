@@ -49,6 +49,25 @@ export const WrapButtons = styled.div`
 		background: #cc5858;
 	}
 `
+export const WrapEdit = styled.div`
+	.edit {
+		border-radius: 0 15px 15px 0;
+		background: linear-gradient(180deg, #303030 0%, #747474 100%);
+	}
+	& > button {
+		width: 55px;
+		border: none;
+		display: flex;
+		height: 100px;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		&:disabled {
+			cursor: not-allowed;
+			background-color: #cccccc;
+		}
+	}
+`
 
 export const WrapNewButton = styled.div`
 	width: 100%;

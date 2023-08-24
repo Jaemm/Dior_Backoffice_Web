@@ -1,4 +1,4 @@
-import { WrapButtons } from './style'
+import { WrapButtons, WrapEdit } from './style'
 import { schema } from './form.schema'
 import { deleteData } from 'api/delete'
 import { useForm } from 'react-hook-form'
@@ -13,6 +13,7 @@ import { ReactComponent as IconEdit } from 'assets/icons/edit.svg'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ReactComponent as IconDelete } from 'assets/icons/delete.svg'
 import { postProductCatalog, pustProductCatalog, uploadImage, uploadUrl } from 'api/product-catalog'
+import { usePermission } from 'hooks/usePermission'
 
 export interface FormTypes {
 	id?: number
@@ -54,6 +55,7 @@ export const defaultValues = {
 export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 	const [imageUrl, setImageUrl] = useState<string | undefined>('')
 	const [type, setType] = useState('')
+	const { isAdmin } = usePermission()
 	const queryClient = useQueryClient()
 	const [image, setImage] = useState('')
 	const [open, toggle, setToggle] = useToggle()
@@ -227,14 +229,24 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 				selector: row => row.id,
 				width: '70px',
 				cell: row => (
-					<WrapButtons>
-						<button className='edit' onClick={() => handleEdit(row)}>
-							<IconEdit />
-						</button>
-						<button className='delete' onClick={() => handleDelete([row.id])}>
-							<IconDelete />
-						</button>
-					</WrapButtons>
+					isAdmin ? (
+						<WrapButtons>
+							<button className='edit' onClick={() => handleEdit(row)}>
+								<IconEdit />
+							</button>
+							<button className='delete' onClick={() => handleDelete([row.id])}>
+								<IconDelete />
+							</button>
+						</WrapButtons>
+						):
+						(
+							<WrapEdit>
+							<button className='edit' onClick={() => handleEdit(row)}>
+								<IconEdit />
+							</button>
+							</WrapEdit>
+						)
+				
 				),
 			},
 		],
