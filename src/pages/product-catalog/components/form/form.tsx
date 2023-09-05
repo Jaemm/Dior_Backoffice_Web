@@ -99,14 +99,18 @@ export const CatForm = ({ type, values, ButtonModal, buttonTitle }: ICatalogForm
 										}
 										{...a11yProps(0)}
 									/>
-									<Tab label='Variation' {...a11yProps(1)} />
+									{isAdmin &&(<Tab label='Variation' {...a11yProps(1)} />)}
 								</Tabs>
 								<TabPanel value={valueEditVar} index={0}>
 									<VariationCountries onNext={handleNextVar} />
 								</TabPanel>
-								<TabPanel value={valueEditVar} index={1}>
-									<Variation {...values} />
-								</TabPanel>
+								{isAdmin &&
+								(
+									<TabPanel value={valueEditVar} index={1}>
+									 <Variation {...values} />
+									</TabPanel>
+								)}
+
 							</>
 						) : (
 							<>
