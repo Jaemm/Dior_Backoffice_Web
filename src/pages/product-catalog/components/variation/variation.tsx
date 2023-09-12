@@ -10,6 +10,7 @@ import { DataRow, useVariation } from './useVariation'
 import { DataRowProductCatalog } from 'types/product-catalog'
 import { ReactComponent as IconUploadImage } from 'assets/icons/upload-image.svg'
 import { Form, Container, LabelUpload, WrapNewButton, WrapButtonsSubmit } from './style'
+import { getUser } from 'utils/getUser'
 
 export const Variation = (values: Partial<DataRowProductCatalog>) => {
 	const { optionsCategory, categoryIsLoading } = useCategory()
@@ -28,7 +29,7 @@ export const Variation = (values: Partial<DataRowProductCatalog>) => {
 		editVariation,
 		uploadingImageIsLoading,
 	} = useVariation(values)
-
+	const {user} = getUser()
 	return (
 		<>
 			{open || editVariation.open ? (
@@ -130,9 +131,12 @@ export const Variation = (values: Partial<DataRowProductCatalog>) => {
 				</Form>
 			) : (
 				<>
-					<WrapNewButton>
-						<Button onClick={handleAdd}>Add New Variant</Button>
-					</WrapNewButton>
+				{user.user_type === 'Super Admin' && (
+				<WrapNewButton>
+					<Button onClick={handleAdd}>Add New Variant</Button>
+				</WrapNewButton>
+				)}
+					
 					<Container>
 						<Table<DataRow>
 							keyField='id'

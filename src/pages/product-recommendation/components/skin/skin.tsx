@@ -121,7 +121,6 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 					name='preserum'
 					type='Pre-serums'
 					routine='Skincare'
-					filter_by='Pre-serums'
 					value={values.preserum}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -130,7 +129,6 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 					name='lotion'
 					type='Lotion'
 					routine='Skincare'
-					filter_by='Lotions'
 					value={values.lotion}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -139,7 +137,6 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 					name='serum'
 					type='Serum'
 					routine='Skincare'
-					filter_by='Serums'
 					value={values.serum}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -148,7 +145,6 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 					name='cream'
 					type='Cream'
 					routine='Skincare'
-					filter_by='Creams'
 					value={values.cream}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -157,7 +153,6 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 					name='eye'
 					type='Eye'
 					routine='Skincare'
-					filter_by='Eye Care'
 					value={values.eye}
 					onChange={onChange}
 					loading={isLoadingMutate}
@@ -165,7 +160,6 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 				<AutoCompleteInput
 					name='uv'
 					type='UV'
-					filter_by='UV Protection'
 					value={values.uv}
 					onChange={onChange}
 					loading={isLoadingMutate}

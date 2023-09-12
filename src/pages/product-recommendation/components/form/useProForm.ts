@@ -21,7 +21,7 @@ export interface FormTypes {
 	skin?: string | null
 	make?: string | null
 	products_selected?: any[]
-	principal_product: number
+	principal_product?: number | null
 }
 
 export interface IValue {
