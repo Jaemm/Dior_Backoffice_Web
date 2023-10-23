@@ -58,7 +58,7 @@ export const Variation = (values: Partial<DataRowProductCatalog>) => {
 							name='shades'
 							label='Shades'
 							control={form.control}
-							placeholder='Enter product name'
+							placeholder='Enter shade name'
 							error={!!form.formState.errors.name}
 							message={form.formState.errors.name?.message}
 						/>
