@@ -12,6 +12,7 @@ interface IInput {
 	message?: any
 	placeholder: string
 	autoComplete?: string
+	disable?: boolean
 	control: Control<any> | undefined
 }
 
@@ -25,6 +26,7 @@ export const Input = ({
 	InputProps,
 	placeholder,
 	autoComplete,
+	disable,
 	type = 'text',
 }: IInput) => {
 	return (
@@ -35,6 +37,7 @@ export const Input = ({
 				control={control}
 				render={({ field }) => (
 					<TextField
+						disabled={disable ?? false}
 						id={id}
 						fullWidth
 						{...field}

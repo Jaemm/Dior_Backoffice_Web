@@ -29,7 +29,7 @@ export const Variation = (values: Partial<DataRowProductCatalog>) => {
 		editVariation,
 		uploadingImageIsLoading,
 	} = useVariation(values)
-	const {user} = getUser()
+	const { user } = getUser()
 	return (
 		<>
 			{open || editVariation.open ? (
@@ -61,6 +61,7 @@ export const Variation = (values: Partial<DataRowProductCatalog>) => {
 							placeholder='Enter shade name'
 							error={!!form.formState.errors.name}
 							message={form.formState.errors.name?.message}
+							disable={type === 'edit'}
 						/>
 					</div>
 					<Input
@@ -140,12 +141,12 @@ export const Variation = (values: Partial<DataRowProductCatalog>) => {
 				</Form>
 			) : (
 				<>
-				{user.user_type === 'Super Admin' && (
-				<WrapNewButton>
-					<Button onClick={handleAdd}>Add New Variant</Button>
-				</WrapNewButton>
-				)}
-					
+					{user.user_type === 'Super Admin' && (
+						<WrapNewButton>
+							<Button onClick={handleAdd}>Add New Variant</Button>
+						</WrapNewButton>
+					)}
+
 					<Container>
 						<Table<DataRow>
 							keyField='id'
