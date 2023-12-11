@@ -57,8 +57,7 @@ export const useBeauty = () => {
 			}),
 		{
 			select: data => {
-				const newData = data.data.data.filter((v: any) => v.code !== null && v.code.length > 0)
-				return { ...data.data, data: newData }
+				return { ...data.data }
 			},
 			onSuccess: data => {
 				if (data.total_pages > page && data.data.length === 0) {
