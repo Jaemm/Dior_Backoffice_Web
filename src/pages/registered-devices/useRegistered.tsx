@@ -6,6 +6,7 @@ import { getRegistered } from 'api/registered-devices'
 import { TableColumn } from 'react-data-table-component'
 import { Reset } from './components/reset'
 import { ButtonReset } from './style'
+import { Tooltip } from '@mui/material'
 
 export type DataRow = {
 	app_update_date: string | null
@@ -115,9 +116,11 @@ export const useRegistered = () => {
 				sortable: true,
 				center: true,
 				cell: row => (
-					<ButtonReset>
-						<Reset id={Number(row.id)} />
-					</ButtonReset>
+					<Tooltip title='Reset'>
+						<ButtonReset>
+							<Reset id={Number(row.id)} />
+						</ButtonReset>
+					</Tooltip>
 				),
 			},
 		],
