@@ -18,4 +18,6 @@ export const WrapButtons = styled.div`
 	grid-column-gap: 20px;
 	justify-content: center;
 	grid-template-columns: minmax(auto, 180px) minmax(auto, 180px);
+	.resetConfirm {
+	}
 `

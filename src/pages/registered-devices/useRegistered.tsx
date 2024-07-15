@@ -4,6 +4,8 @@ import { useDebounce } from 'hooks/useDebounce'
 import { useQuery } from '@tanstack/react-query'
 import { getRegistered } from 'api/registered-devices'
 import { TableColumn } from 'react-data-table-component'
+import { Reset } from './components/reset'
+import { ButtonReset } from './style'
 
 export type DataRow = {
 	app_update_date: string | null
@@ -106,6 +108,17 @@ export const useRegistered = () => {
 				selector: row => row.status,
 				sortable: true,
 				center: true,
+			},
+			{
+				name: 'Action',
+				selector: row => row.id,
+				sortable: true,
+				center: true,
+				cell: row => (
+					<ButtonReset>
+						<Reset id={Number(row.id)} />
+					</ButtonReset>
+				),
 			},
 		],
 		[],

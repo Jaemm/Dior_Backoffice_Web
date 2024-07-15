@@ -39,3 +39,16 @@ export const RightSide = styled.div`
 	margin-left: 10px;
 	grid-template-columns: auto auto auto auto auto;
 `
+export const ButtonReset = styled.div`
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	.reset {
+		padding: 0;
+		border: none;
+		background: none;
+		cursor: pointer;
+	}
+`

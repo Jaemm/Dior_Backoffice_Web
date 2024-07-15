@@ -9,6 +9,7 @@ interface ModalType {
 	button?: JSX.Element
 	onSubmit?: () => void
 	text: string | JSX.Element
+	isReset?: boolean
 }
 
 export const ConfirmModal = ({
@@ -18,6 +19,7 @@ export const ConfirmModal = ({
 	onClick,
 	isLoading,
 	onSubmit = () => {},
+	isReset,
 }: ModalType) => {
 	return (
 		<>
@@ -46,12 +48,14 @@ export const ConfirmModal = ({
 					</header>
 					<h3>{text}</h3>
 					<WrapButtons>
-						<Button disabled={isLoading} variant='outlined' onClick={onClick}>
-							No
-						</Button>
-						<Button disabled={isLoading} variant='contained' onClick={onSubmit}>
-							Yes
-						</Button>
+						<>
+							<Button disabled={isLoading} variant='outlined' onClick={onClick}>
+								No
+							</Button>
+							<Button disabled={isLoading} variant='contained' onClick={onSubmit}>
+								{isReset ? 'Confirm' : 'Yes'}
+							</Button>
+						</>
 					</WrapButtons>
 				</Container>
 			</Dialog>
