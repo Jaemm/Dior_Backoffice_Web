@@ -1,8 +1,8 @@
 import { request } from 'api/request'
 
 export const getRegistered = <T>(params: T) =>
-	request('api/dior/devices', {
+	request('dior/devices', {
 		params,
 	})
 export const resetDevice = ({ id }: { id: number }) =>
-	request.post('/api/dior/devices/connect-reset', { device_id: id })
+	request.post('dior/devices/connect-reset', { device_id: id })

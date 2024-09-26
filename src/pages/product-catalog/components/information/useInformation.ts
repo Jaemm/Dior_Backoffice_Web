@@ -5,30 +5,29 @@ import { uploadImage, uploadUrl } from 'api/product-catalog'
 
 export const useInformation = () => {
 	const { setValue } = useFormContext()
-	const [image, setImage] = useState('')
+	const [image, setImage] = useState<File | undefined>(undefined)
 
 	const putUploadUrl = useMutation(uploadUrl)
 
 	const { mutate, isLoading } = useMutation(uploadImage, {
 		onSuccess: data => {
-			putUploadUrl.mutate(
-				{ url: data.data?.presigned_url, file: image },
-				{
-					onSuccess: () => {
-						setValue('image_url', data.data?.public_url)
-					},
-				},
-			)
+			if (data.data?.url) {
+				setValue('image_url', data.data?.url)
+			}
 		},
 	})
 
 	const uploadingImageIsLoading = putUploadUrl.isLoading || isLoading
 
-	const handleUpload = async (e: any) => {
-		await setImage(e.target.files[0])
-		await mutate({ filename: e.target.files[0]?.name })
+	const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0]
+		if (file) {
+			setImage(file)
+			const formData = new FormData()
+			formData.append('file', file)
+			await mutate(formData)
+		}
 	}
-
 	return {
 		handleUpload,
 		uploadingImageIsLoading,

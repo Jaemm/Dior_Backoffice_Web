@@ -34,6 +34,5 @@ export const useSkin = () => {
 	)
 
 	const { mutate, isLoading: isLoadingMutate } = useMutation(getProductFormRecommendation)
-
 	return { data: data?.data?.data, mutate, isLoading, isLoadingMutate }
 }

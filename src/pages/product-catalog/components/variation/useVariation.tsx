@@ -57,7 +57,7 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 	const [type, setType] = useState('')
 	const { isAdmin } = usePermission()
 	const queryClient = useQueryClient()
-	const [image, setImage] = useState('')
+	const [image, setImage] = useState<File | undefined>(undefined)
 	const [open, toggle, setToggle] = useToggle()
 	const { countries, setCountries, editVariation, setEditVariation } = useProductCatalogStore(
 		state => ({
@@ -93,23 +93,23 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 
 	const resUploadImage = useMutation(uploadImage, {
 		onSuccess: data => {
-			putUploadUrl.mutate(
-				{ url: data.data?.presigned_url, file: image },
-				{
-					onSuccess: () => {
-						form.setValue('image_url', data.data?.public_url)
-						setImageUrl(data.data?.public_url)
-					},
-				},
-			)
+			if (data.data?.url) {
+				form.setValue('image_url', data.data?.url)
+				setImageUrl(data.data?.url)
+			}
 		},
 	})
 
 	const uploadingImageIsLoading = putUploadUrl.isLoading || resUploadImage.isLoading
 
-	const handleUpload = async (e: any) => {
-		await setImage(e.target.files[0])
-		await resUploadImage.mutate({ filename: e.target.files[0]?.name })
+	const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0]
+		if (file) {
+			setImage(file)
+			const formData = new FormData()
+			formData.append('file', file)
+			await resUploadImage.mutate(formData)
+		}
 	}
 
 	const addPost = useMutation((data: any) => postProductCatalog<any>(data), {
@@ -228,7 +228,7 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 				name: '',
 				selector: row => row.id,
 				width: '70px',
-				cell: row => (
+				cell: row =>
 					isAdmin ? (
 						<WrapButtons>
 							<button className='edit' onClick={() => handleEdit(row)}>
@@ -238,16 +238,13 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 								<IconDelete />
 							</button>
 						</WrapButtons>
-						):
-						(
-							<WrapEdit>
+					) : (
+						<WrapEdit>
 							<button className='edit' onClick={() => handleEdit(row)}>
 								<IconEdit />
 							</button>
-							</WrapEdit>
-						)
-				
-				),
+						</WrapEdit>
+					),
 			},
 		],
 		[],

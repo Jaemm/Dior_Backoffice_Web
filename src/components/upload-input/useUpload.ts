@@ -19,12 +19,12 @@ export const defaultValues = {
 	withCountry: false,
 }
 
-const defaulteFileName = 'Link here'
+const defaultFileName = 'Link here'
 
 export const useUpload = ({ type, onClose, importDior, withCountry, keyQuery }: IUpload) => {
 	const queryClient = useQueryClient()
 	const ref = useRef<HTMLInputElement>(null)
-	const [fileName, setFileName] = useState(defaulteFileName)
+	const [fileName, setFileName] = useState(defaultFileName)
 
 	const form = useForm<FormTypes>({
 		resolver: yupResolver(schema),
@@ -34,7 +34,7 @@ export const useUpload = ({ type, onClose, importDior, withCountry, keyQuery }: 
 
 	useEffect(() => {
 		if (withCountry) form.setValue('withCountry', withCountry)
-	}, [])
+	}, [withCountry])
 
 	const resFilePut = useMutation(filePut, {
 		onError: (err: any) => {
@@ -52,7 +52,7 @@ export const useUpload = ({ type, onClose, importDior, withCountry, keyQuery }: 
 				queryClient.invalidateQueries([keyQuery])
 			}
 			form.reset(defaultValues)
-			setFileName(defaulteFileName)
+			setFileName(defaultFileName)
 			notifySuccess(data.data.message)
 			onClose()
 		},
@@ -67,7 +67,7 @@ export const useUpload = ({ type, onClose, importDior, withCountry, keyQuery }: 
 
 	const handleCancel = () => {
 		form.reset(defaultValues)
-		setFileName(defaulteFileName)
+		setFileName(defaultFileName)
 		onClose()
 	}
 
@@ -80,12 +80,15 @@ export const useUpload = ({ type, onClose, importDior, withCountry, keyQuery }: 
 		})
 	}
 
-	const handleChange = async (event: any) => {
-		const fileUploaded = await event.target.files[0]
+	const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		const fileUploaded = event.target.files?.[0]
+		if (!fileUploaded) return
 		await setFileName(fileUploaded.name)
-		await resUpload.mutate(fileUploaded.name, {
+		const formData = new FormData()
+		formData.append('file', fileUploaded)
+		resUpload.mutate(formData, {
 			onSuccess: data => {
-				form.setValue('file_url', data.data.public_url)
+				form.setValue('file_url', data.data.url)
 				resFilePut.mutate({
 					url: data.data.presigned_url,
 					file: fileUploaded,
