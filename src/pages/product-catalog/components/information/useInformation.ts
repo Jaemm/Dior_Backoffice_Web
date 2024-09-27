@@ -12,7 +12,7 @@ export const useInformation = () => {
 	const { mutate, isLoading } = useMutation(uploadImage, {
 		onSuccess: data => {
 			if (data.data?.url) {
-				setValue('image_url', 'https://' + data.data?.url)
+				setValue('image_url', data.data?.url)
 			}
 		},
 	})
