@@ -94,8 +94,8 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 	const resUploadImage = useMutation(uploadImage, {
 		onSuccess: data => {
 			if (data.data?.url) {
-				form.setValue('image_url', data.data?.url)
-				setImageUrl(data.data?.url)
+				form.setValue('image_url', 'https://' + data.data?.url)
+				setImageUrl('https://' + data.data?.url)
 			}
 		},
 	})
