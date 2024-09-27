@@ -1,14 +1,14 @@
 import { request } from 'api/request'
 import axios from 'axios'
 
-export const uploadFile = (formData: FormData) =>
-	request.post('dior/company_branches/presign_upload_import_file', formData, {
-		headers: {
-			'Content-Type': 'multipart/form-data',
+export const uploadFile = (filename: string) =>
+	request('api/dior/company_branches/presign_upload_import_file', {
+		params: {
+			filename,
 		},
 	})
 
-export const filePut = ({ url, file }: { url: string; file: File }) => axios.put(url, file)
+export const filePut = ({ url, file }: { url: string; file: string }) => axios.put(url, file)
 
 interface ISave {
 	type: string
@@ -16,11 +16,8 @@ interface ISave {
 	importDior?: string
 	country?: string
 }
-export const saveFile = ({ type, file_url, country, importDior }: ISave) => {
-	file_url = 'https://' + file_url
+export const saveFile = ({ type, file_url, country, importDior }: ISave) =>
+	request.post(`api/dior/${type}/${importDior}`, { file_url, country })
 
-	return request.post(`dior/${type}/${importDior}`, { file_url, country })
-}
-
-export const saveFileImages = ({ file_url }: any) =>
-	request.post('dior/product_recommendations/import_pictures', { file_url })
+export const saveFileImages = ({ file_urls }: any) =>
+	request.post('api/dior/product_recommendations/import_pictures', { file_urls })

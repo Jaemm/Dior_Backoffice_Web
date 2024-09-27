@@ -30,7 +30,7 @@ request.interceptors.request.use(
 			if (isExpiredDay > 1) {
 				config.headers = {
 					...config.headers,
-					Authorization: `Bearer ${user.token}`,
+					'X-CHOWIS-CONSULTANT-TOKEN': user.token,
 				}
 				return config
 			}

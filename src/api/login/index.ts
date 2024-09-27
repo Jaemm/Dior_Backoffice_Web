@@ -1,23 +1,12 @@
 import { request } from 'api/request'
 import { FormTypes, FormForgetTypes } from 'types/login'
 
-export const loginUser = (data: FormTypes) => {
-	const requestData = {
-		...data,
-		app_id: '88',
-	}
-
-	return request.post('partnerdb/consultants/dior_login', requestData, {
+export const loginUser = (data: FormTypes) =>
+	request.post('api/partnerdb/consultants/dior_login', data, {
 		headers: {
 			'X-CHOWIS-LOCALE': 'ko',
 		},
 	})
-}
 
-export const forgetPassword = (data: FormForgetTypes) => {
-	const requestData = {
-		...data,
-		app_id: '88',
-	}
-	return request.post('partnerdb/consultants/password', requestData)
-}
+export const forgetPassword = (data: FormForgetTypes) =>
+	request.post('api/partnerdb/consultants/password', data)

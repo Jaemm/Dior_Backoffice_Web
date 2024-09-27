@@ -8,8 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { postAdmins, putAdmins } from 'api/user-managment'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isAdmin } from 'utils/isAdmn'
-import { getUser } from 'utils/getUser'
-import { isExpiredToken } from 'utils/isExpiredToken'
 
 export interface IValues {
 	consultant_position_id: number
@@ -28,12 +26,11 @@ export interface FormTypes {
 	surname: string
 	email: string
 	is_admin?: boolean | string
-	// consultant_position_id: string
 	countries?: string[]
 	password: string
 }
 
-export const defaultValues: FormTypes = {
+export const defaultValues = {
 	name: '',
 	surname: '',
 	email: '',
@@ -46,7 +43,7 @@ export const useManForm = (values?: IValues, type?: string) => {
 	const queryClient = useQueryClient()
 	const [open, toggle, setToggle] = useToggle()
 	const [allCountries, setAllCountries] = useState<any[]>([])
-	const { user } = getUser()
+
 	const form = useForm<FormTypes>({
 		resolver: yupResolver(schema),
 		mode: 'onChange',
@@ -56,22 +53,22 @@ export const useManForm = (values?: IValues, type?: string) => {
 	const isAdminWatch = useWatch({ control: form.control, name: 'is_admin' })
 
 	useEffect(() => {
-		if (type === 'edit' && values) {
+		if (type === 'edit') {
 			form.reset({
-				email: values.email,
-				name: values.name,
-				surname: values.surname,
-				is_admin: isAdmin(values.consultant_position_id, 'boolean'),
-				countries: values.countries,
-				password: values.password || '',
+				email: values?.email,
+				name: values?.name,
+				surname: values?.surname,
+				is_admin: isAdmin(values?.consultant_position_id, 'boolean'),
+				countries: values?.countries,
+				password: values?.password,
 			})
 		}
-	}, [type, values, form])
+	}, [open])
 
 	const handleSuccess = async () => {
 		await queryClient.invalidateQueries(['admins'])
-		setToggle(false)
-		form.reset(defaultValues)
+		await setToggle(false)
+		await form.reset(defaultValues)
 	}
 
 	const addUser = useMutation((data: FormTypes) => postAdmins<FormTypes>(data), {

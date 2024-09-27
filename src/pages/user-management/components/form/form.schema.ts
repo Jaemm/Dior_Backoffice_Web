@@ -6,7 +6,6 @@ export const schema: SchemaOf<FormTypes> = object().shape({
 	surname: string().nullable(true).required(),
 	email: string().email().nullable(true).required(),
 	is_admin: boolean().notRequired(),
-	// consultant_position_id: string().nullable(true).required(),
 	countries: array().notRequired(),
 	password: string().min(8).nullable(true).required(),
 })
