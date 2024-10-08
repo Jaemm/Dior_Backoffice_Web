@@ -62,7 +62,7 @@ export const useUpload = ({ onClose }: IUpload) => {
 	}
 
 	const onSubmit = (data: FormTypes) => {
-		resSaveFile.mutate({ file_urls: data.file_url })
+		resSaveFile.mutate({ file_url: data.file_url })
 	}
 
 	const handleChange = async (event: any) => {
@@ -70,15 +70,13 @@ export const useUpload = ({ onClose }: IUpload) => {
 		const fileUploaded = await event.target.files
 		for (let i = 0; i < fileUploaded.length; i++) {
 			if (i <= 10) {
-				const file = await fileUploaded[i]
+				const file: File = await fileUploaded[i]
+				const formData = new FormData()
+				formData.append('file', file)
 				await setFileName(prev => prev + file.name + ';')
-				await resUpload.mutateAsync(file.name, {
+				await resUpload.mutateAsync(formData, {
 					onSuccess: async data => {
-						await form.setValue('file_url', [...form.getValues('file_url'), data.data.public_url])
-						await resFilePut.mutate({
-							url: data.data.presigned_url,
-							file: fileUploaded[i],
-						})
+						await form.setValue('file_url', [...form.getValues('file_url'), data.data.url])
 					},
 				})
 			}

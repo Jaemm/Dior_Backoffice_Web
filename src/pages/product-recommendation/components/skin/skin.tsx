@@ -40,7 +40,7 @@ export const Skin = ({ values, setValues, onChange }: ISkin) => {
 							onChange={e => {
 								mutate(e.target.value, {
 									onSuccess: data => {
-										const products = data.data.products
+										const products = data.data
 										const preserums = products.find((v: any) => v?.category === 'Pre-serums')
 										const lotions = products.find((v: any) => v?.category === 'Lotions')
 										const serums = products.find((v: any) => v?.category === 'Serums')

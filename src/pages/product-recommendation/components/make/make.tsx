@@ -18,19 +18,20 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 	const form = useFormContext()
 	const [defaultval, setDefaultval] = useState('')
 	const { data, mutate, isLoading, isLoadingMutate } = useMake()
-		
-		const defaultValue = 
-		   values.make3?.principal ? values.make3?.id: 
-		   values.make2?.principal ? values.make2?.id: 
-		   values.make1?.principal ? values.make1?.id:
-		   undefined;
-	
-		   
-		useEffect(()=>{
-			setDefaultval(defaultValue)
-		},[])
-		form.setValue('principal_product', defaultval)
-		console.log(defaultval)
+
+	const defaultValue = values.make3?.principal
+		? values.make3?.id
+		: values.make2?.principal
+		? values.make2?.id
+		: values.make1?.principal
+		? values.make1?.id
+		: undefined
+
+	useEffect(() => {
+		setDefaultval(defaultValue)
+	}, [])
+	form.setValue('principal_product', defaultval)
+	console.log(defaultval)
 
 	return (
 		<div>
@@ -53,11 +54,9 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 								</WrapDown>
 							)}
 							MenuProps={{ PaperProps: { sx: { maxHeight: 300 } } }}
-							
 							onChange={e => {
 								mutate(e.target.value, {
 									onSuccess: data => {
-										
 										const products = data.data.products
 										const make1 = products[0]
 										const make2 = products[1]
@@ -65,37 +64,36 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 										form.setValue('make1', make1?.id)
 										form.setValue('make2', make2?.id)
 										form.setValue('make3', make3?.id)
-									
+
 										const values = {
 											make1: {
 												id: make1?.id,
 												code: make1?.code,
 												name: make1?.name,
 												image_url: make1?.image_url,
-												principal: make1.is_principal
+												principal: make1.is_principal,
 											},
 											make2: {
 												id: make2?.id,
 												code: make2?.code,
 												name: make2?.name,
 												image_url: make2?.image_url,
-												principal: make2.is_principal
+												principal: make2.is_principal,
 											},
 											make3: {
 												id: make3?.id,
 												code: make3?.code,
 												name: make3?.name,
 												image_url: make3?.image_url,
-												principal: make3.is_principal
+												principal: make3.is_principal,
 											},
 										}
-							
+
 										setValues(values)
 										onChange(e)
 									},
 								})
 							}}
-							
 							renderValue={value => {
 								return value === null || value === undefined ? (
 									<Placeholder>Select Recommendation</Placeholder>
@@ -108,9 +106,7 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 								<MenuItem key={id} value={id}>
 									{name}
 								</MenuItem>
-								
 							))}
-							
 						</Select>
 					)}
 				/>
@@ -118,16 +114,16 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 					{form.formState.errors.make?.message as string}
 				</FormHelperText>
 			</div>
-		
+
 			<WrapList>
-				
 				<RadioGroup
 					id='principal_product'
 					name='principal_product'
-					defaultValue={defaultValue} 
+					defaultValue={defaultValue}
 					onChange={e => {
 						setDefaultval(e.target.value)
-					}}>
+					}}
+				>
 					<AutoCompleteInput
 						name='make1'
 						routine='Makeup'
