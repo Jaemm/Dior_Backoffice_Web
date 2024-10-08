@@ -10,9 +10,9 @@ export const useStatitic = () => {
 		() => getStatistic(typeOfStatistic),
 		{
 			select: res => {
-				const countries = Object.entries(res.data.data).map(([name, total]) => ({
+				const countries = Object.entries(res.data.data).map(([name, total]: any) => ({
 					name: name === 'unknown_country' ? 'Country Not Disclosed' : name,
-					total,
+					total: typeOfStatistic === 'stores' ? total.count_all : total,
 				}))
 				const newData = { data: countries, total_count: res.data.total_count }
 				return { ...res, data: newData }
