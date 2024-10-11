@@ -78,7 +78,7 @@ export const useDetail = () => {
 			select: data => {
 				let measurement = ''
 				let count = 0
-				const newData = data.data.data
+				const newData = data.data.data.data
 					.sort((a: any, b: any) => {
 						if (a.measurement < b.measurement) {
 							return -1

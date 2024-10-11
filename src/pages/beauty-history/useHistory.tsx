@@ -62,12 +62,16 @@ export const useHistory = () => {
 			),
 		{
 			select: data => {
-				const newData = data.data.data.map((v: DataRow) => ({
+				const newData = data.data.data[0].data.map((v: any) => ({
 					...v,
+					analysis_type: 'CNDP Skin',
+					service_name: 'Dior-Skin Analysis system',
+					batch_id: v.batch_id,
 					date: dayjs(v.created_time).format('MM/DD/YYYY'),
 					time: dayjs(v.created_time).format('hh:mm A'),
 				}))
-				return { ...data.data, data: newData }
+
+				return { ...data.data, data: newData, total_size: newData.lenght }
 			},
 			onError: (err: any) => {
 				notifyError(err.message)
@@ -75,7 +79,6 @@ export const useHistory = () => {
 			keepPreviousData: true,
 		},
 	)
-
 	const {
 		data: customerData = {
 			list1: [],
