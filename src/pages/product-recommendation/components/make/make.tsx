@@ -31,8 +31,6 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 		setDefaultval(defaultValue)
 	}, [])
 	form.setValue('principal_product', defaultval)
-	console.log(defaultval)
-
 	return (
 		<div>
 			<div>
@@ -57,7 +55,7 @@ export const Make = ({ values, setValues, onChange }: IMake) => {
 							onChange={e => {
 								mutate(e.target.value, {
 									onSuccess: data => {
-										const products = data.data.products
+										const products = data.data
 										const make1 = products[0]
 										const make2 = products[1]
 										const make3 = products[2]
