@@ -110,11 +110,11 @@ export const useBrand = () => {
 				cell: row => <Password value={row.password} />,
 				width: '220px',
 			},
-			// {
-			// 	name: 'Last Consultation Date',
-			// 	selector: row => row.last_consultation_date,
-			// 	center: true,
-			// },
+			{
+				name: 'Last Consultation Date',
+				selector: row => row.last_consultation_date,
+				center: true,
+			},
 			{
 				name: 'Edit',
 				selector: row => row.last_consultation_date,
