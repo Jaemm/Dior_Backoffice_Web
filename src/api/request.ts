@@ -7,6 +7,7 @@ const baseURL = process.env.REACT_APP_BASE_URL
 
 const request = axios.create({
 	baseURL,
+	timeout: 300000,
 	headers: {
 		Accept: '*/*',
 		Connection: 'keep-alive',
