@@ -49,7 +49,7 @@ export const useHistory = () => {
 		isFetching,
 	} = useQuery(
 		['beauty-history', page, limit, search, dates?.from, dates?.to],
-		() =>
+		({ signal }) =>
 			getBeautyHistory<IParams>(
 				{
 					limit,
@@ -59,6 +59,7 @@ export const useHistory = () => {
 					to: String(dates?.to ? dayjs(dates?.to).format('YYYYMMDD') : ''),
 				},
 				beautyHistory,
+				signal,
 			),
 		{
 			select: data => {

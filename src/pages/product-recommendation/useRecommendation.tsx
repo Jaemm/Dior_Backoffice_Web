@@ -54,13 +54,17 @@ export const useRecommendation = () => {
 		isFetching,
 	} = useQuery(
 		['product-recommendations', page, limit, search],
-		() =>
-			productRecommendations<IParams>({
-				page,
-				search,
-				per: limit,
-			}),
+		({ signal }) =>
+			productRecommendations<IParams>(
+				{
+					page,
+					search,
+					per: limit,
+				},
+				signal,
+			),
 		{
+			staleTime: 5 * 60 * 1000,
 			select: data => {
 				const newData = data.data.data.map((v: any) => ({
 					...v,
@@ -76,6 +80,40 @@ export const useRecommendation = () => {
 			keepPreviousData: true,
 		},
 	)
+
+	const {
+		data: allData = {
+			data: [],
+			total_size: 0,
+		},
+		isLoading: allDataLoading,
+		isFetching: allDataFetching,
+	} = useQuery(
+		['product-recommendations', page, search],
+		() =>
+			productRecommendations<IParams>({
+				page,
+				search,
+				per: data.total_size,
+			}),
+		{
+			enabled: !isLoading && !isFetching && data.data.length > 0,
+			select: data => {
+				const newData = data.data.data.map((v: any) => ({
+					...v,
+					number_of_products: v.products?.length,
+					routine: v.products[0]?.routine,
+					status: 'Active',
+				}))
+				return { ...data.data, data: newData }
+			},
+			onError: (err: any) => {
+				notifyError(err.response.data.error)
+			},
+			keepPreviousData: true,
+		},
+	)
+	const isAllDataLoading = allDataFetching || allDataLoading
 
 	const handleSearchChange = (e: any) => {
 		setSearchValue(e.target.value)
@@ -157,10 +195,12 @@ export const useRecommendation = () => {
 	return {
 		data,
 		limit,
+		allData,
 		columns,
 		isLoading,
 		isFetching,
 		searchValue,
+		isAllDataLoading,
 		handleClear,
 		handlePageChange,
 		handleSearchChange,

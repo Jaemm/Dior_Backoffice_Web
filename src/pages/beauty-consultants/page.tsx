@@ -13,6 +13,8 @@ import { ExportExcel } from 'components/export-excel'
 import { FilterSelect } from 'components/filter-select'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
+import { SearchDropDown } from 'components/search-drop'
+import { ExportSelect } from 'components/export-select'
 
 const BeautyConsultants = () => {
 	const { user, isAdminNotBrand } = usePermission()
@@ -22,22 +24,47 @@ const BeautyConsultants = () => {
 	const {
 		pos,
 		data,
+		allData,
 		limit,
 		country,
 		columns,
 		isLoading,
 		isFetching,
 		handleClear,
+		setCountry,
 		searchValue,
-		posIsLoading,
-		posIsFetching,
+		isNoOption,
 		optionPosData,
+		isloadingPOS,
+		isAlldataLoading,
 		handleChangePos,
 		handlePageChange,
 		handleSearchChange,
 		handleChangeCountry,
 		handlePerRowsChange,
+		setSelectSearchValue,
+		handleSelectSearchChange,
 	} = useBeauty()
+
+	const selectedBCData = dataSelected.map(v => ({
+		Country: v.country,
+		'POS Code': v.pos_code,
+		'BC Code': v.code,
+		'BC Name': v.name,
+		'BC Email': v.pos_email,
+		'User Status': v.status,
+	}))
+	const allBCData = allData.data.map((v: any) => ({
+		Country: v.country,
+		'POS Code': v.pos_code,
+		'BC Code': v.code,
+		'BC Name': v.name,
+		'BC Email': v.pos_email,
+		'User Status': v.status,
+	}))
+
+	const title = ['Export selected (BC)', 'Export All']
+	const excelTitle = ['Export (BC)', 'Export All (BC)']
 
 	return (
 		<Container>
@@ -55,19 +82,29 @@ const BeautyConsultants = () => {
 								isLoading={countryIsLoading}
 							/>
 						)}
-						<FilterSelect
+						<SearchDropDown
 							value={pos}
 							label='Filter Pos'
 							onChange={handleChangePos}
+							onChangeText={handleSelectSearchChange}
 							options={optionPosData.optionsPos}
-							isLoading={posIsLoading || posIsFetching}
+							isLoading={isloadingPOS}
+							isNoOption={isNoOption}
 						/>
 						<Button onClick={handleClear}>Reset</Button>
 					</LeftSide>
 					<RightSide>
 						{isAdminNotBrand && (
 							<>
-								<Add optionsPos={optionPosData.onlyOptionPos} />
+								<Add
+									optionsPos={optionPosData.onlyOptionPos}
+									onChangeText={handleSelectSearchChange}
+									isPOSLoading={isloadingPOS}
+									onChange={handleChangePos}
+									isNoOption={isNoOption}
+									setCountry={setCountry}
+									setPOSValue={setSelectSearchValue}
+								/>
 								<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
 							</>
 						)}
@@ -78,18 +115,11 @@ const BeautyConsultants = () => {
 							title='Upload a list of Beauty Consultant'
 							label='Please select Excel BC list to upload'
 						/>
-						<ExportExcel
-							title='Export BC'
-							loading={isLoading}
-							excelTitle='export-bc'
-							data={dataSelected.map(v => ({
-								Country: v.country,
-								'POS Code': v.pos_code,
-								'BC Code': v.code,
-								'BC Name': v.name,
-								'BC Email': v.pos_email,
-								'User Status': v.status,
-							}))}
+						<ExportSelect
+							loading={isAlldataLoading}
+							title={title}
+							excelTitle={excelTitle}
+							data={[selectedBCData, allBCData]}
 						/>
 					</RightSide>
 				</Header>

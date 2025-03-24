@@ -1,9 +1,9 @@
 import { WrapEdit } from './style'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { notifyError } from 'components/notify'
 import { useDebounce } from 'hooks/useDebounce'
 import { Password } from './components/password'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SelectChangeEvent } from '@mui/material'
 import { FormBrandDetails } from './components/form'
 import { getBranchCompanies } from 'api/brand-details'
@@ -45,8 +45,10 @@ export const useBrand = () => {
 		isFetching,
 	} = useQuery(
 		['branch-companies', page, limit, search, country],
-		() => getBranchCompanies<IParams>({ per: limit, page, search, filter_by: country }),
+		({ signal }) =>
+			getBranchCompanies<IParams>({ per: limit, page, search, filter_by: country }, signal),
 		{
+			staleTime: 5 * 60 * 1000,
 			select: data => {
 				return data.data
 			},
@@ -56,6 +58,53 @@ export const useBrand = () => {
 			keepPreviousData: true,
 		},
 	)
+	const isDoneLoading = !isLoading && !isFetching && data?.data?.length > 0
+
+	let numOfMapping = 0
+	if (isDoneLoading && data?.total_size) {
+		numOfMapping = Math.ceil(data.total_size / 500)
+	}
+
+	const fetchData = async () => {
+		let allFetchedData = [] as any
+
+		for (let i = 1; i <= numOfMapping; i++) {
+			try {
+				const response = await getBranchCompanies<IParams>({
+					per: 500,
+					page: i,
+					search: search,
+					filter_by: country,
+				})
+
+				if (Array.isArray(response?.data.data)) {
+					allFetchedData = [...allFetchedData, ...response.data.data]
+				} else {
+					console.error(`Error: response.data is not iterable for page ${i}`)
+				}
+			} catch (error) {
+				console.error('Error fetching data for page', i, error)
+			}
+		}
+
+		return allFetchedData
+	}
+
+	const {
+		data: allData = { data: [], total_size: 0 } as any,
+		isLoading: alldataLoading,
+		isFetching: allDatafetching,
+	} = useQuery(['branch-companies', page, search, country], fetchData, {
+		staleTime: 5 * 60 * 1000,
+		enabled: isDoneLoading,
+		select: data => data,
+		onError: (err: any) => {
+			notifyError(err.response.data.error)
+		},
+		keepPreviousData: true,
+	})
+
+	const isAlldataLoading = alldataLoading || allDatafetching
 
 	const handleChangeCountry = (e: SelectChangeEvent<string>) => {
 		setCountry(e.target.value)
@@ -146,11 +195,13 @@ export const useBrand = () => {
 	return {
 		data,
 		limit,
+		allData,
 		country,
 		columns,
 		isLoading,
 		isFetching,
 		searchValue,
+		isAlldataLoading,
 		handlePageChange,
 		handleSearchChange,
 		handleChangeCountry,

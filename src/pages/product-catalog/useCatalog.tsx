@@ -29,7 +29,7 @@ export const useCatalog = () => {
 	const search = useDebounce(searchValue, 500)
 	const [category, setCategory] = useState<string>('')
 	const [collection, setCollection] = useState<string>('')
-	
+
 	const {
 		data = {
 			data: [],
@@ -39,16 +39,20 @@ export const useCatalog = () => {
 		isFetching,
 	} = useQuery(
 		['product-catalog-list', page, limit, search, category, collection],
-		() =>
-			getProductCatalog<IParams>({
-				limit,
-				page,
-				search,
-				filter_by: category,
-				filter_by_2: collection,
-				request_origin: 'dior_bo'
-			}),
+		({ signal }) =>
+			getProductCatalog<IParams>(
+				{
+					limit,
+					page,
+					search,
+					filter_by: category,
+					filter_by_2: collection,
+					request_origin: 'dior_bo',
+				},
+				signal,
+			),
 		{
+			staleTime: 5 * 60 * 1000,
 			select: data => {
 				return data.data
 			},
@@ -58,6 +62,37 @@ export const useCatalog = () => {
 			keepPreviousData: true,
 		},
 	)
+
+	const {
+		data: allData = {
+			data: [],
+			total_size: 0,
+		},
+		isLoading: allDataLoading,
+		isFetching: allDataFetching,
+	} = useQuery(
+		['product-catalog-list', page, search, category, collection],
+		() =>
+			getProductCatalog<IParams>({
+				limit: data.total_size,
+				page,
+				search,
+				filter_by: category,
+				filter_by_2: collection,
+				request_origin: 'dior_bo',
+			}),
+		{
+			enabled: !isLoading && !isFetching && data.data.length > 0,
+			select: data => {
+				return data.data
+			},
+			onError: (err: any) => {
+				notifyError(err.response.data.error)
+			},
+			keepPreviousData: true,
+		},
+	)
+	const isAllDataLoading = allDataLoading || allDataFetching
 
 	const handleChangeCollection = (e: SelectChangeEvent<string>) => {
 		setCollection(e.target.value)
@@ -188,6 +223,7 @@ export const useCatalog = () => {
 	return {
 		data,
 		limit,
+		allData,
 		columns,
 		category,
 		isLoading,
@@ -195,6 +231,7 @@ export const useCatalog = () => {
 		collection,
 		handleClear,
 		searchValue,
+		isAllDataLoading,
 		handlePageChange,
 		handleSearchChange,
 		handlePerRowsChange,

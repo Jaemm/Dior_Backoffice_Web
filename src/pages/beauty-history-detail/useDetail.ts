@@ -43,12 +43,15 @@ export const useDetail = () => {
 
 	const { data: moistureData = { data: [] }, isLoading: moistureIsLoading } = useQuery(
 		['get-beauty-moisture', beautyHistory, state.batch_id, state.analysis_type],
-		() =>
-			getMoisture({
-				customer_id: beautyHistory,
-				batch_id: state.batch_id,
-				analysis_type: state.analysis_type,
-			}),
+		({ signal }) =>
+			getMoisture(
+				{
+					customer_id: beautyHistory,
+					batch_id: state.batch_id,
+					analysis_type: state.analysis_type,
+				},
+				signal,
+			),
 		{
 			select: data => {
 				const newData = data.data.data.map((item: any) => [
@@ -68,12 +71,15 @@ export const useDetail = () => {
 
 	const { data: resultData = { data: [] }, isLoading: resultIsLoading } = useQuery(
 		['get-beauty-result', beautyHistory, state.batch_id, state.analysis_type],
-		() =>
-			getResult({
-				customer_id: beautyHistory,
-				batch_id: state.batch_id,
-				analysis_type: state.analysis_type,
-			}),
+		({ signal }) =>
+			getResult(
+				{
+					customer_id: beautyHistory,
+					batch_id: state.batch_id,
+					analysis_type: state.analysis_type,
+				},
+				signal,
+			),
 		{
 			select: data => {
 				let measurement = ''

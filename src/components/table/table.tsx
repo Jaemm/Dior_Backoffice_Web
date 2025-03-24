@@ -6,6 +6,7 @@ import { LinearProgress } from '@mui/material'
 import { Container, WrapSpinner } from './style'
 import DataTable from 'react-data-table-component'
 import { ReactComponent as IconArrowSort } from 'assets/icons/arrow-sort.svg'
+import { rows_per_page } from 'constants/row-option'
 
 export const Table = <C extends unknown>({
 	data,
@@ -65,7 +66,8 @@ export const Table = <C extends unknown>({
 				onSelectedRowsChange={handleChangeSelect}
 				onChangeRowsPerPage={handlePerRowsChange}
 				expandableRowsComponent={expandableRowsComponent}
-				paginationComponentOptions={paginationComponentOptions}
+				paginationRowsPerPageOptions={rows_per_page}
+				// paginationComponentOptions={paginationComponentOptions}
 			/>
 		</Container>
 	)

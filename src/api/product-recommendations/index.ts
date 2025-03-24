@@ -1,8 +1,9 @@
 import { request } from 'api/request'
 
-export const productRecommendations = <T>(params: T) =>
+export const productRecommendations = <T>(params: T, signal?: AbortSignal) =>
 	request('dior/product_recommendation_groups', {
 		params,
+		signal,
 	})
 
 export const getProductFormRecommendations = <T>(params: T) =>

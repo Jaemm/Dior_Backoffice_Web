@@ -7,15 +7,28 @@ import { CountrySelect } from 'components/country-select'
 import { ReactComponent as IconExit } from 'assets/icons/exit.svg'
 import { ReactComponent as IconDown } from 'assets/icons/down.svg'
 import { WrapPos, WrapDown, Container, WrapButtons, Placeholder } from './style'
-import { Button, Dialog, FormHelperText, IconButton, MenuItem, Select } from '@mui/material'
+import { Autocomplete, Button, Dialog, FormHelperText, IconButton, TextField } from '@mui/material'
 
 interface IPropsAdd {
 	optionsPos: { label: string; value: string }[]
+	onChangeText: (e: React.ChangeEvent<HTMLInputElement>) => void
+	isPOSLoading: boolean
+	onChange: any
+	isNoOption: boolean
+	setCountry: React.Dispatch<React.SetStateAction<string>>
+	setPOSValue: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const Add = ({ optionsPos }: IPropsAdd) => {
+export const Add = ({
+	optionsPos,
+	onChangeText,
+	isPOSLoading,
+	isNoOption,
+	setCountry,
+	setPOSValue,
+}: IPropsAdd) => {
 	const { options, isLoading: countryIsLoading } = useCountries()
-	const { form, open, toggle, isLoading, onSubmit, handleClose } = useAdd()
+	const { form, open, toggle, isLoading, onSubmit, handleClose } = useAdd(setCountry, setPOSValue)
 
 	return (
 		<>
@@ -53,34 +66,42 @@ export const Add = ({ optionsPos }: IPropsAdd) => {
 						/>
 						<WrapPos>
 							<label htmlFor='consultant_branch_id'>POS Code</label>
+
 							<Controller
 								name='consultant_branch_id'
 								control={form.control}
 								render={({ field }) => (
-									<Select
-										{...field}
-										displayEmpty
+									<Autocomplete
+										options={optionsPos}
+										getOptionLabel={option => option.label}
+										isOptionEqualToValue={(option, value) => option.value === value.value}
+										size='small'
+										noOptionsText={isNoOption ? 'POS not found' : 'Type to see options'}
 										id='consultant_branch_id'
-										labelId='consultant_branch_id'
-										IconComponent={props => (
-											<WrapDown {...props}>
-												<IconDown />
-											</WrapDown>
-										)}
-										renderValue={value => {
-											return value === null ? (
-												<Placeholder>Select POS Code</Placeholder>
-											) : (
-												optionsPos.find(v => Number(v.value) === Number(value))?.label
-											)
+										sx={{
+											'& .MuiInputBase-root': {
+												height: 55,
+												alignItems: 'center',
+												display: 'flex',
+												justifyContent: 'center',
+											},
+											'& .MuiInputBase-input': { marginTop: '-5px' },
+											maxWidth: '410px',
 										}}
-									>
-										{optionsPos.map(({ value, label }) => (
-											<MenuItem key={value} value={value}>
-												{label}
-											</MenuItem>
-										))}
-									</Select>
+										clearIcon={false}
+										popupIcon={<IconDown />}
+										loading={isPOSLoading}
+										value={optionsPos.find(option => option.value === String(field.value))}
+										onChange={(_, newValue) => field.onChange(newValue?.value)}
+										renderOption={(props, option) => (
+											<li {...props} key={option.value}>
+												{option.label}
+											</li>
+										)}
+										renderInput={params => (
+											<TextField {...params} onChange={onChangeText} placeholder='Enter POS' />
+										)}
+									/>
 								)}
 							/>
 							<FormHelperText error={!!form.formState.errors.consultant_branch_id}>

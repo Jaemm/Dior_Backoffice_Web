@@ -41,8 +41,9 @@ export const useUser = () => {
 		isFetching,
 	} = useQuery(
 		['admins', search, country],
-		() => getAdmins<IParams>({ search, filter_by: country }),
+		({ signal }) => getAdmins<IParams>({ search, filter_by: country }, signal),
 		{
+			staleTime: 5 * 60 * 1000,
 			select: data => {
 				const newData = data.data.data.map((v: any) => ({
 					...v,

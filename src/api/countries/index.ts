@@ -1,6 +1,7 @@
 import { request } from 'api/request'
 
-export const getCountries = <T>(params: T) => request('dior/countries', { params })
+export const getCountries = <T>(params: T, signal?: AbortSignal) =>
+	request('dior/countries', { params, signal })
 
 export const postCountries = <T>(data: T) => request.post('dior/countries', data)
 

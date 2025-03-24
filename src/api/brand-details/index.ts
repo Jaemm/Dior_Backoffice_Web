@@ -1,8 +1,9 @@
 import { request } from 'api/request'
 
-export const getBranchCompanies = <T>(params: T) =>
+export const getBranchCompanies = <T>(params: T, signal?: AbortSignal) =>
 	request('dior/company_branches', {
 		params,
+		signal,
 	})
 
 export const addPos = <T>(data: T) => request.post('dior/company_branches', data)

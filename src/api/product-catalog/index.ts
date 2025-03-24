@@ -1,9 +1,10 @@
 import { request } from 'api/request'
 import axios from 'axios'
 
-export const getProductCatalog = <T>(params: T) =>
+export const getProductCatalog = <T>(params: T, signal?: AbortSignal) =>
 	request('dior/product_recommendations', {
 		params,
+		signal,
 	})
 
 export const postProductCatalog = <T>(data: T) => request.post('dior/product_recommendations', data)

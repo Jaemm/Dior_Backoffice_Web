@@ -8,6 +8,7 @@ import { DataRow, useAttributes } from './useAttributes'
 import { FormProductAttributes } from './components/form'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
+import { ExportSelect } from 'components/export-select'
 
 const ProductAttributes = () => {
 	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
@@ -15,15 +16,30 @@ const ProductAttributes = () => {
 	const {
 		data,
 		limit,
+		allData,
 		columns,
 		isLoading,
 		isFetching,
 		handleClear,
 		searchValue,
+		isAllDataLoading,
 		handlePageChange,
 		handleSearchChange,
 		handlePerRowsChange,
 	} = useAttributes()
+
+	const selectedAttribData = dataSelected.map(v => ({
+		'Attribute Type': v.typ,
+		'Attribute Name': v.value,
+	}))
+
+	const allAttribData = allData.data.map((v: any) => ({
+		'Attribute Type': v.typ,
+		'Attribute Name': v.value,
+	}))
+
+	const title = ['Export selected (Attrib.)', 'Export All']
+	const excelTitle = ['Export (Attrib.)', 'Export All (Attrib.)']
 
 	return (
 		<Container>
@@ -42,13 +58,11 @@ const ProductAttributes = () => {
 						/>
 						<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
 						<Upload />
-						<ExportExcel
-							loading={isLoading}
-							excelTitle='export-attributes'
-							data={dataSelected.map(v => ({
-								'Attribute Type': v.typ,
-								'Attribute Name': v.value,
-							}))}
+						<ExportSelect
+							loading={isAllDataLoading}
+							title={title}
+							excelTitle={excelTitle}
+							data={[selectedAttribData, allAttribData]}
 						/>
 					</RightSide>
 				</Header>

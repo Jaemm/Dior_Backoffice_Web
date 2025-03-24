@@ -9,10 +9,10 @@ import { useCountries } from 'hooks/useCountries'
 import { usePermission } from 'hooks/usePermission'
 import { PERMISSIONS } from 'constants/permissions'
 import { FormBrandDetails } from './components/form'
-import { ExportExcel } from 'components/export-excel'
 import { FilterSelect } from 'components/filter-select'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
+import { ExportSelect } from 'components/export-select'
 
 const BrandDetails = () => {
 	const { user, isAdminNotBrand } = usePermission()
@@ -24,15 +24,55 @@ const BrandDetails = () => {
 		data,
 		limit,
 		country,
+		allData,
 		columns,
 		isLoading,
 		isFetching,
 		searchValue,
+		isAlldataLoading,
 		handlePageChange,
 		handleSearchChange,
 		handleChangeCountry,
 		handlePerRowsChange,
 	} = useBrand()
+
+	const selectedPOSData = dataSelected.map(v => ({
+		Country: v.country,
+		'POS Code': v.code,
+		'POS Name': v.name,
+		'POS Email': v.email,
+		'Total Devices': v.total_devices,
+		Password: v.password,
+	}))
+	const selectedDeviceData = dataSelected.map(v => ({
+		'Total Devices': v.total_devices,
+		Password: v.password,
+		'Last Consultation Date': v.last_consultation_date,
+	}))
+
+	const allPOSData = Array.isArray(allData)
+		? allData.map((v: any) => ({
+				Country: v.country,
+				'POS Code': v.code,
+				'POS Name': v.name,
+				'POS Email': v.email,
+				'Total Devices': v.total_devices,
+				Password: v.password,
+		  }))
+		: []
+
+	const allDeviceData = Array.isArray(allData)
+		? allData.map((v: any) => ({
+				'Total Devices': v.total_devices,
+				Password: v.password,
+				'Last Consultation Date': v.last_consultation_date,
+		  }))
+		: []
+
+	const titlePOS = ['Export selected (POS)', 'Export all']
+	const titleDevices = ['Export selected (Devices)', 'Export all']
+	const excelTitlePOS = ['Export (POS)', 'Export all (POS)']
+	const excelTitleDevices = ['Export (Devices)', 'Export all (Devices)']
 
 	return (
 		<Container>
@@ -69,28 +109,19 @@ const BrandDetails = () => {
 							title='Upload a list of POS'
 							label='Please select Excel POS list to upload'
 						/>
-						<ExportExcel
-							title='Export POS'
-							loading={isLoading}
-							excelTitle='export-pos'
-							data={dataSelected.map(v => ({
-								Country: v.country,
-								'POS Code': v.code,
-								'POS Name': v.name,
-								'POS Email': v.email,
-								'Total Devices': v.total_devices,
-								Password: v.password,
-							}))}
+						<ExportSelect
+							header='Export POS'
+							loading={isAlldataLoading}
+							title={titlePOS}
+							excelTitle={excelTitlePOS}
+							data={[selectedPOSData, allPOSData]}
 						/>
-						<ExportExcel
-							loading={isLoading}
-							title='Export Devices'
-							excelTitle='export-devices'
-							data={dataSelected.map(v => ({
-								'Total Devices': v.total_devices,
-								Password: v.password,
-								'Last Consultation Date': v.last_consultation_date,
-							}))}
+						<ExportSelect
+							header='Export Devices'
+							loading={isAlldataLoading}
+							title={titleDevices}
+							excelTitle={excelTitleDevices}
+							data={[selectedDeviceData, allDeviceData]}
 						/>
 					</RightSide>
 				</Header>

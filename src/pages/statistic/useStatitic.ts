@@ -26,7 +26,7 @@ export const useStatitic = () => {
 
 	const { data = { data: { data: [], total_count: 0 } }, isLoading } = useQuery(
 		['statistic', typeOfStatistic],
-		() => getStatistic(typeOfStatistic),
+		({ signal }) => getStatistic(typeOfStatistic, signal),
 		{
 			select: res => {
 				const countries = Object.entries(res.data.data).map(([name, total]: any) => {

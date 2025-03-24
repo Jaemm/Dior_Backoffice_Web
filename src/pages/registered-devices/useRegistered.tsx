@@ -42,13 +42,17 @@ export const useRegistered = () => {
 		isFetching,
 	} = useQuery(
 		['registered-devices', page, limit, search],
-		() =>
-			getRegistered({
-				page,
-				limit,
-				search,
-			}),
+		({ signal }) =>
+			getRegistered(
+				{
+					page,
+					limit,
+					search,
+				},
+				signal,
+			),
 		{
+			staleTime: 5 * 60 * 1000,
 			select: data => {
 				return data.data
 			},
@@ -58,6 +62,31 @@ export const useRegistered = () => {
 			keepPreviousData: true,
 		},
 	)
+
+	const {
+		data: allData = { data: [], total_size: 0 },
+		isLoading: allDataLoading,
+		isFetching: allDatafetching,
+	} = useQuery(
+		['registered-devices', page, search],
+		() =>
+			getRegistered({
+				page,
+				limit: data.total_size,
+				search,
+			}),
+		{
+			enabled: !isLoading && !isFetching && data.data.length > 0,
+			select: data => {
+				return data.data
+			},
+			onError: (err: any) => {
+				notifyError(err.response?.data?.error)
+			},
+			keepPreviousData: true,
+		},
+	)
+	const isAlldataLoading = allDataLoading || allDatafetching
 
 	const handleSearchChange = (e: any) => {
 		setSearchValue(e.target.value)
@@ -129,11 +158,13 @@ export const useRegistered = () => {
 
 	return {
 		data,
+		allData,
 		limit,
 		columns,
 		isLoading,
 		isFetching,
 		searchValue,
+		isAlldataLoading,
 		handlePageChange,
 		handleSearchChange,
 		handlePerRowsChange,

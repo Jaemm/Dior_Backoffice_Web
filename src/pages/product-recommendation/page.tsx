@@ -9,6 +9,7 @@ import { DataRow, useRecommendation } from './useRecommendation'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { ReactComponent as IconRoundArrow } from 'assets/icons/round-arrow.svg'
 import { Wrap, Header, LeftSide, RightSide, WrapRound, Container } from './style'
+import { ExportSelect } from 'components/export-select'
 
 const ProductRecommendation = () => {
 	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
@@ -16,15 +17,35 @@ const ProductRecommendation = () => {
 	const {
 		data,
 		limit,
+		allData,
 		columns,
 		isLoading,
 		isFetching,
 		searchValue,
+		isAllDataLoading,
 		handleClear,
 		handlePageChange,
 		handleSearchChange,
 		handlePerRowsChange,
 	} = useRecommendation()
+
+	const selectedRoutineData = dataSelected.map(v => ({
+		'Group Name': v.name,
+		Routine: v.routine,
+		'Access Rights': v.right,
+		Status: v.status,
+		'No. of Products': v.number_of_products,
+	}))
+	const allRoutineData = allData.data.map((v: any) => ({
+		'Group Name': v.name,
+		Routine: v.routine,
+		'Access Rights': v.right,
+		Status: v.status,
+		'No. of Products': v.number_of_products,
+	}))
+
+	const title = ['Export selected (Routine)', 'Export All']
+	const excelTitle = ['Export (Routine)', 'Export All (Routine)']
 
 	return (
 		<Container>
@@ -42,16 +63,11 @@ const ProductRecommendation = () => {
 							ButtonModal={({ onClick }) => <Button onClick={onClick}>New Group</Button>}
 						/>
 						<Delete<DataRow> list={dataSelected} onClear={handleClearAfterDelete} />
-						<ExportExcel
-							loading={isLoading}
-							excelTitle='export-recommendation'
-							data={dataSelected.map(v => ({
-								'Group Name': v.name,
-								Routine: v.routine,
-								'Access Rights': v.right,
-								Status: v.status,
-								'No. of Products': v.number_of_products,
-							}))}
+						<ExportSelect
+							loading={isAllDataLoading}
+							title={title}
+							excelTitle={excelTitle}
+							data={[selectedRoutineData, allRoutineData]}
 						/>
 					</RightSide>
 				</Header>

@@ -10,7 +10,8 @@ const role_id: { [key in UserType]: number } = {
 	Admin: 6,
 }
 const userType = user.user_type as UserType
-export const getAdmins = <T>(params: T) => request('dior/admins', { params })
+export const getAdmins = <T>(params: T, signal?: AbortSignal) =>
+	request('dior/admins', { params, signal })
 export const postAdmins = <T>(data: T) => {
 	const requestData = {
 		...data,

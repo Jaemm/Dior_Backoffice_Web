@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postBeautyConsultants } from 'api/beauty-consultants'
 import { useToggle } from 'hooks/useToggle'
 import { notifyError } from 'components/notify'
+import { useEffect } from 'react'
 
 export interface FormTypes {
 	country?: string
@@ -20,7 +21,10 @@ export const defaultValues = {
 	consultant_branch_id: null,
 }
 
-export const useAdd = () => {
+export const useAdd = (
+	setCountry: React.Dispatch<React.SetStateAction<string>>,
+	setPOSValue: React.Dispatch<React.SetStateAction<string>>,
+) => {
 	const queryClient = useQueryClient()
 	const [open, toggle, setToggle] = useToggle()
 
@@ -29,6 +33,11 @@ export const useAdd = () => {
 		mode: 'onChange',
 		defaultValues,
 	})
+	const countryValue = form.watch('country')
+
+	useEffect(() => {
+		setCountry(countryValue ?? '')
+	}, [countryValue])
 
 	const handleSuccess = async () => {
 		await queryClient.invalidateQueries(['beauty-consultants'])
@@ -38,7 +47,15 @@ export const useAdd = () => {
 
 	const handleClose = () => {
 		form.reset(defaultValues)
+		setCountry('')
+		setPOSValue('')
 		setToggle(false)
+	}
+
+	const handleOpen = () => {
+		setCountry('')
+		setPOSValue('')
+		setToggle(true)
 	}
 
 	const { mutate, isLoading } = useMutation(
@@ -53,5 +70,5 @@ export const useAdd = () => {
 
 	const onSubmit = (data: FormTypes) => mutate(data)
 
-	return { form, open, toggle, isLoading, onSubmit, handleClose }
+	return { form, open, toggle, isLoading, onSubmit, handleClose, handleOpen }
 }

@@ -36,8 +36,9 @@ export const useAttributes = () => {
 		isFetching,
 	} = useQuery(
 		['getAttributes', page, limit, search],
-		() => getAttributes<IParams>({ per: limit, page, search }),
+		({ signal }) => getAttributes<IParams>({ per: limit, page, search }, signal),
 		{
+			staleTime: 5 * 60 * 1000,
 			select: data => {
 				return data.data
 			},
@@ -47,6 +48,29 @@ export const useAttributes = () => {
 			keepPreviousData: true,
 		},
 	)
+	const {
+		data: allData = {
+			data: [],
+			total_size: 0,
+		},
+		isLoading: allDataLoading,
+		isFetching: allDataFetching,
+	} = useQuery(
+		['getAttributes', page, search],
+		() => getAttributes<IParams>({ per: data.total_size, page, search }),
+		{
+			enabled: !isLoading && !isFetching && data.data.length > 0,
+			select: data => {
+				return data.data
+			},
+			onError: (err: any) => {
+				notifyError(err.response.data.error)
+			},
+			keepPreviousData: true,
+		},
+	)
+
+	const isAllDataLoading = allDataLoading || allDataFetching
 
 	const handleClear = () => {
 		setSearchValue('')
@@ -109,11 +133,13 @@ export const useAttributes = () => {
 	return {
 		data,
 		limit,
+		allData,
 		columns,
 		isLoading,
 		isFetching,
 		handleClear,
 		searchValue,
+		isAllDataLoading,
 		handlePageChange,
 		handleSearchChange,
 		handlePerRowsChange,

@@ -46,13 +46,14 @@ export const useDetails = () => {
 		isFetching,
 	} = useQuery(
 		['assigned-customers', page, limit, beautyDetails],
-		() =>
+		({ signal }) =>
 			getAssignedCustomers<IParams>(
 				{
 					limit,
 					page,
 				},
 				beautyDetails,
+				signal,
 			),
 		{
 			select: data => {
@@ -73,7 +74,7 @@ export const useDetails = () => {
 		isLoading: detailIsLoading,
 	} = useQuery(
 		['beauty-consultants-detail', beautyDetails],
-		() => getBeautyConsultantsDetail(beautyDetails),
+		({ signal }) => getBeautyConsultantsDetail(beautyDetails, signal),
 		{
 			select: data => {
 				const list1 = [

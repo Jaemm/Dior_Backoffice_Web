@@ -28,15 +28,20 @@ export const useMarket = () => {
 		data = { data: [] },
 		isLoading,
 		isFetching,
-	} = useQuery(['all-countries', search], () => getCountries<IParams>({ search }), {
-		select: data => {
-			return data.data
+	} = useQuery(
+		['all-countries', search],
+		({ signal }) => getCountries<IParams>({ search }, signal),
+		{
+			staleTime: 5 * 60 * 1000,
+			select: data => {
+				return data.data
+			},
+			onError: (err: any) => {
+				notifyError(err.response.data.error)
+			},
+			keepPreviousData: true,
 		},
-		onError: (err: any) => {
-			notifyError(err.response.data.error)
-		},
-		keepPreviousData: true,
-	})
+	)
 
 	const handleClear = () => {
 		setSearchValue('')

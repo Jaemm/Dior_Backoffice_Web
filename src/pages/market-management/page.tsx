@@ -6,15 +6,29 @@ import { Upload } from 'components/upload'
 import { Delete } from './components/delete'
 import { FormMarket } from './components/form'
 import { DataRow, useMarket } from './useMarket'
-import { ExportExcel } from 'components/export-excel'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
+import { ExportSelect } from 'components/export-select'
 
 const MarketManagement = () => {
 	const { dataSelected, handleChangeSelect, handleClearAfterDelete } =
 		useDataSelectedTable<DataRow>()
 	const { data, columns, isLoading, isFetching, handleClear, searchValue, handleSearchChange } =
 		useMarket()
+
+	const selectedMarketData = dataSelected.map(v => ({
+		'Market Code': v.code,
+		'Market Name': v.name,
+		'Default Recommendation': v.default_recommendation,
+	}))
+	const allMarketData = data.data.map((v: any) => ({
+		'Market Code': v.code,
+		'Market Name': v.name,
+		'Default Recommendation': v.default_recommendation,
+	}))
+
+	const title = ['Export selected (Market)', 'Export All']
+	const excelTitle = ['Export (Market)', 'Export All (Market)']
 
 	return (
 		<Container>
@@ -39,14 +53,12 @@ const MarketManagement = () => {
 							title='Upload a list of Country'
 							label='Please select Excel Country list to upload'
 						/>
-						<ExportExcel
-							loading={isLoading}
-							excelTitle='export-market'
-							data={dataSelected.map(v => ({
-								'Market Code': v.code,
-								'Market Name': v.name,
-								'Default Recommendation': v.default_recommendation,
-							}))}
+
+						<ExportSelect
+							loading={isLoading || isFetching}
+							title={title}
+							excelTitle={excelTitle}
+							data={[selectedMarketData, allMarketData]}
 						/>
 					</RightSide>
 				</Header>

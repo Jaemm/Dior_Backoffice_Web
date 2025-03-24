@@ -13,6 +13,7 @@ import { FilterSelect } from 'components/filter-select'
 import { DataRowProductCatalog } from 'types/product-catalog'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
+import { ExportSelect } from 'components/export-select'
 
 const ProductCatalog = () => {
 	const { isAdmin } = usePermission()
@@ -23,6 +24,7 @@ const ProductCatalog = () => {
 	const {
 		data,
 		limit,
+		allData,
 		columns,
 		category,
 		isLoading,
@@ -30,12 +32,19 @@ const ProductCatalog = () => {
 		collection,
 		handleClear,
 		searchValue,
+		isAllDataLoading,
 		handlePageChange,
 		handleSearchChange,
 		handlePerRowsChange,
 		handleChangeCategory,
 		handleChangeCollection,
 	} = useCatalog()
+
+	const selectedDevicesData = dataSelected
+	const allDevicesData = allData.data
+
+	const title = ['Export selected (Product)', 'Export All']
+	const excelTitle = ['Export (Product)', 'Export All (Product)']
 
 	return (
 		<Container>
@@ -74,7 +83,12 @@ const ProductCatalog = () => {
 								<Upload />
 							</>
 						)}
-						<ExportProduct loading={isLoading} data={dataSelected} />
+						<ExportSelect
+							loading={isAllDataLoading}
+							title={title}
+							excelTitle={excelTitle}
+							data={[selectedDevicesData, allDevicesData]}
+						/>
 					</RightSide>
 				</Header>
 				<Table<DataRowProductCatalog>

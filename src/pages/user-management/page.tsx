@@ -11,6 +11,7 @@ import { ExportExcel } from 'components/export-excel'
 import { FilterSelect } from 'components/filter-select'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { Wrap, Header, LeftSide, RightSide, Container } from './style'
+import { ExportSelect } from 'components/export-select'
 
 const UserManagement = () => {
 	const { countries, isLoading: countryIsLoading } = useCountries()
@@ -27,6 +28,25 @@ const UserManagement = () => {
 		handleSearchChange,
 		handleChangeCountry,
 	} = useUser()
+
+	const selectedUserData = dataSelected.map(v => ({
+		'First name': v.name,
+		'Last name': v.surname,
+		Email: v.email,
+		Countries: v.countryString,
+		'is Admin': v.isAdmin,
+	}))
+
+	const allUserData = data.data.map((v: any) => ({
+		'First name': v.name,
+		'Last name': v.surname,
+		Email: v.email,
+		Countries: v.countryString,
+		'is Admin': v.isAdmin,
+	}))
+
+	const title = ['Export selected (User)', 'Export All']
+	const excelTitle = ['Export (User)', 'Export All (User)']
 
 	return (
 		<Container>
@@ -58,16 +78,11 @@ const UserManagement = () => {
 							title='Upload a list of Users'
 							label='Please select Excel user list to upload'
 						/>
-						<ExportExcel
-							loading={isLoading}
-							excelTitle='export-users'
-							data={dataSelected.map(v => ({
-								'First name': v.name,
-								'Last name': v.surname,
-								Email: v.email,
-								Countries: v.countryString,
-								'is Admin': v.isAdmin,
-							}))}
+						<ExportSelect
+							loading={isLoading || isFetching}
+							title={title}
+							excelTitle={excelTitle}
+							data={[selectedUserData, allUserData]}
 						/>
 					</RightSide>
 				</Header>
