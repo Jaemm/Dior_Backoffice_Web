@@ -82,7 +82,7 @@ export const useCatalog = () => {
 				request_origin: 'dior_bo',
 			}),
 		{
-			enabled: !isLoading && !isFetching && data.data.length > 0,
+			enabled: !isLoading && !isFetching && data.data.length > 0 && page === 1,
 			select: data => {
 				return data.data
 			},

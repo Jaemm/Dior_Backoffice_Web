@@ -58,7 +58,7 @@ export const useBrand = () => {
 			keepPreviousData: true,
 		},
 	)
-	const isDoneLoading = !isLoading && !isFetching && data?.data?.length > 0
+	const isDoneLoading = !isLoading && !isFetching && data?.data?.length > 0 && page === 1
 
 	let numOfMapping = 0
 	if (isDoneLoading && data?.total_size) {

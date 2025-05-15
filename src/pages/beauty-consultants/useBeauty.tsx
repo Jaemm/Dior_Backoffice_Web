@@ -144,7 +144,7 @@ export const useBeauty = () => {
 				filter_by_2: pos?.value,
 			}),
 		{
-			enabled: !isLoading && !isFetching && data.data.length > 0,
+			enabled: !isLoading && !isFetching && data.data.length > 0 && page === 1,
 			select: data => {
 				return { ...data.data }
 			},
