@@ -15,7 +15,7 @@ const LogIn = () => {
 					<IconLogo />
 					<form onSubmit={onSubmit} style={{ marginTop: '24px' }}>
 						<Button type='submit' variant='contained' fullWidth>
-							Login with Okta
+							Login
 						</Button>
 					</form>
 				</Content>
