@@ -12,13 +12,6 @@ const defaultValues = {
 	password: '',
 }
 
-// role ID → 문자열 매핑
-const ROLE_ID_TO_NAME_MAP: Record<string, string> = {
-	'4': PERMISSIONS.BRAND_MANAGER,
-	'5': PERMISSIONS.SUPER_ADMIN,
-	'6': PERMISSIONS.ADMIN,
-}
-
 export const useLogin = () => {
 	const navigate = useNavigate()
 	const { user } = usePermission()
@@ -35,7 +28,7 @@ export const useLogin = () => {
 
 		if (user?.token && !isSamlLogin) {
 			const url =
-				user.user_type === PERMISSIONS.SUPER_ADMIN || user.user_type === PERMISSIONS.ADMIN
+				user.position === PERMISSIONS.SUPER_ADMIN || user.position === PERMISSIONS.ADMIN
 					? '/brand-details'
 					: '/beauty-consultants'
 			navigate(url)
@@ -44,33 +37,25 @@ export const useLogin = () => {
 
 		if (isSamlLogin) {
 			const token = searchParams.get('token')
-			const id = searchParams.get('id')
+			const refresh_token = searchParams.get('refresh_token')
+			const email = searchParams.get('email')
 			const name = searchParams.get('name')
-			const roleId = searchParams.get('role')
+			const user_type = searchParams.get('role')
+			const position = searchParams.get('consultant_position_id')
 
-			// 👉 콘솔 로그 추가
-			console.log('[SAML 로그인 파라미터]', {
-				token,
-				id,
-				name,
-				roleId,
-			})
-
-			const user_type = ROLE_ID_TO_NAME_MAP[roleId ?? '']
-
-			if (token && id && name && user_type) {
+			if (token && email && name) {
 				const user = {
 					token,
-					user_id: id,
+					refresh_token,
+					email,
 					name,
 					user_type,
+					position,
 				}
-				console.log('[저장될 사용자 정보]', user) // 👈 로컬스토리지 저장 전 확인
-
 				localStorage.setItem('user', JSON.stringify(user))
 
 				const url =
-					user_type === PERMISSIONS.SUPER_ADMIN || user_type === PERMISSIONS.ADMIN
+					position === PERMISSIONS.SUPER_ADMIN || position === PERMISSIONS.ADMIN
 						? '/brand-details'
 						: '/beauty-consultants'
 
