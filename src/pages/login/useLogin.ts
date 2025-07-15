@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { FormTypes } from 'types/login'
 import { schema } from './form.schema'
-import { loginUser } from 'api/login' // ✅ SAML 응답 가져오기용 API
 
 const defaultValues = {
 	email: '',
@@ -23,7 +22,6 @@ export const useLogin = () => {
 		defaultValues,
 	})
 
-	// ✅ SAML 로그인 후 자동 로그인 처리
 useEffect(() => {
 	const searchParams = new URLSearchParams(window.location.search)
 	const isSamlLogin = searchParams.get('samlLogin') === 'true'
@@ -37,7 +35,6 @@ useEffect(() => {
 		return
 	}
 
-	// ✅ SAML 리다이렉션 처리
 	if (isSamlLogin) {
 		const token = searchParams.get('token')
 		const id = searchParams.get('id')
@@ -51,6 +48,7 @@ useEffect(() => {
 				name,
 				user_type,
 			}
+			console.log('SAML 로그인 성공:', user)
 			localStorage.setItem('user', JSON.stringify(user))
 
 			const url =
