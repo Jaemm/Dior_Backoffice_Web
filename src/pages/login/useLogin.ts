@@ -34,27 +34,32 @@ export const useLogin = () => {
 					? '/brand-details'
 					: '/beauty-consultants'
 			navigate(url)
+			return
 		}
 
+		// ✅ SAML 리다이렉션 처리
 		if (isSamlLogin) {
-			loginUser().then(res => {
-				const data = res.data
+			const token = searchParams.get('token')
+			const id = searchParams.get('id')
+			const name = searchParams.get('name')
+			const user_type = searchParams.get('role')
 
+			if (token && id && name) {
 				const user = {
-					name: data.name,
-					user_id: data.id,
-					token: data.token,
-					user_type: data.consultant_position?.name || 'DEFAULT',
+					token,
+					user_id: id,
+					name,
+					user_type,
 				}
 				localStorage.setItem('user', JSON.stringify(user))
 
 				const url =
-					user.user_type === PERMISSIONS.SUPER_ADMIN || user.user_type === PERMISSIONS.ADMIN
+					user_type === PERMISSIONS.SUPER_ADMIN || user_type === PERMISSIONS.ADMIN
 						? '/brand-details'
 						: '/beauty-consultants'
 
 				navigate(url)
-			})
+			}
 		}
 	}, [])
 
