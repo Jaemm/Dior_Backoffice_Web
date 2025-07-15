@@ -6,17 +6,11 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { FormTypes } from 'types/login'
 import { schema } from './form.schema'
+import { loginUser } from 'api/login' // ✅ SAML 응답 가져오기용 API
 
 const defaultValues = {
 	email: '',
 	password: '',
-}
-
-// consultant_position_id → 권한 이름 매핑
-const POSITION_ID_TO_NAME_MAP: Record<string, string> = {
-	'4': PERMISSIONS.BRAND_MANAGER,
-	'5': PERMISSIONS.SUPER_ADMIN,
-	'6': PERMISSIONS.ADMIN,
 }
 
 export const useLogin = () => {
@@ -29,58 +23,46 @@ export const useLogin = () => {
 		defaultValues,
 	})
 
-	useEffect(() => {
-		const searchParams = new URLSearchParams(window.location.search)
-		const isSamlLogin = searchParams.get('samlLogin') === 'true'
+	// ✅ SAML 로그인 후 자동 로그인 처리
+useEffect(() => {
+	const searchParams = new URLSearchParams(window.location.search)
+	const isSamlLogin = searchParams.get('samlLogin') === 'true'
 
-		if (user?.token && !isSamlLogin) {
-			const url =
-				user.position === PERMISSIONS.SUPER_ADMIN || user.position === PERMISSIONS.ADMIN
-					? '/brand-details'
-					: '/beauty-consultants'
-			navigate(url)
-			return
-		}
+	if (user?.token && !isSamlLogin) {
+		const url =
+			user.user_type === PERMISSIONS.SUPER_ADMIN || user.user_type === PERMISSIONS.ADMIN
+				? '/brand-details'
+				: '/beauty-consultants'
+		navigate(url)
+		return
+	}
 
-		if (isSamlLogin) {
-			const token = searchParams.get('token')
-			const refresh_token = searchParams.get('refresh_token')
-			const email = searchParams.get('email')
-			const name = searchParams.get('name')
-			const user_type = searchParams.get('role')
-			const positionId = searchParams.get('consultant_position_id')
-			const position = POSITION_ID_TO_NAME_MAP[positionId ?? '']
+	// ✅ SAML 리다이렉션 처리
+	if (isSamlLogin) {
+		const token = searchParams.get('token')
+		const id = searchParams.get('id')
+		const name = searchParams.get('name')
+		const user_type = searchParams.get('role')
 
-			console.log('[SAML 로그인 파라미터]', {
+		if (token && id && name) {
+			const user = {
 				token,
-				refresh_token,
-				email,
+				user_id: id,
 				name,
 				user_type,
-				positionId,
-				position,
-			})
-
-			if (token && email && name && position) {
-				const user = {
-					token,
-					refresh_token,
-					email,
-					name,
-					user_type,
-					position,
-				}
-				localStorage.setItem('user', JSON.stringify(user))
-
-				const url =
-					position === PERMISSIONS.SUPER_ADMIN || position === PERMISSIONS.ADMIN
-						? '/brand-details'
-						: '/beauty-consultants'
-
-				navigate(url)
 			}
+			localStorage.setItem('user', JSON.stringify(user))
+
+			const url =
+				user_type === PERMISSIONS.SUPER_ADMIN || user_type === PERMISSIONS.ADMIN
+					? '/brand-details'
+					: '/beauty-consultants'
+
+			navigate(url)
 		}
-	}, [])
+	}
+}, [])
+
 
 	const handleSamlLogin = () => {
 		const redirectUrl = encodeURIComponent(`${window.location.origin}/login`)
