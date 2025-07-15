@@ -3,8 +3,6 @@ import { usePermission } from 'hooks/usePermission'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const baseURL = process.env.REACT_APP_BASE_URL
-
 export const useLogin = () => {
 	const navigate = useNavigate()
 	const { user } = usePermission()
@@ -49,8 +47,7 @@ export const useLogin = () => {
 
 	const handleSamlLogin = () => {
 		const redirectUrl = encodeURIComponent(`${window.location.origin}/login`)
-		const samlLoginUrl = `${baseURL}/consultants/login/saml?redirect=${redirectUrl}`
-		window.location.href = samlLoginUrl
+		window.location.href = `https://stg-dior.chowis.cloud/v1/api/consultants/login/saml?redirect=${redirectUrl}`
 	}
 
 	const onSubmit = () => {
