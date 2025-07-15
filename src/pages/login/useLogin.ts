@@ -12,6 +12,13 @@ const defaultValues = {
 	password: '',
 }
 
+// consultant_position_id → 권한 이름 매핑
+const POSITION_ID_TO_NAME_MAP: Record<string, string> = {
+	'4': PERMISSIONS.BRAND_MANAGER,
+	'5': PERMISSIONS.SUPER_ADMIN,
+	'6': PERMISSIONS.ADMIN,
+}
+
 export const useLogin = () => {
 	const navigate = useNavigate()
 	const { user } = usePermission()
@@ -41,9 +48,20 @@ export const useLogin = () => {
 			const email = searchParams.get('email')
 			const name = searchParams.get('name')
 			const user_type = searchParams.get('role')
-			const position = searchParams.get('consultant_position_id')
+			const positionId = searchParams.get('consultant_position_id')
+			const position = POSITION_ID_TO_NAME_MAP[positionId ?? '']
 
-			if (token && email && name) {
+			console.log('[SAML 로그인 파라미터]', {
+				token,
+				refresh_token,
+				email,
+				name,
+				user_type,
+				positionId,
+				position,
+			})
+
+			if (token && email && name && position) {
 				const user = {
 					token,
 					refresh_token,
