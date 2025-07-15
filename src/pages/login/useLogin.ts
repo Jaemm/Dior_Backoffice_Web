@@ -1,11 +1,26 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { PERMISSIONS } from 'constants/permissions'
 import { usePermission } from 'hooks/usePermission'
-import { useEffect } from 'react'
+import { FormEvent, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { FormTypes } from 'types/login'
+import { schema } from './form.schema'
+
+const defaultValues = {
+	email: '',
+	password: '',
+}
 
 export const useLogin = () => {
 	const navigate = useNavigate()
 	const { user } = usePermission()
+
+	const form = useForm<FormTypes>({
+		resolver: yupResolver(schema),
+		mode: 'onChange',
+		defaultValues,
+	})
 
 	useEffect(() => {
 		const searchParams = new URLSearchParams(window.location.search)
@@ -50,9 +65,10 @@ export const useLogin = () => {
 		window.location.href = `https://stg-dior.chowis.cloud/v1/api/consultants/login/saml?redirect=${redirectUrl}`
 	}
 
-	const onSubmit = () => {
+	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
 		handleSamlLogin()
 	}
 
-	return { isLoading: false, onSubmit }
+	return { form, isLoading: false, onSubmit }
 }
