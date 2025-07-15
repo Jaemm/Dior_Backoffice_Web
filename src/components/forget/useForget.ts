@@ -22,22 +22,25 @@ export const useForget = () => {
 		defaultValues,
 	})
 
-	const { mutate, isLoading } = useMutation(forgetPassword, {
-		onSuccess: async () => {
-			await toggle()
-			await notifySuccess('Email successfully sent!')
-			await form.reset(defaultValues)
+	const { mutate, isLoading } = useMutation<any, any, FormForgetTypes>(
+		(data: FormForgetTypes) => forgetPassword(data),
+		{
+			onSuccess: async () => {
+				await toggle()
+				await notifySuccess('Email successfully sent!')
+				await form.reset(defaultValues)
+			},
+			onError: (err: any) => {
+				notifyError(err.response?.data?.error || 'Failed to send email.')
+			},
 		},
-		onError: (err: any) => {
-			notifyError(err.response.data.error)
-		},
-	})
+	)
 
 	const handleSubmit = (data: FormForgetTypes) => mutate(data)
 
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.stopPropagation()
-		return form.handleSubmit(handleSubmit)(e)
+		e.preventDefault()
+		form.handleSubmit(handleSubmit)(e)
 	}
 
 	const handleDialog = (e: ChangeEventHandler, reason: DialogType) => {
