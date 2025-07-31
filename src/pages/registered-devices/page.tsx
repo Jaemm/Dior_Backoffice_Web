@@ -27,16 +27,16 @@ const RegisteredDevices = () => {
 		Country: v.country,
 		'POS code': v.pos_code,
 		'BC Code': v.consultant?.code,
-		'BC Email': v.consultant?.email,
-		Status: v.status,
+		'BC Email': v.consultant?.email?.toLocaleLowerCase() || '',
+		'User Status': v.status,
 	}))
 	const allProductData = allData.data.map((v: any) => ({
+		'Device ID': v.optic_number,
 		Country: v.country,
 		'POS Code': v.pos_code,
-		'BC Code': v.code,
-		'BC Name': v.name,
-		'BC Email': v.pos_email,
-		'User Status': v.status,
+		'BC Code': v.pos_code,
+		'BC Email': v.consultant?.email,
+		Status: v.status,
 	}))
 
 	const title = ['Export selected (Devices)', 'Export All']
