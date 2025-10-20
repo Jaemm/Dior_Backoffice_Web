@@ -1,6 +1,6 @@
 export type FormTypes = {
 	email: string
-	password: string
+	// password: string
 	remember?: boolean
 }
 

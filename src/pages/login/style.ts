@@ -20,6 +20,7 @@ export const Wrapper = styled.main`
 	flex-grow: 1;
 	display: flex;
 	max-width: 500px;
+	min-width: 280px;
 	align-items: center;
 	padding-bottom: 70px;
 	flex-direction: column;
