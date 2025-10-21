@@ -23,7 +23,7 @@ export const useLogin = () => {
 	})
 
 	useEffect(() => {
-		console.log('🔥 useLogin useEffect 실행됨')
+		console.log('useLogin useEffect 실행됨')
 		console.log('user:', user)
 		console.log('search:', window.location.search)
 
@@ -78,7 +78,7 @@ export const useLogin = () => {
 
 	const handleSamlLogin = () => {
 		const redirectUrl = encodeURIComponent(`${window.location.origin}/login`)
-		window.location.href = `https://stg-dior.chowis.cloud/v1/api/consultants/login/saml?redirect=${redirectUrl}`
+		window.location.href = `https://dior-crm.chowis.cloud/v1/api/consultants/login/saml?redirect=${redirectUrl}`
 	}
 
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
