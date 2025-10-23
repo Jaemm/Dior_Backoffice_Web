@@ -47,7 +47,7 @@ export const useUser = () => {
 			select: data => {
 				const newData = data.data.data.map((v: any) => ({
 					...v,
-					countryString: v.countries.join(' , '),
+					countryString: v.countries?.join(' , '),
 					isAdmin: isAdmin(v.consultant_position_id, 'string'),
 				}))
 				return { ...data.data, data: newData }
