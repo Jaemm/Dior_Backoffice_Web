@@ -4,7 +4,7 @@ import { usePermission } from 'hooks/usePermission'
 import { FormEvent, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { FormTypes } from 'types/login'
+import { OktaFormTypes } from 'types/login'
 import { schema } from './form.schema'
 
 const defaultValues = {
@@ -12,11 +12,11 @@ const defaultValues = {
 	password: '',
 }
 
-export const useLogin = () => {
+export const useAuth = () => {
 	const navigate = useNavigate()
 	const { user } = usePermission()
 
-	const form = useForm<FormTypes>({
+	const form = useForm<OktaFormTypes>({
 		resolver: yupResolver(schema),
 		mode: 'onChange',
 		defaultValues,

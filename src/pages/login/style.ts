@@ -39,20 +39,6 @@ export const Content = styled.div`
 	box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.1);
 `
 
-export const Form = styled.form`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	margin-top: 15px;
-	.MuiFormControl-root:first-child {
-		margin-bottom: 7px;
-	}
-	.MuiInputBase-root {
-		padding-right: 0 !important;
-	}
-`
-
 export const Footer = styled.footer`
 	bottom: 20px;
 	display: flex;
@@ -61,26 +47,4 @@ export const Footer = styled.footer`
 	position: absolute;
 	text-align: center;
 	flex-direction: column;
-`
-
-export const Remember = styled.div`
-	padding: 7px 0;
-	.MuiFormControlLabel-root {
-		margin: 0 !important;
-	}
-	.MuiTypography-root {
-		font-size: 18px;
-		font-weight: 400;
-		color: var(--gray);
-	}
-`
-
-export const WrapIcons = styled.div`
-	display: grid;
-	grid-gap: 10px;
-	align-items: center;
-	grid-template-columns: auto auto;
-	svg {
-		cursor: pointer;
-	}
 `

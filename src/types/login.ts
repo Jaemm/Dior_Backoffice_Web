@@ -1,6 +1,11 @@
-export type FormTypes = {
+export type CredentialsFormTypes = {
 	email: string
-	// password: string
+	password: string
+	remember?: boolean
+}
+
+export type OktaFormTypes = {
+	email: string
 	remember?: boolean
 }
 

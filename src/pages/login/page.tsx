@@ -1,24 +1,15 @@
-import { Button } from '@mui/material'
 import { ReactComponent as IconChowisLogo } from 'assets/icons/chowis-logo.svg'
-import { ReactComponent as IconLogo } from 'assets/icons/logo.svg'
 import version from '../../../package.json'
 import { Container, Content, Footer, Wrapper } from './style'
-import { useLogin } from './useLogin'
+import { IS_INTERNAL } from 'constants/permissions'
+import { CredentialsAuth } from './components/credentials-auth'
+import { OktaAuth } from './components/okta-auth'
 
 const LogIn = () => {
-	const { onSubmit } = useLogin()
-
 	return (
 		<Container>
 			<Wrapper>
-				<Content>
-					<IconLogo />
-					<form onSubmit={onSubmit} style={{ marginTop: '24px' }}>
-						<Button type='submit' variant='contained' fullWidth>
-							Login
-						</Button>
-					</form>
-				</Content>
+				<Content>{IS_INTERNAL ? <CredentialsAuth /> : <OktaAuth />}</Content>
 			</Wrapper>
 			<Footer>
 				<IconChowisLogo />
