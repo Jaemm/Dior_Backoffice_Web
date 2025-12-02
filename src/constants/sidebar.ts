@@ -1,4 +1,6 @@
 import { PAGES } from './page'
+import { IS_INTERNAL } from './permissions'
+
 import { ReactComponent as IconDetails } from 'assets/icons/details.svg'
 import { ReactComponent as IconConsultants } from 'assets/icons/consultants.svg'
 import { ReactComponent as IconDevices } from 'assets/icons/devices.svg'
@@ -8,6 +10,7 @@ import { ReactComponent as IconPerformance } from 'assets/icons/performance.svg'
 import { ReactComponent as IconManagement } from 'assets/icons/management.svg'
 import { ReactComponent as IconUser } from 'assets/icons/user.svg'
 import { ReactComponent as IconAttributes } from 'assets/icons/attributes.svg'
+import { ReactComponent as IconLogs } from 'assets/icons/logs.svg'
 
 import { ReactComponent as IconActiveDetails } from 'assets/icons/active-details.svg'
 import { ReactComponent as IconActiveConsultants } from 'assets/icons/active-consultants.svg'
@@ -18,6 +21,7 @@ import { ReactComponent as IconActivePerformance } from 'assets/icons/active-per
 import { ReactComponent as IconActiveManagement } from 'assets/icons/active-management.svg'
 import { ReactComponent as IconActiveUser } from 'assets/icons/active-user.svg'
 import { ReactComponent as IconActiveAttributes } from 'assets/icons/active-attributes.svg'
+import { ReactComponent as IconActiveLogs } from 'assets/icons/active-logs.svg'
 
 export const menuList = [
 	{
@@ -52,20 +56,32 @@ export const menuList = [
 	},
 ]
 
-export const administratorList = [
-	{
-		...PAGES.MARKET_MANAGMENT,
-		Icon: IconManagement,
-		ActiveIcon: IconActiveManagement,
-	},
-	{
-		...PAGES.USER_MANAGMENT,
-		Icon: IconUser,
-		ActiveIcon: IconActiveUser,
-	},
-	{
-		...PAGES.PRODUCT_ATTRIBUTES,
-		Icon: IconAttributes,
-		ActiveIcon: IconActiveAttributes,
-	},
-]
+export const getAdministratorList = () => {
+	const list = [
+		{
+			...PAGES.MARKET_MANAGMENT,
+			Icon: IconManagement,
+			ActiveIcon: IconActiveManagement,
+		},
+		{
+			...PAGES.USER_MANAGMENT,
+			Icon: IconUser,
+			ActiveIcon: IconActiveUser,
+		},
+		{
+			...PAGES.PRODUCT_ATTRIBUTES,
+			Icon: IconAttributes,
+			ActiveIcon: IconActiveAttributes,
+		},
+	]
+
+	if (IS_INTERNAL) {
+		list.push({
+			...PAGES.DEVICE_LOGS,
+			Icon: IconLogs,
+			ActiveIcon: IconActiveLogs,
+		})
+	}
+
+	return list
+}

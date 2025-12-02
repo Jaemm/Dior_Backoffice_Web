@@ -1,15 +1,17 @@
 import { LogOut } from 'components/logout'
-import version from '../../../package.json'
+import { VERSION } from 'constants/version'
 import { Ul, Aside, Wrapper } from './style'
 import { Link, NavLink } from 'react-router-dom'
 import { PERMISSIONS } from 'constants/permissions'
 import { usePermission } from 'hooks/usePermission'
-import { administratorList, menuList } from 'constants/sidebar'
+import { getAdministratorList, menuList } from 'constants/sidebar'
 import { ReactComponent as IconChowisLogo } from 'assets/icons/chowis-logo.svg'
 import { ReactComponent as IconSideBarLogo } from 'assets/icons/sidebar-logo.svg'
 
 export const Sidebar = () => {
 	const { user } = usePermission()
+
+	const administratorList = getAdministratorList()
 
 	return (
 		<Aside>
@@ -57,7 +59,7 @@ export const Sidebar = () => {
 			</Wrapper>
 			<footer>
 				<IconChowisLogo />
-				<span>App version {version.version}</span>
+				<span>App version {VERSION}</span>
 			</footer>
 		</Aside>
 	)

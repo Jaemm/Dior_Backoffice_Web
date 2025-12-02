@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import version from '../../../package.json'
+import { VERSION } from 'constants/version'
 import { useNavigate } from 'react-router-dom'
 import { Text, Title, Footer, SubTitle, Wrapper, Container } from './style'
 import { ReactComponent as IconChowisLogo } from 'assets/icons/chowis-logo.svg'
@@ -21,7 +21,7 @@ const NotFound = () => {
 			</Wrapper>
 			<Footer>
 				<IconChowisLogo />
-				<span>App version {version.version}</span>
+				<span>App version {VERSION}</span>
 			</Footer>
 		</Container>
 	)

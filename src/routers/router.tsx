@@ -18,6 +18,7 @@ const ProductCatalog = lazy(() => import('pages/product-catalog'))
 const ProductRecommendation = lazy(() => import('pages/product-recommendation'))
 const RegisteredDevices = lazy(() => import('pages/registered-devices'))
 const UserManagement = lazy(() => import('pages/user-management'))
+const DeviceLogs = lazy(() => import('pages/device-logs'))
 
 export const router = createBrowserRouter([
 	{
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
 			{
 				path: PAGES.PRODUCT_ATTRIBUTES.path,
 				element: <ProductAttributes />,
+			},
+			{
+				path: PAGES.DEVICE_LOGS.path,
+				element: <DeviceLogs />,
 			},
 		],
 	},

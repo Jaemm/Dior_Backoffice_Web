@@ -63,6 +63,13 @@ const PRODUCT_ATTRIBUTES = {
 	permissions: [PERMISSIONS.SUPER_ADMIN],
 }
 
+const DEVICE_LOGS = {
+	main: true,
+	title: 'Device Logs',
+	path: 'device-logs',
+	permissions: [PERMISSIONS.SUPER_ADMIN],
+}
+
 const PAGES = {
 	BRAND_DATAILS,
 	BEAUTY_CONSULTANTS,
@@ -73,6 +80,7 @@ const PAGES = {
 	MARKET_MANAGMENT,
 	USER_MANAGMENT,
 	PRODUCT_ATTRIBUTES,
+	DEVICE_LOGS,
 }
 
 const ARRAY_ALL_PAGES = [
@@ -85,6 +93,7 @@ const ARRAY_ALL_PAGES = [
 	MARKET_MANAGMENT,
 	USER_MANAGMENT,
 	PRODUCT_ATTRIBUTES,
+	DEVICE_LOGS,
 ]
 
 export { PAGES, ARRAY_ALL_PAGES }
