@@ -7,6 +7,7 @@ import { TableColumn } from 'react-data-table-component'
 import { Reset } from './components/reset'
 import { ButtonReset } from './style'
 import { Tooltip } from '@mui/material'
+import { IS_INTERNAL } from 'constants/permissions'
 
 export type DataRow = {
 	app_update_date: string | null
@@ -20,6 +21,7 @@ export type DataRow = {
 	lat: null
 	license_period: number
 	lng: null
+	first_use_date: string
 	optic_number: number
 	refresh_date: string
 	serial_number: string
@@ -101,8 +103,10 @@ export const useRegistered = () => {
 		setPage(page)
 	}
 
-	const columns: TableColumn<DataRow>[] = useMemo(
-		() => [
+	const columns: TableColumn<DataRow>[] = useMemo(() => {
+		const columns: TableColumn<DataRow>[] = []
+
+		columns.push(
 			{
 				name: 'Device ID',
 				selector: row => row.optic_number,
@@ -152,9 +156,19 @@ export const useRegistered = () => {
 					</Tooltip>
 				),
 			},
-		],
-		[],
-	)
+		)
+
+		if (IS_INTERNAL) {
+			columns.splice(6, 0, {
+				name: 'Activation Date',
+				selector: row => row.first_use_date,
+				sortable: true,
+				center: true,
+			})
+		}
+
+		return columns
+	}, [])
 
 	return {
 		data,
