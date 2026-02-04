@@ -1,7 +1,6 @@
 import { Table } from 'components/table'
 import { Search } from 'components/search'
 import { Wrap, Header, Container } from './style'
-import { ExportExcel } from 'components/export-excel'
 import { DataRow, useRegistered } from './useRegistered'
 import { useDataSelectedTable } from 'hooks/useDataSelectedTable'
 import { ExportSelect } from 'components/export-select'

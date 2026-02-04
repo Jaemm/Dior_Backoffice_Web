@@ -8,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { postAdmins, putAdmins } from 'api/user-managment'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isAdmin } from 'utils/isAdmn'
-import { getUser } from 'utils/getUser'
 
 export interface IValues {
 	consultant_position_id: number

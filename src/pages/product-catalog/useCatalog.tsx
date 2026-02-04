@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Image } from './components/image'
 import { CatForm } from './components/form'
 import { notifyError } from 'components/notify'

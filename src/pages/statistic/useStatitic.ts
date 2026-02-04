@@ -3,26 +3,25 @@ import { getStatistic } from 'api/statistics'
 import { notifyError } from 'components/notify'
 import { useQuery } from '@tanstack/react-query'
 import { getCountries } from 'api/countries'
-import Statistic from './page'
 
 export const useStatitic = () => {
 	const { typeOfStatistic } = useParams()
 
 	const search = ''
 
-	const {
-		data: market = { data: [] },
-		isLoading: isLoadingMarket,
-		isFetching,
-	} = useQuery(['all-countries', search], () => getCountries({ search }), {
-		select: data => {
-			return data.data
+	const { data: market = { data: [] } } = useQuery(
+		['all-countries', search],
+		() => getCountries({ search }),
+		{
+			select: data => {
+				return data.data
+			},
+			onError: (err: any) => {
+				notifyError(err.response.data.error)
+			},
+			keepPreviousData: true,
 		},
-		onError: (err: any) => {
-			notifyError(err.response.data.error)
-		},
-		keepPreviousData: true,
-	})
+	)
 
 	const { data = { data: { data: [], total_count: 0 } }, isLoading } = useQuery(
 		['statistic', typeOfStatistic],

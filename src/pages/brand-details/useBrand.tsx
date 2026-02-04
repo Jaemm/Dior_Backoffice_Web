@@ -1,9 +1,9 @@
 import { WrapEdit } from './style'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { notifyError } from 'components/notify'
 import { useDebounce } from 'hooks/useDebounce'
 import { Password } from './components/password'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { SelectChangeEvent } from '@mui/material'
 import { FormBrandDetails } from './components/form'
 import { getBranchCompanies } from 'api/brand-details'
@@ -73,7 +73,7 @@ export const useBrand = () => {
 				const response = await getBranchCompanies<IParams>({
 					per: 500,
 					page: i,
-					search: search,
+					search,
 					filter_by: country,
 				})
 

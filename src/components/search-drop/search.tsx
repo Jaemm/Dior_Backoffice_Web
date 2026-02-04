@@ -2,9 +2,7 @@ import { Container } from './style'
 import { styled } from '@mui/material/styles'
 import { ReactComponent as IconDown } from 'assets/icons/down.svg'
 import { Autocomplete, TextField } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
 import Popper from '@mui/material/Popper'
-import { Spinner } from 'components/spinner'
 
 const CustomPopper = styled(Popper)({
 	width: '240px !important',

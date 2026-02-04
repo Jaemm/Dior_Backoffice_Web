@@ -27,11 +27,6 @@ export const Table = <C extends unknown>({
 }: PropTypes<C>) => {
 	const { ref, height } = useResize()
 
-	const paginationComponentOptions = {
-		selectAllRowsItem: true,
-		selectAllRowsItemText: 'All',
-	}
-
 	return (
 		<Container ref={ref} maxHeight={height} loading={String(isLoading || data.length === 0)}>
 			{isFetching && (

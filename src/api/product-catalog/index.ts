@@ -15,10 +15,6 @@ export const pustProductCatalog = <T>(data: T, id?: number) =>
 export const getCollection = () => request('dior/product_recommendations/get_collection')
 export const getCategory = () => request('dior/product_recommendations/get_category')
 
-interface IUpload {
-	filename: string
-}
-
 export const uploadImage = (formData: FormData) =>
 	request.post('dior/product_recommendations/presign_upload', formData, {
 		headers: {

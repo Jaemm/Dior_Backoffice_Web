@@ -4,7 +4,7 @@ import { getUser } from 'utils/getUser'
 type UserType = 'Brand Manager' | 'Super Admin' | 'Admin'
 
 const { user } = getUser()
-const role_id: { [key in UserType]: number } = {
+const role_id = {
 	'Brand Manager': 4,
 	'Super Admin': 5,
 	Admin: 6,

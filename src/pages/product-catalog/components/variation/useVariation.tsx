@@ -57,7 +57,6 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 	const [type, setType] = useState('')
 	const { isAdmin } = usePermission()
 	const queryClient = useQueryClient()
-	const [image, setImage] = useState<File | undefined>(undefined)
 	const [open, toggle, setToggle] = useToggle()
 	const { countries, setCountries, editVariation, setEditVariation } = useProductCatalogStore(
 		state => ({
@@ -105,7 +104,6 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 	const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0]
 		if (file) {
-			setImage(file)
 			const formData = new FormData()
 			formData.append('file', file)
 			await resUploadImage.mutate(formData)

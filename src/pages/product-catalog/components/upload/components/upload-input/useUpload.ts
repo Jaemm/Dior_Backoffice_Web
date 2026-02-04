@@ -1,7 +1,7 @@
 import { schema } from './form.schema'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { filePut, saveFile, saveFileImages, uploadFile } from 'api/upload'
+import { filePut, saveFileImages, uploadFile } from 'api/upload'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { IUpload } from './upload'

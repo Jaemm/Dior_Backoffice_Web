@@ -6,7 +6,7 @@ import { useCountries } from 'hooks/useCountries'
 import { CountrySelect } from 'components/country-select'
 import { ReactComponent as IconExit } from 'assets/icons/exit.svg'
 import { ReactComponent as IconDown } from 'assets/icons/down.svg'
-import { WrapPos, WrapDown, Container, WrapButtons, Placeholder } from './style'
+import { WrapPos, Container, WrapButtons } from './style'
 import { Autocomplete, Button, Dialog, FormHelperText, IconButton, TextField } from '@mui/material'
 
 interface IPropsAdd {
