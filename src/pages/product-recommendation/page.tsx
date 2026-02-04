@@ -91,7 +91,7 @@ const ProductRecommendation = () => {
 							</WrapRound>
 						),
 					}}
-					expandableRowsComponent={row => <Expandtable data={row.data.products} />}
+					expandableRowsComponent={(row: any) => <Expandtable data={row.data.products} />}
 				/>
 			</Wrap>
 		</Container>

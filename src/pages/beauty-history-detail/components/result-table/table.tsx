@@ -34,7 +34,7 @@ export const ResultTable = ({ list, header, isLoading }: ITable) => {
 							<tr key={i}>
 								{tr?.map((td: any, id: number) =>
 									tr.length === id + 1 ? (
-										<td>{td === '' ? '-' : <AnalysisImage src={td} />}</td>
+										<td key={id}>{td === '' ? '-' : <AnalysisImage src={td} />}</td>
 									) : (
 										<td key={id}>{td}</td>
 									),

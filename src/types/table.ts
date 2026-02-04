@@ -4,7 +4,7 @@ import {
 	ExpandableRowsComponent,
 	PaginationChangePage,
 	PaginationChangeRowsPerPage,
-} from 'react-data-table-component/dist/src/DataTable/types'
+} from 'react-data-table-component/dist/DataTable/types'
 
 export interface PropTypes<C> {
 	data: C[]
