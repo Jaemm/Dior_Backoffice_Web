@@ -34,7 +34,7 @@ export const Translation = ({ type, onNext, title, isLoading: formLoading }: ITr
 							if (user.consultant_country) {
 								return user.consultant_country.includes(language.language)
 							} else {
-								if (user.countries.length > 0) {
+								if (user.countries?.length > 0) {
 									return user.countries.includes(language.language)
 								}
 								return language

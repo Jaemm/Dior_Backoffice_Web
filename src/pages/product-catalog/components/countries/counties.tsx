@@ -32,7 +32,7 @@ export const Counties = ({ type, onNext }: ICon) => {
 							if (user.consultant_country) {
 								return user.consultant_country.includes(country.label)
 							} else {
-								if (user.countries.length > 0) {
+								if (user.countries?.length > 0) {
 									return user.countries.includes(country.label)
 								}
 								return country
