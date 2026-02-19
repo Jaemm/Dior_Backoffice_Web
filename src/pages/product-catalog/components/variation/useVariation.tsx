@@ -113,7 +113,13 @@ export const useVariation = (values: Partial<DataRowProductCatalog>) => {
 	const addPost = useMutation((data: any) => postProductCatalog<any>(data), {
 		onSuccess: handleSuccess,
 		onError: (err: any) => {
-			notifyError(err.message)
+			const message = err.message as string
+
+			if (message.includes('409')) {
+				notifyError('This product code is already in use.')
+			} else {
+				notifyError(err.message)
+			}
 		},
 	})
 
