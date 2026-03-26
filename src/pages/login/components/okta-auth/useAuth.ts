@@ -78,7 +78,7 @@ export const useAuth = () => {
 
 	const handleSamlLogin = () => {
 		const redirectUrl = encodeURIComponent(`${window.location.origin}/login`)
-		window.location.href = `https://dior-crm.chowis.cloud/v1/api/consultants/login/saml?redirect=${redirectUrl}`
+		window.location.href = `https://dior-crm.choicedx.kr:8097/v1/api/consultants/login/saml?redirect=${redirectUrl}`
 	}
 
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
