@@ -1,46 +1,105 @@
-# Getting Started with Create React App
+﻿# Dior Backoffice Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+백오피스 운영을 위한 React 기반 관리자 웹 애플리케이션입니다.  
+CRM, 제품 카탈로그, 추천 관리, 통계, 사용자/디바이스 관리 등 운영 기능을 하나의 콘솔로 제공합니다.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+- 관리자 전용 화면 제공
+- 라우트별 권한 제어
+- 목록/상세/등록/수정/삭제 흐름을 기능 단위로 분리
+- React Query로 서버 상태 관리
+- Zustand로 전역 UI 상태 관리
+- MUI 기반 테마 커스터마이징
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- React 18
+- TypeScript
+- React Router v6
+- @tanstack/react-query
+- Zustand
+- Material UI
+- Styled Components
+- Axios
+- react-hook-form
+- yup
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Architecture
 
-### `npm test`
+이 프로젝트는 기능별 페이지를 기준으로 구조를 나눈 vertical slice 스타일입니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `src/pages`: 도메인별 화면
+- `src/components`: 공통 UI 컴포넌트
+- `src/api`: API 요청 모듈
+- `src/hooks`: 공통 훅
+- `src/store`: 전역 상태
+- `src/routers`: 라우팅과 보호 라우트
+- `src/config`: 테마, react-query 설정
+- `src/constants`: 메뉴, 권한, 페이지 정의
 
-### `npm run build`
+### Main Flow
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. `src/index.tsx`에서 전역 Provider 초기화
+2. `src/routers/router.tsx`에서 페이지 라우팅 구성
+3. `src/routers/private/private.tsx`에서 로그인 및 권한 체크
+4. 각 페이지는 `useXxx` 훅 + `components` 조합으로 구성
+5. API 응답은 React Query로 캐싱 및 에러 처리
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Key Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 로그인/세션 기반 보호 라우팅
+- 권한별 메뉴 노출
+- 제품 및 속성 관리
+- 브랜드/컨설턴트/사용자 관리
+- 디바이스 로그 및 통계 조회
+- 엑셀 다운로드/업로드 지원
+- 이미지 및 파일 업로드 처리
+- 토큰 만료 시 자동 로그아웃 처리
 
-### `npm run eject`
+## Folder Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```text
+src
+├─ api
+├─ assets
+├─ components
+├─ config
+├─ constants
+├─ hooks
+├─ pages
+├─ routers
+├─ store
+├─ types
+└─ utils
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Run Locally
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm install
+npm run dev
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+기본 개발 서버는 `http://localhost:3000`에서 실행됩니다.
 
-## Learn More
+## Environment Variables
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+`.env.local` 예시:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+REACT_APP_BASE_URL=https://your-api-base-url
+REACT_APP_ENV=dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## Portfolio Notes
+
+- 운영 화면을 기능 단위로 쪼개 유지보수성을 높였습니다.
+- 서버 상태와 UI 상태를 분리해 화면 복잡도를 낮췄습니다.
+- 권한 기반 라우팅으로 관리자 페이지 구조를 명확히 했습니다.
